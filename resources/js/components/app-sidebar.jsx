@@ -3,14 +3,59 @@ import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-react';
+import { BookOpen, ChartColumnBig, DrillIcon, Folder, LayoutGrid, LucidePuzzle, TruckIcon, Users, WrenchIcon } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems = [
     {
         title: 'Dashboard',
-        url: '/dashboard',
+        href: '/dashboard',
         icon: LayoutGrid,
+    },
+    {
+        title: 'Vehicles',
+        href: 'vehicles',
+        icon: TruckIcon,
+        children: [
+            { title: 'List', href: '/vehicles/list' },
+            { title: 'Assignments', href: '/vehicles/assignments' },
+        ],
+    },
+    {
+        title: 'Repairs',
+        href: '#',
+        icon: WrenchIcon,
+        children: [
+            { title: 'All', href: '#' },
+            { title: 'Ongoing', href: '#' },
+            { title: 'Pending', href: '#' },
+            { title: 'Completed', href: '#' },
+        ],
+    },
+    {
+        title: 'Maintenance',
+        href: '#',
+        icon: DrillIcon,
+        children: [
+            { title: 'All', href: '#' },
+            { title: 'Due soon', href: '#' },
+            { title: 'Overdue', href: '#' },
+        ],
+    },
+    {
+        title: 'Parts',
+        href: '#',
+        icon: LucidePuzzle,
+    },
+    {
+        title: 'Personnel',
+        href: '#',
+        icon: Users,
+    },
+    {
+        title: 'Reports',
+        href: '#',
+        icon: ChartColumnBig,
     },
 ];
 
@@ -33,8 +78,8 @@ export function AppSidebar() {
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <SidebarMenuButton size="lg" asChild>
-                            <Link href="/dashboard" prefetch>
+                    <SidebarMenuButton size={null} asChild>
+                            <Link href="/dashboard" prefetch className="flex flex-col items-center">
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>

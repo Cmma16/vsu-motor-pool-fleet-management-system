@@ -3,11 +3,12 @@ import AppLogoIcon from './app-logo-icon';
 export default function AppLogo() {
     return (
         <>
-            <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-md">
+            <div className="text-sidebar-primary-foreground mb-1 flex aspect-square size-28 items-center justify-center rounded-[100%] bg-[#00964f] p-3">
                 <AppLogoIcon className="size-5 fill-current text-white dark:text-black" />
             </div>
-            <div className="ml-1 grid flex-1 text-left text-sm">
-                <span className="mb-0.5 truncate leading-none font-semibold">Laravel Starter Kit</span>
+            <div className="grid flex-1 text-center text-sm leading-tight">
+                <span className="truncate font-semibold">VSU Motor Pool Services Office</span>
+                <span className="truncate text-xs">Fleet Management System</span>
             </div>
         </>
     );
