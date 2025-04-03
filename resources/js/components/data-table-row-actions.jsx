@@ -10,7 +10,7 @@ import {
 
 import { MoreHorizontal, NotepadText, Pencil, TrashIcon } from 'lucide-react';
 
-export function DataTableRowActions({ row }) {
+export function DataTableRowActions({ row, handleView, handleEdit, handleDelete }) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -23,14 +23,14 @@ export function DataTableRowActions({ row }) {
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <DropdownMenuItem onClick={() => navigator.clipboard.writeText(row.id)}>Copy payment ID</DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => console.log(row.vehicleName)}>
+                <DropdownMenuItem onClick={() => handleView(row.vehicle_id)}>
                     <NotepadText />
                     View details
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleEdit(row.vehicle_id)}>
                     <Pencil /> Edit
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleDelete(row.vehicle_id)}>
                     <TrashIcon />
                     Delete
                 </DropdownMenuItem>

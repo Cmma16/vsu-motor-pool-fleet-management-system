@@ -10,7 +10,10 @@ import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
 
 export default function Register() {
+    //personally added feature
     const [stage, setStage] = React.useState(1);
+
+    //for handling the form
     const { data, setData, post, processing, errors, reset } = useForm({
         first_name: '',
         middle_name: '',

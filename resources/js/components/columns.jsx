@@ -8,8 +8,7 @@ import { DataTableRowActions } from '@/components/data-table-row-actions';
 
 const columnHelper = createColumnHelper();
 
-// Define columns without TypeScript types
-export const columns = [
+export const columns = (handleView, handleEdit, handleDelete) => [
     {
         id: 'select',
         header: ({ table }) => (
@@ -30,7 +29,7 @@ export const columns = [
         enableSorting: false,
         enableHiding: false,
     },
-    columnHelper.accessor('vehicleName', {
+    columnHelper.accessor('vehicle_name', {
         header: ({ column }) => (
             <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
                 Vehicle
@@ -51,7 +50,7 @@ export const columns = [
         header: () => <div className="text-left">Capacity</div>,
         cell: (info) => <div className="text-left">{info.getValue()} person(s)</div>,
     }),
-    columnHelper.accessor('meterReading', {
+    columnHelper.accessor('odometer_reading', {
         header: () => <div className="text-left">Odometer</div>,
         cell: (info) => {
             const meterReading = parseFloat(info.getValue());
@@ -68,8 +67,7 @@ export const columns = [
         id: 'actions',
         cell: ({ row }) => {
             const vehicle = row.original;
-
-            return <DataTableRowActions row={vehicle} />;
+            return <DataTableRowActions row={vehicle} handleView={handleView} handleEdit={handleEdit} handleDelete={handleDelete} />;
         },
     },
 ];

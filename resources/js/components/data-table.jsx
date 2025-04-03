@@ -10,7 +10,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { DataTablePagination } from '@/components/data-table-pagination';
 import { DataTableToolbar } from '@/components/data-table-toolbar';
 
-export function DataTable({ columns, data }) {
+export function DataTable({ columns, data, handleView, handleEdit, handleDelete }) {
     const [sorting, setSorting] = React.useState([]);
     const [columnFilters, setColumnFilters] = React.useState([]);
     const [columnVisibility, setColumnVisibility] = React.useState({});
@@ -18,7 +18,7 @@ export function DataTable({ columns, data }) {
 
     const table = useReactTable({
         data,
-        columns,
+        columns: React.useMemo(() => columns(handleView, handleEdit, handleDelete), [handleView, handleEdit, handleDelete]),
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         onSortingChange: setSorting,

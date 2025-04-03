@@ -17,7 +17,7 @@ const mainNavItems = [
         href: 'vehicles',
         icon: TruckIcon,
         children: [
-            { title: 'List', href: '/vehicles/list' },
+            { title: 'List', href: '/vehicles' },
             { title: 'Assignments', href: '/vehicles/assignments' },
         ],
     },
@@ -78,7 +78,7 @@ export function AppSidebar() {
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
-                    <SidebarMenuButton size={null} asChild>
+                        <SidebarMenuButton size={null} asChild>
                             <Link href="/dashboard" prefetch className="flex flex-col items-center">
                                 <AppLogo />
                             </Link>
