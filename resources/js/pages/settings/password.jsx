@@ -27,6 +27,11 @@ export default function Password() {
         password_confirmation: '',
     });
 
+    const pageDetails = {
+        title: '',
+        description: '',
+    };
+
     const updatePassword = (e) => {
         e.preventDefault();
 
@@ -48,7 +53,7 @@ export default function Password() {
     };
 
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             <Head title="Profile settings" />
 
             <SettingsLayout>

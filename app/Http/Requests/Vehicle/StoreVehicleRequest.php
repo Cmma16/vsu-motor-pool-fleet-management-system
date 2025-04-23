@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Vehicle;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateVehicleRequest extends FormRequest
+class StoreVehicleRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,6 +21,7 @@ class UpdateVehicleRequest extends FormRequest
      */
     public function rules(): array
     {
+
         return [
             // Asset Tag - Ensure it's required, unique in the vehicles table, and a string with a max length
             'asset_tag' => 'required|string|max:255|unique:vehicles,asset_tag',

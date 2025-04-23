@@ -17,6 +17,11 @@ const breadcrumbs = [
     },
 ];
 
+const pageDetails = {
+    title: '',
+    description: '',
+};
+
 export default function Profile({ mustVerifyEmail, status }) {
     const { auth } = usePage().props;
 
@@ -34,7 +39,7 @@ export default function Profile({ mustVerifyEmail, status }) {
     };
 
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             <Head title="Profile settings" />
 
             <SettingsLayout>

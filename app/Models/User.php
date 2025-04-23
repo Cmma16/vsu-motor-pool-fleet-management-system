@@ -22,9 +22,13 @@ class User extends Authenticatable
         'middle_name',
         'last_name',
         'contact_number',
-        'address',
+        'province',
+        'city',
+        'barangay',
+        'address_details',
         'email',
         'password',
+        'role'
     ];
 
     /**

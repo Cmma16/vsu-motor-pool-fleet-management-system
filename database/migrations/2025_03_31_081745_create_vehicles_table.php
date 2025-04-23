@@ -16,6 +16,7 @@ return new class extends Migration
             $table->id('vehicle_id');
             $table->string('asset_tag', 25);
             $table->string('vehicle_name');
+            $table->string('brand');
             $table->string('model');
             $table->enum('vehicle_type', ['sedan', 'truck', 'motorcycle', 'bus', 'other']);
             $table->integer('capacity');
@@ -23,7 +24,7 @@ return new class extends Migration
             $table->year('year_acquired');
             $table->enum('category', ['light vehicle', 'heavy vehicle']);
             $table->string('plate_number', 25);
-            $table->integer('odometer_reading');
+            // $table->integer('odometer_reading');
             $table->enum('fuel_type', ['gasoline', 'diesel']);
             $table->enum('status', ['available', 'in use', 'under maintenance', 'retired']);
             $table->timestamps();

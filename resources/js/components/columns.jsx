@@ -67,7 +67,9 @@ export const columns = (handleView, handleEdit, handleDelete) => [
         id: 'actions',
         cell: ({ row }) => {
             const vehicle = row.original;
-            return <DataTableRowActions row={vehicle} handleView={handleView} handleEdit={handleEdit} handleDelete={handleDelete} />;
+            return (
+                <DataTableRowActions row={vehicle} rowKey="vehicle_id" handleView={handleView} handleEdit={handleEdit} handleDelete={handleDelete} />
+            );
         },
     },
 ];

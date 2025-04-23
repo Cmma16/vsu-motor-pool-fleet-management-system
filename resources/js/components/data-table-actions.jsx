@@ -4,12 +4,12 @@ import { Link } from '@inertiajs/react';
 import { Plus, X } from 'lucide-react';
 
 //add more props for the filter feature, for reusability purposes
-export function DataTableActions({ table }) {
+export function DataTableActions({ table, handleCreate }) {
     const isFiltered = table.getState().columnFilters.length > 0;
     return (
         <>
             <Link
-                href={route('vehicles.create')}
+                href={handleCreate}
                 as="button"
                 className="m-0 flex rounded-md border bg-[#006600] px-3 py-1 text-sm text-white hover:bg-[#00964F] hover:text-white"
                 variant="outline"

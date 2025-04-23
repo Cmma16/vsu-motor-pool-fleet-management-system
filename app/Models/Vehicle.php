@@ -22,7 +22,7 @@ class Vehicle extends Model
         'year_acquired',
         'category',
         'plate_number',
-        'odometer_reading',
+        // 'odometer_reading',
         'fuel_type',
         'status',
     ];

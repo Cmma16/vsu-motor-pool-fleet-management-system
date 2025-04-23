@@ -13,9 +13,14 @@ const breadcrumbs = [
     },
 ];
 
+const pageDetails = {
+    title: '',
+    description: '',
+};
+
 export default function Appearance() {
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             <Head title="Appearance settings" />
 
             <SettingsLayout>

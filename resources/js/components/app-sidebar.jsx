@@ -18,7 +18,7 @@ const mainNavItems = [
         icon: TruckIcon,
         children: [
             { title: 'List', href: '/vehicles' },
-            { title: 'Assignments', href: '/vehicles/assignments' },
+            { title: 'Trips', href: '/vehicles/trips' },
         ],
     },
     {
@@ -26,10 +26,10 @@ const mainNavItems = [
         href: '#',
         icon: WrenchIcon,
         children: [
-            { title: 'All', href: '#' },
-            { title: 'Ongoing', href: '#' },
-            { title: 'Pending', href: '#' },
-            { title: 'Completed', href: '#' },
+            { title: 'All', href: '/repairs' },
+            { title: 'Ongoing', href: '/repairs?status=in_progress' },
+            { title: 'Pending', href: '/repairs?status=pending' },
+            { title: 'Completed', href: '/repairs?status=completed' },
         ],
     },
     {
@@ -37,24 +37,24 @@ const mainNavItems = [
         href: '#',
         icon: DrillIcon,
         children: [
-            { title: 'All', href: '#' },
+            { title: 'All', href: '/maintenance' },
             { title: 'Due soon', href: '#' },
             { title: 'Overdue', href: '#' },
         ],
     },
     {
         title: 'Parts',
-        href: '#',
+        href: '/parts',
         icon: LucidePuzzle,
     },
     {
         title: 'Personnel',
-        href: '#',
+        href: '/personnel',
         icon: Users,
     },
     {
         title: 'Reports',
-        href: '#',
+        href: '/reports',
         icon: ChartColumnBig,
     },
 ];

@@ -11,8 +11,8 @@ import { cn } from '@/lib/utils';
 
 export function CalendarDateRangePicker({ className }) {
     const [date, setDate] = useState({
-        from: new Date(2023, 0, 20),
-        to: addDays(new Date(2023, 0, 20), 20),
+        from: new Date(2025, 3, 4),
+        to: addDays(new Date(2025, 3, 4), 0),
     });
 
     return (
