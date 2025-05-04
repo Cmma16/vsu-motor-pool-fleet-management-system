@@ -4,7 +4,10 @@ namespace Database\Seeders;
 
 use App\Models\Repairs;
 use App\Models\User;
+use App\Models\UserRole;
 use App\Models\Vehicle;
+use App\Models\ServiceRequest;
+// use App\Models\Maintenance;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -17,7 +20,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory(4)->create();
+        $roles = [
+            ['name' => 'Admin'],
+            ['name' => 'Staff'],
+            ['name' => 'Driver'],
+            ['name' => 'Technician'],
+        ];
+
+        foreach ($roles as $role) {
+            UserRole::create($role);
+        }
+
+        User::factory(3)->create();
         User::factory()->create([
             'first_name' => 'Carlos Miguel',
             'middle_name' => 'Maniego',
@@ -27,11 +41,13 @@ class DatabaseSeeder extends Seeder
             'city' => 'Tolosa',
             'barangay' => 'Opong',
             'address_details' => 'Zone 5',
-            'role' => 'admin',
+            'role_id' => 1,
             'email' => '1cmadvincula@gmail.com',
             'password' => Hash::make('2fcc3627'),
         ]);
+
         Vehicle::factory(5)->create();
+        ServiceRequest::factory(3)->create();   
         Repairs::factory(5)->create();
     }
 }

@@ -23,13 +23,11 @@ class StoreRepairsRequest extends FormRequest
     {
         return [
             'vehicle_id' => ['required', 'integer', 'exists:vehicles,vehicle_id'],
-            'description' => ['required', 'string', 'max:255'], 
-            'scheduled_date' => ['required', 'date'],
-            'required_by' => ['required', 'date'],
-            'urgency_level' => ['required', 'string', 'in:low,medium,high'],
-            'assigned_personnel' => ['required', 'integer', 'exists:users,id'],
-            'status' => ['required', 'string', 'in:pending,in_progress,completed'],
-            'requested_by' => ['required', 'integer', 'exists:users,id'],
+            'request_id' => ['required', 'integer', 'exists:service_requests,request_id'],
+            'performed_by' => ['required', 'integer', 'exists:users,id'],
+            'confirmed_by' => ['nullable', 'integer', 'exists:users,id'],
+            'description' => ['required', 'string', 'max:255'],
+            'status' => ['required', 'string', 'in:pending,ongoing,completed,cancelled'],
         ];
     }
 }

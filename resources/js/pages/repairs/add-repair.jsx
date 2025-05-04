@@ -13,25 +13,22 @@ const breadcrumbs = [
 ];
 
 const pageDetails = {
-    title: 'Schedule a Repair',
-    description: 'Schedule a repair for your vehicle.',
+    title: 'Vehicle Repair Record',
+    description: 'Record the details of a vehicle repair.',
 };
 
-export default function AddRepair({ vehicles, users }) {
+export default function AddRepair({ vehicles, users, serviceRequests }) {
     const { data, setData, post, processing, errors, reset } = useForm({
         vehicle_id: '',
+        request_id: '',
+        performed_by: '',
+        confirmed_by: '',
         description: '',
-        scheduled_date: '',
-        required_by: '',
-        urgency_level: '',
-        assigned_personnel: '',
-        status: 'pending',
-        requested_by: '',
+        status: '',
     });
 
     const createRepair = (e) => {
         e.preventDefault();
-        console.log(data);
         post(route('repairs.store'), {
             data,
             onSuccess: () => reset(),
@@ -46,7 +43,7 @@ export default function AddRepair({ vehicles, users }) {
                 <Card className="w-full">
                     <CardHeader>
                         <CardTitle>Repair Information</CardTitle>
-                        <CardDescription>Enter the details of the repair you want to schedule.</CardDescription>
+                        <CardDescription>Enter the details of the repair.</CardDescription>
                     </CardHeader>
                     <CardContent>
                         <RepairForm
@@ -58,6 +55,7 @@ export default function AddRepair({ vehicles, users }) {
                             errors={errors}
                             vehicles={vehicles}
                             users={users}
+                            serviceRequests={serviceRequests}
                         />
                     </CardContent>
                 </Card>

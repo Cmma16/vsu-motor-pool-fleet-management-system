@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Repairs;
 use App\Models\User;
 use App\Models\Vehicle;
+use App\Models\ServiceRequest;
 use App\Http\Requests\Repair\StoreRepairsRequest;
 use App\Http\Requests\Repair\UpdateRepairsRequest;
 use App\Http\Requests\Repair\RepairFilterRequest;
@@ -20,7 +21,7 @@ class RepairsController extends Controller
     {
         $status = $request->query('status'); // Get status filter from query params
 
-        $repairs = Repairs::with(['vehicle', 'assignedPersonnel', 'requestedBy'])
+        $repairs = Repairs::with(['vehicle', 'performedBy', 'confirmedBy', 'serviceRequest'])
             ->when($status, function ($query, $status) {
                 return $query->where('status', $status);
             })
@@ -29,13 +30,11 @@ class RepairsController extends Controller
                 return [
                     'repair_id' => $repair->repair_id,
                     'vehicle_name' => $repair->vehicle->vehicle_name ?? 'N/A',
+                    'request_id' => $repair->request_id,
+                    'performed_by' => $repair->performedBy ? $repair->performedBy->first_name . ' ' . $repair->performedBy->last_name : 'N/A',
+                    'confirmed_by' => $repair->confirmedBy ? $repair->confirmedBy->first_name . ' ' . $repair->confirmedBy->last_name : 'N/A',
                     'description' => $repair->description,
-                    'scheduled_date' => $repair->scheduled_date,
-                    'required_by' => $repair->required_by,
-                    'urgency_level' => $repair->urgency_level,
-                    'assigned_personnel' => $repair->assignedPersonnel->name ?? 'N/A',
                     'status' => $repair->status,
-                    'requested_by' => $repair->requestedBy->name ?? 'N/A',
                 ];
             });
     
@@ -50,12 +49,14 @@ class RepairsController extends Controller
     public function create()
     {
         $vehicles = Vehicle::select('vehicle_id', 'vehicle_name')->get();
-        $users = User::select('id', 'name')->get(); // Or filter to only show personnel if needed
+        $users = User::select('id', 'first_name', 'last_name')->get();
+        $serviceRequests = ServiceRequest::select('request_id', 'work_description')->get();
 
 
         return Inertia::render('repairs/add-repair', [
             'vehicles' => $vehicles,
             'users' => $users,
+            'serviceRequests' => $serviceRequests,
         ]);
     }
 
@@ -80,13 +81,11 @@ class RepairsController extends Controller
             'repair' => [
                 'repair_id' => $repair->repair_id,
                 'vehicle_name' => $repair->vehicle->vehicle_name ?? 'N/A',
+                'request_description' => $repair->serviceRequest->work_description ?? 'N/A',
+                'performed_by' => trim(($repair->performedBy->first_name ?? '') . ' ' . ($repair->performedBy->middle_name ?? '') . ' ' . ($repair->performedBy->last_name ?? '')) ?: 'N/A',
+                'confirmed_by' => trim(($repair->confirmedBy->first_name ?? '') . ' ' . ($repair->confirmedBy->middle_name ?? '') . ' ' . ($repair->confirmedBy->last_name ?? '')) ?: 'N/A',
                 'description' => $repair->description,
-                'scheduled_date' => $repair->scheduled_date,
-                'required_by' => $repair->required_by,
-                'urgency_level' => $repair->urgency_level,
-                'assigned_personnel' => $repair->assignedPersonnel->name ?? 'N/A',
                 'status' => $repair->status,
-                'requested_by' => $repair->requestedBy->name ?? 'N/A',
             ],
         ]);
     }
@@ -98,22 +97,22 @@ class RepairsController extends Controller
     {
 
         $vehicles = Vehicle::select('vehicle_id', 'vehicle_name')->get();
-        $users = User::select('id', 'name')->get(); // Or filter to only show personnel if needed
+        $users = User::select('id', 'first_name', 'last_name')->get(); // Or filter to only show personnel if needed
+        $serviceRequests = ServiceRequest::select('request_id', 'work_description')->get();
 
         return Inertia::render('repairs/edit-repair', [
             'repair' => [
                 'repair_id' => $repair->repair_id,
                 'vehicle_id' => $repair->vehicle_id,
+                'request_id' => $repair->request_id,
+                'performed_by' => $repair->performed_by,
+                'confirmed_by' => $repair->confirmed_by,
                 'description' => $repair->description,
-                'scheduled_date' => $repair->scheduled_date,
-                'required_by' => $repair->required_by,
-                'urgency_level' => $repair->urgency_level,
-                'assigned_personnel' => $repair->assigned_personnel,
                 'status' => $repair->status,
-                'requested_by' => $repair->requested_by,
             ],
             'vehicles' => $vehicles,
             'users' => $users,
+            'serviceRequests' => $serviceRequests,
         ]);
     }
 

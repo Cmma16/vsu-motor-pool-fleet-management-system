@@ -4,6 +4,10 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\RepairsController;
+use App\Http\Controllers\ServiceRequestController;
+use App\Http\Controllers\ServiceInspectionController;
+use App\Http\Controllers\ServiceAccomplishmentController;
+use App\Http\Controllers\PartController;
 
 Route::get('/', function () {
     return Inertia::render('welcome');
@@ -24,6 +28,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('parts.index');
     Route::resource('vehicles', VehicleController::class);
     Route::resource('repairs', RepairsController::class);
+    Route::resource('services/requests', ServiceRequestController::class);
+    Route::resource('services/request-inspections', ServiceInspectionController::class);
+    Route::resource('services/completed', ServiceAccomplishmentController::class);
+    Route::resource('parts', PartController::class);
 });
 
 require __DIR__.'/settings.php';

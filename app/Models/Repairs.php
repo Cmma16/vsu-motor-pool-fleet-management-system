@@ -15,13 +15,13 @@ class Repairs extends Model
     protected $fillable = [
             'repair_id',
             'vehicle_id', 
+            'request_id',
+            'performed_by',
+            'confirmed_by',
             'description',
-            'scheduled_date',
-            'required_by',
-            'urgency_level',
-            'assigned_personnel',
             'status',
-            'requested_by',
+            // 'created_at',
+            // 'updated_at',
     ];
 
     // Relationship with Vehicle
@@ -29,17 +29,22 @@ class Repairs extends Model
     {
         return $this->belongsTo(Vehicle::class, 'vehicle_id');
     }
+    // Relationship with Request
+    public function serviceRequest()
+    {
+        return $this->belongsTo(ServiceRequest::class, 'request_id');
+    }   
 
     // Relationship with User (Assigned Personnel)
-    public function assignedPersonnel()
+    public function performedBy()
     {
-        return $this->belongsTo(User::class, 'assigned_personnel');
+        return $this->belongsTo(User::class, 'performed_by');
     }
 
     // Relationship with User (Requested By)
-    public function requestedBy()
+    public function confirmedBy()
     {
-        return $this->belongsTo(User::class, 'requested_by');
+        return $this->belongsTo(User::class, 'confirmed_by');
     }
 }
 

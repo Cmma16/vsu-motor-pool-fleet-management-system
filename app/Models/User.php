@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\UserRole;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -28,8 +29,13 @@ class User extends Authenticatable
         'address_details',
         'email',
         'password',
-        'role'
+        'role_id'
     ];
+
+    public function role()
+    {
+        return $this->belongsTo(UserRole::class, 'role_id');
+    }
 
     /**
      * The attributes that should be hidden for serialization.

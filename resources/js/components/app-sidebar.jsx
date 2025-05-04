@@ -3,7 +3,7 @@ import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { Link } from '@inertiajs/react';
-import { BookOpen, ChartColumnBig, DrillIcon, Folder, LayoutGrid, LucidePuzzle, TruckIcon, Users, WrenchIcon } from 'lucide-react';
+import { BookOpen, ChartColumnBig, DrillIcon, Folder, HandHelpingIcon, LayoutGrid, LucidePuzzle, TruckIcon, Users, WrenchIcon } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems = [
@@ -11,6 +11,16 @@ const mainNavItems = [
         title: 'Dashboard',
         href: '/dashboard',
         icon: LayoutGrid,
+    },
+    {
+        title: 'Services',
+        href: '/services',
+        icon: HandHelpingIcon,
+        children: [
+            { title: 'Requests', href: '/services/requests' },
+            { title: 'For inspection', href: '/services/request-inspections' },
+            { title: 'Completed', href: '/services/completed' },
+        ],
     },
     {
         title: 'Vehicles',
@@ -27,9 +37,10 @@ const mainNavItems = [
         icon: WrenchIcon,
         children: [
             { title: 'All', href: '/repairs' },
-            { title: 'Ongoing', href: '/repairs?status=in_progress' },
+            { title: 'Ongoing', href: '/repairs?status=ongoing' },
             { title: 'Pending', href: '/repairs?status=pending' },
             { title: 'Completed', href: '/repairs?status=completed' },
+            { title: 'Cancelled', href: '/repairs?status=cancelled' },
         ],
     },
     {

@@ -56,7 +56,7 @@ export const columns = (handleView, handleEdit, handleDelete) => [
             const meterReading = parseFloat(info.getValue());
             const formatted = new Intl.NumberFormat('en-US').format(meterReading);
 
-            return <div className="text-left">{formatted} km</div>;
+            return <div className="text-left">tbd km</div>;
         },
     }),
     columnHelper.accessor('status', {

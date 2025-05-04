@@ -34,7 +34,6 @@ class ProfileUpdateRequest extends FormRequest
             //not sure with this
             // 'role' => ['required', 'string', 'max:255'],
             // 'role' => ['required', 'string', 'max:255', Rule::in(['admin', 'driver', 'mechanic', 'staff'])],
-            'role' => ['nullable', 'string', 'max:255'],
 
             'email' => [
                 'required',

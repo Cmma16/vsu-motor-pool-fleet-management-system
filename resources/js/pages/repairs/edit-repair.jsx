@@ -23,16 +23,14 @@ const pageDetails = {
     description: 'Update the details of the repair request.',
 };
 
-export default function EditRepair({ repair, vehicles, users }) {
+export default function EditRepair({ repair, vehicles, users, serviceRequests }) {
     const { data, setData, put, processing, errors, reset } = useForm({
         vehicle_id: repair.vehicle_id,
+        request_id: repair.request_id,
+        performed_by: repair.performed_by,
+        confirmed_by: repair.confirmed_by,
         description: repair.description,
-        scheduled_date: repair.scheduled_date,
-        required_by: repair.required_by,
-        urgency_level: repair.urgency_level,
-        assigned_personnel: repair.assigned_personnel,
         status: repair.status,
-        requested_by: repair.requested_by,
     });
 
     const editRepair = (e) => {
@@ -70,6 +68,7 @@ export default function EditRepair({ repair, vehicles, users }) {
                             errors={errors}
                             vehicles={vehicles}
                             users={users}
+                            serviceRequests={serviceRequests}
                         />
                     </CardContent>
                 </Card>

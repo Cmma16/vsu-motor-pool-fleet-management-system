@@ -24,6 +24,12 @@ export function AboutVehicleCard({ vehicle }) {
                             <span>{vehicle.vehicle_name}</span>
                         </div>
 
+                        {/* Plate Number */}
+                        <div className="flex flex-col space-y-2">
+                            <Label htmlFor="brand">Brand</Label>
+                            <span>{vehicle.brand}</span>
+                        </div>
+
                         {/* Model */}
 
                         <div className="flex flex-col space-y-2">
@@ -66,12 +72,6 @@ export function AboutVehicleCard({ vehicle }) {
                         <div className="flex flex-col space-y-2">
                             <Label htmlFor="fuel_type">Fuel Type</Label>
                             <span>{vehicle.fuel_type}</span>
-                        </div>
-
-                        {/* Plate Number */}
-                        <div className="flex flex-col space-y-2">
-                            <Label htmlFor="plate_number">Plate Number</Label>
-                            <span>{vehicle.plate_number}</span>
                         </div>
                         <Link
                             href={`${vehicle.vehicle_id}/edit`}

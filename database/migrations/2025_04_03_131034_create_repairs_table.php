@@ -13,14 +13,12 @@ return new class extends Migration
     {
         Schema::create('repairs', function (Blueprint $table) {
             $table->id('repair_id');
-            $table->foreignId('vehicle_id')->constrained('vehicles', 'vehicle_id')->onDelete('cascade');
+            $table->foreignId('vehicle_id')->constrained('vehicles', 'vehicle_id')->onDelete('set null');
+            $table->foreignId('request_id')->nullable()->constrained('service_requests', 'request_id')->onDelete('set null');
+            $table->foreignId('performed_by')->nullable()->constrained('users', 'id')->onDelete('set null');
+            $table->foreignId('confirmed_by')->nullable()->constrained('users', 'id')->onDelete('set null');
             $table->string('description', 255);
-            $table->date('scheduled_date');
-            $table->date('required_by');
-            $table->enum('urgency_level', ['low', 'medium', 'high', 'critical']);
-            $table->foreignId('assigned_personnel')->nullable()->constrained('users', 'id')->onDelete('set null');
-            $table->enum('status', ['pending', 'in progress', 'completed', 'cancelled']);
-            $table->foreignId('requested_by')->nullable()->constrained('users', 'id')->onDelete('set null');
+            $table->enum('status', ['pending', 'ongoing', 'completed', 'cancelled']);
             $table->timestamps();
 
             // Foreign key constraints

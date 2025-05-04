@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\UserRole;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -39,7 +40,7 @@ class RegisteredUserController extends Controller
             'city' => 'required|string|max:500',
             'barangay' => 'required|string|max:500',
             'address_details' => 'nullable|string|max:500',
-            'role' => 'nullable|string|max:500',
+            'role_id' => 'required|integer|exists:'.UserRole::class.',role_id',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
@@ -53,7 +54,7 @@ class RegisteredUserController extends Controller
             'city' => $request->city,
             'barangay' => $request->barangay,
             'address_details' => $request->address_details,
-            'role' => $request->role,
+            'role_id' => $request->role_id,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);

@@ -18,7 +18,23 @@ class VehicleFactory extends Factory
     {
         return [
             'asset_tag' => $this->faker->unique()->regexify('[A-Z0-9]{8}'),
-            'vehicle_name' => $this->faker->word(),
+            'vehicle_name' => $this->faker->randomElement([
+                'Toyota Corolla', 
+                'Honda Civic', 
+                'Ford F-150', 
+                'Nissan Sentra', 
+                'Chevrolet Express Van', 
+                'Hyundai Tucson', 
+                'Isuzu NPR', 
+                'Mercedes-Benz Sprinter Van', 
+                'Ford Transit Van', 
+                'Dodge Ram 1500', 
+                'Mitsubishi L300', 
+                'Volvo Bus', 
+                'Mercedes-Benz Citaro', 
+                'International Harvester Fire Truck', 
+                'Pierce Arrow XT Fire Truck'
+            ]),
             'brand' => $this->faker->randomElement(['Toyota', 'Honda', 'Ford', 'Chevrolet', 'Nissan']),
             'model' => $this->faker->word(),
             'vehicle_type' => $this->faker->randomElement(['sedan', 'truck', 'motorcycle', 'bus', 'other']),

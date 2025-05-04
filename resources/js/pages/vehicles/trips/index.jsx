@@ -4,7 +4,7 @@ import AppLayout from '@/layouts/app-layout';
 
 import { Head } from '@inertiajs/react';
 
-import { CalendarPage } from '@/components/calendar/calendar-page';
+import { TripsPage } from '@/components/trip/tripPage';
 
 const breadcrumbs = [
     {
@@ -15,15 +15,15 @@ const breadcrumbs = [
 
 const pageDetails = {
     title: 'Vehicle Trips',
-    description: 'Schedule, view and manage all trips taken by vehicles in the fleet',
+    description: 'Monitor and manage all fleet trips',
 };
 
-export default function index() {
+export default function TripsIndex() {
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             <Head title="Vehicles" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-                <CalendarPage />
+                <TripsPage />
                 <div className="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border md:min-h-min">
                     <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
                 </div>

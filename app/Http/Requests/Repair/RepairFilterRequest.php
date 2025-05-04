@@ -22,7 +22,7 @@ class RepairFilterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status' => 'nullable|string|in:pending,in_progress,completed', // Ensures valid values
+            'status' => 'nullable|string|in:pending,ongoing,completed,cancelled', // Ensures valid values
         ];
     }
 }

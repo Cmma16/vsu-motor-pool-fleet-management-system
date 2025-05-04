@@ -13,6 +13,8 @@ import { MoreHorizontal, NotepadText, Pencil, TrashIcon } from 'lucide-react';
 export function DataTableRowActions({ row, rowKey = 'id', handleView, handleEdit, handleDelete }) {
     const rowId = row[rowKey];
 
+    // console.log('Row actions:', rowId, rowKey);
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>

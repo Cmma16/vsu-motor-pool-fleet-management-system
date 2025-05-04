@@ -38,23 +38,21 @@ export const RepairsColumn = (handleView, handleEdit, handleDelete) => [
         ),
         cell: (info) => <div className="text-left">{info.getValue()}</div>,
     }),
+    columnHelper.accessor('request_id', {
+        header: () => <div className="text-left">Request</div>,
+        cell: (info) => <div className="text-left">{info.getValue()}</div>,
+    }),
+    columnHelper.accessor('performed_by', {
+        header: () => <div className="text-left">Performed by</div>,
+        cell: (info) => <div className="text-left">{info.getValue()}</div>,
+    }),
+    columnHelper.accessor('confirmed_by', {
+        header: () => <div className="text-left">Confirmed by</div>,
+        cell: (info) => <div className="text-left">{info.getValue()}</div>,
+    }),
     columnHelper.accessor('description', {
         header: () => <div className="text-left">Description</div>,
         cell: (info) => <div className="text-left">{info.getValue()}</div>,
-    }),
-    columnHelper.accessor('scheduled_date', {
-        header: () => <div className="text-left">Date scheduled</div>,
-        cell: (info) => <div className="text-left">{info.getValue()}</div>,
-    }),
-    columnHelper.accessor('required_by', {
-        header: () => <div className="text-left">Required by</div>,
-        cell: (info) => <div className="text-left">{info.getValue()}</div>,
-    }),
-    columnHelper.accessor('urgency_level', {
-        header: () => <div className="text-left">Urgency level</div>,
-        cell: (info) => {
-            return <div className="text-left">{info.getValue()}</div>;
-        },
     }),
     columnHelper.accessor('status', {
         header: () => <div className="text-left">Status</div>,

@@ -26,7 +26,14 @@ export default function Profile({ mustVerifyEmail, status }) {
     const { auth } = usePage().props;
 
     const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
-        name: auth.user.name,
+        first_name: auth.user.first_name,
+        middle_name: auth.user.middle_name,
+        last_name: auth.user.last_name,
+        contact_number: auth.user.contact_number,
+        address_details: auth.user.address_details,
+        province: auth.user.province,
+        city: auth.user.city,
+        barangay: auth.user.barangay,
         email: auth.user.email,
     });
 
@@ -40,6 +47,7 @@ export default function Profile({ mustVerifyEmail, status }) {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
+            {/*console.log(auth.user)*/}
             <Head title="Profile settings" />
 
             <SettingsLayout>
@@ -48,19 +56,120 @@ export default function Profile({ mustVerifyEmail, status }) {
 
                     <form onSubmit={submit} className="space-y-6">
                         <div className="grid gap-2">
-                            <Label htmlFor="name">Name</Label>
+                            <Label htmlFor="first_name">First Name</Label>
 
                             <Input
-                                id="name"
+                                id="first_name"
                                 className="mt-1 block w-full"
-                                value={data.name}
-                                onChange={(e) => setData('name', e.target.value)}
+                                value={data.first_name}
+                                onChange={(e) => setData('first_name', e.target.value)}
                                 required
                                 autoComplete="name"
-                                placeholder="Full name"
+                                placeholder="First name"
                             />
 
                             <InputError className="mt-2" message={errors.name} />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="middle_name">Middle Name(Optional)</Label>
+
+                            <Input
+                                id="middle_name"
+                                className="mt-1 block w-full"
+                                value={data.middle_name}
+                                onChange={(e) => setData('middle_name', e.target.value)}
+                                required
+                                autoComplete="name"
+                                placeholder="Middle name"
+                            />
+
+                            <InputError className="mt-2" message={errors.name} />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="last_name">Last Name</Label>
+
+                            <Input
+                                id="last_name"
+                                className="mt-1 block w-full"
+                                value={data.last_name}
+                                onChange={(e) => setData('last_name', e.target.value)}
+                                required
+                                autoComplete="name"
+                                placeholder="Last name"
+                            />
+
+                            <InputError className="mt-2" message={errors.name} />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="contact_number">Contact Number</Label>
+                            <Input
+                                id="contact_number"
+                                className="mt-1 block w-full"
+                                value={data.contact_number}
+                                onChange={(e) => setData('contact_number', e.target.value)}
+                                required
+                                autoComplete="tel"
+                                placeholder="Contact number"
+                            />
+                            <InputError className="mt-2" message={errors.contact_number} />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="province">Province</Label>
+                            <Input
+                                id="province"
+                                className="mt-1 block w-full"
+                                value={data.province}
+                                onChange={(e) => setData('province', e.target.value)}
+                                required
+                                autoComplete="address-level1"
+                                placeholder="Province"
+                            />
+                            <InputError className="mt-2" message={errors.province} />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="city">City/Municipality/Town</Label>
+                            <Input
+                                id="city"
+                                className="mt-1 block w-full"
+                                value={data.city}
+                                onChange={(e) => setData('city', e.target.value)}
+                                required
+                                autoComplete="address-level2"
+                                placeholder="City/Municipality/Town"
+                            />
+                            <InputError className="mt-2" message={errors.city} />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="barangay">Barangay</Label>
+                            <Input
+                                id="barangay"
+                                className="mt-1 block w-full"
+                                value={data.barangay}
+                                onChange={(e) => setData('barangay', e.target.value)}
+                                required
+                                autoComplete="address-level3"
+                                placeholder="Barangay"
+                            />
+                            <InputError className="mt-2" message={errors.barangay} />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="address_details">Address Details (Optional)</Label>
+                            <Input
+                                id="address_details"
+                                className="mt-1 block w-full"
+                                value={data.address_details}
+                                onChange={(e) => setData('address_details', e.target.value)}
+                                autoComplete="address"
+                                placeholder="Address details"
+                            />
+                            <InputError className="mt-2" message={errors.address_details} />
                         </div>
 
                         <div className="grid gap-2">

@@ -6,13 +6,10 @@ export function PlateNumberCard({ plate_number }) {
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Plate Number</CardTitle>
-                <CardDescription>Details about the vehicle's license plate.</CardDescription>
+                <CardTitle>Vehicle License</CardTitle>
+                <CardDescription>Details about the vehicle's license.</CardDescription>
             </CardHeader>
             <CardContent className="">
-                <div className="flex flex-col space-y-2">
-                    <span className="font-bold">{plate_number}</span>
-                </div>
                 <div className="mt-2 flex flex-col space-y-2">
                     <Label htmlFor="expiration_date">Expiration Date</Label>
                     <span>May 02, 2026</span>
