@@ -49,7 +49,7 @@ export default function details({ maintenancePlan }) {
                                 {/* Next Service KM */}
                                 <div className="flex flex-col space-y-2">
                                     <Label htmlFor="next_service_km">Next Service (km)</Label>
-                                    <span>{maintenancePlan.next_service_km + ' km' ?? 'N/A'}</span>
+                                    <span>{maintenancePlan?.next_service_km ? `${maintenancePlan.next_service_km} km` : 'N/A'}</span>
                                 </div>
 
                                 {/* Description */}
