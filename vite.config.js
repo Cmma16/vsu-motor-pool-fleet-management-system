@@ -27,5 +27,4 @@ export default defineConfig({
             'ziggy-js': resolve(__dirname, 'vendor/tightenco/ziggy'),
         },
     },
-    base: import.meta.env.VITE_BASE_PATH || '/vsu-motor-pool-fleet-management-system',
 });
