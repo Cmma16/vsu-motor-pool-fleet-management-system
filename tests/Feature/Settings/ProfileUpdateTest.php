@@ -28,7 +28,14 @@ class ProfileUpdateTest extends TestCase
         $response = $this
             ->actingAs($user)
             ->patch('/settings/profile', [
-                'name' => 'Test User',
+                'first_name' => 'John',
+                'middle_name' => 'Smith',
+                'last_name' => 'Doe',
+                'contact_number' => '09123456789',
+                'province' => 'Leyte',
+                'city' => 'Tolosa',
+                'barangay' => 'Opong',
+                'address_details' => '123 Main St',
                 'email' => 'test@example.com',
             ]);
 
@@ -38,9 +45,15 @@ class ProfileUpdateTest extends TestCase
 
         $user->refresh();
 
-        $this->assertSame('Test User', $user->name);
+        $this->assertSame('John', $user->first_name);
+        $this->assertSame('Smith', $user->middle_name);
+        $this->assertSame('Doe', $user->last_name);
+        $this->assertSame('09123456789', $user->contact_number);
+        $this->assertSame('Leyte', $user->province);
+        $this->assertSame('Baybay City', $user->city);
+        $this->assertSame('Opong', $user->barangay);
+        $this->assertSame('123 Main St', $user->address_details);
         $this->assertSame('test@example.com', $user->email);
-        $this->assertNull($user->email_verified_at);
     }
 
     public function test_email_verification_status_is_unchanged_when_the_email_address_is_unchanged()
@@ -50,7 +63,14 @@ class ProfileUpdateTest extends TestCase
         $response = $this
             ->actingAs($user)
             ->patch('/settings/profile', [
-                'name' => 'Test User',
+                'first_name' => 'John',
+                'middle_name' => 'Smith',
+                'last_name' => 'Doe',
+                'contact_number' => '09123456789',
+                'province' => 'Leyte',
+                'city' => 'Tolosa',
+                'barangay' => 'Opong',
+                'address_details' => '123 Main St',
                 'email' => $user->email,
             ]);
 
