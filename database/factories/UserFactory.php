@@ -60,7 +60,7 @@ class UserFactory extends Factory
                 'Burak',
             ]),
             'address_details' => $this->faker->streetAddress(),
-            'role_id' => UserRole::inRandomOrder()->first()->role_id,
+            'role_id' => UserRole::first()?->role_id ?? UserRole::factory()->create()->role_id,
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),

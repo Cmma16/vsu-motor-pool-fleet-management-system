@@ -33,17 +33,41 @@ const pageDetails = {
 function getStatusBadge(status) {
     switch (status) {
         case 'pending':
-            return <Badge variant="outline">Scheduled</Badge>;
+            return (
+                <Badge variant="outline" className="bg-gray-100">
+                    Scheduled
+                </Badge>
+            );
         case 'approved':
-            return <Badge className="bg-green-500">Approved</Badge>;
+            return (
+                <Badge variant="default" className="bg-green-500">
+                    Approved
+                </Badge>
+            );
         case 'ongoing':
-            return <Badge className="bg-yellow-500">Ongoing</Badge>;
+            return (
+                <Badge variant="default" className="bg-yellow-500">
+                    Ongoing
+                </Badge>
+            );
         case 'completed':
-            return <Badge variant="secondary">Completed</Badge>;
+            return (
+                <Badge variant="secondary" className="bg-gray-500">
+                    Completed
+                </Badge>
+            );
         case 'cancelled':
-            return <Badge variant="destructive">Cancelled</Badge>;
+            return (
+                <Badge variant="destructive" className="bg-red-500">
+                    Cancelled
+                </Badge>
+            );
         default:
-            return <Badge variant="outline">{status}</Badge>;
+            return (
+                <Badge variant="outline" className="bg-gray-200">
+                    {status}
+                </Badge>
+            );
     }
 }
 
@@ -85,11 +109,11 @@ export default function TripsIndex({ trips = [] }) {
                 <div className="container mx-auto py-6">
                     <div className="mb-6 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
                         <div className="flex items-center gap-2">
-                            <Button>
+                            <Button variant="default" size="default" className="flex items-center">
                                 <Filter className="mr-2 h-4 w-4" />
                                 Filter
                             </Button>
-                            <Button variant="default" onClick={() => router.get(route('trips.create'))}>
+                            <Button variant="default" size="default" className="flex items-center" onClick={() => router.visit('/trips/create')}>
                                 <Car className="mr-2 h-4 w-4" />
                                 New Trip
                             </Button>
@@ -113,19 +137,28 @@ export default function TripsIndex({ trips = [] }) {
                                         Calendar View
                                     </TabsTrigger>
                                 </TabsList>
-
                                 <div className="flex items-center gap-2">
-                                    <Input placeholder="Search trips..." className="w-[200px] md:w-[300px]" />
+                                    <Input type="text" placeholder="Search trips..." className="w-[200px] md:w-[300px]" />
                                     <Select defaultValue="all">
                                         <SelectTrigger className="w-[130px] bg-white">
                                             <SelectValue placeholder="Status" />
                                         </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="all">All Statuses</SelectItem>
-                                            <SelectItem value="scheduled">Scheduled</SelectItem>
-                                            <SelectItem value="in-progress">In Progress</SelectItem>
-                                            <SelectItem value="completed">Completed</SelectItem>
-                                            <SelectItem value="cancelled">Cancelled</SelectItem>
+                                        <SelectContent className="bg-white">
+                                            <SelectItem value="all" className="bg-white">
+                                                All Statuses
+                                            </SelectItem>
+                                            <SelectItem value="scheduled" className="bg-white">
+                                                Scheduled
+                                            </SelectItem>
+                                            <SelectItem value="in-progress" className="bg-white">
+                                                In Progress
+                                            </SelectItem>
+                                            <SelectItem value="completed" className="bg-white">
+                                                Completed
+                                            </SelectItem>
+                                            <SelectItem value="cancelled" className="bg-white">
+                                                Cancelled
+                                            </SelectItem>
                                         </SelectContent>
                                     </Select>
                                 </div>
@@ -145,15 +178,24 @@ export default function TripsIndex({ trips = [] }) {
                                 </div>
                             </TabsContent>
 
-                            <TabsContent value="calendar">
+                            <TabsContent value="calendar" className="space-y-4">
                                 <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
                                     <Card className="col-span-1">
-                                        <CardHeader>
-                                            <CardTitle>Calendar</CardTitle>
-                                            <CardDescription>Select a date to view scheduled trips</CardDescription>
+                                        <CardHeader className="bg-white">
+                                            <CardTitle className="bg-white">Calendar</CardTitle>
+                                            <CardDescription className="bg-white">Select a date to view scheduled trips</CardDescription>
                                         </CardHeader>
                                         <CardContent className="flex justify-center">
-                                            <CalendarComponent mode="single" selected={date} onSelect={setDate} className="rounded-md border" />
+                                            <CalendarComponent
+                                                mode="single"
+                                                selected={date}
+                                                onSelect={setDate}
+                                                className="rounded-md border"
+                                                classNames={{
+                                                    day_selected: 'bg-primary text-primary-foreground',
+                                                    day_today: 'bg-accent text-accent-foreground',
+                                                }}
+                                            />
                                         </CardContent>
                                     </Card>
 
