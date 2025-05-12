@@ -18,6 +18,8 @@ class RegistrationTest extends TestCase
 
     public function test_new_users_can_register()
     {
+        $role = \App\Models\UserRole::factory()->create();
+
         $response = $this->post('/register', [
             'first_name' => 'John',
             'middle_name' => 'Smith',
@@ -27,6 +29,7 @@ class RegistrationTest extends TestCase
             'city' => 'Baybay City',
             'barangay' => 'Opong',
             'address_details' => '123 Main St',
+            'role_id' => $role->role_id,
             'email' => 'test@example.com',
             'password' => 'password',
             'password_confirmation' => 'password',
