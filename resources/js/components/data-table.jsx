@@ -67,7 +67,7 @@ export function DataTable({ columns, data, handleCreate, handleView, handleEdit,
                             ))
                         ) : (
                             <TableRow>
-                                <TableCell colSpan={columns.length} className="h-24 self-center text-center">
+                                <TableCell colSpan={columns.length} className="h-24 text-center">
                                     No results.
                                 </TableCell>
                             </TableRow>

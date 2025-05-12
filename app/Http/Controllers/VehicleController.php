@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Vehicle;
+use App\Models\OdometerLog;
 use App\Http\Requests\Vehicle\StoreVehicleRequest;
 use App\Http\Requests\Vehicle\UpdateVehicleRequest;
 use App\Http\Controllers\Controller;
@@ -33,9 +34,9 @@ class VehicleController extends Controller
      */
     public function store(StoreVehicleRequest $request)
     {
-        Vehicle::create($request->validated());
+        $vehicle = Vehicle::create($request->validated());
 
-        return redirect()->route('vehicles.index');
+        return redirect()->route('vehicles.show', $vehicle->vehicle_id);
     }
 
     /**
@@ -43,8 +44,13 @@ class VehicleController extends Controller
      */
     public function show(Vehicle $vehicle)
     {
+        $odometer_reading = OdometerLog::OfVehicle($vehicle->vehicle_id)->orderBy('logged_at', 'desc')->first();
+
+        $odometer_reading = $odometer_reading ? $odometer_reading : null;
+
         return Inertia::render('vehicles/details', [
-            'vehicle' => $vehicle
+            'vehicle' => $vehicle,
+            'odometer_reading' => $odometer_reading,
         ]);
     }
 

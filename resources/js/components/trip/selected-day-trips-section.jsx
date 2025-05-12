@@ -1,7 +1,6 @@
-import { format } from 'date-fns';
-import { Clock, MapPin, MoreHorizontal, Users } from 'lucide-react';
+import { format, parseISO } from 'date-fns';
+import { Car, Clock, FileText, MapPin, MoreHorizontal, User, Users } from 'lucide-react';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -16,6 +15,7 @@ import {
 export function SelectedDayTripsSection({ selectedDateTrips, date, getStatusBadge }) {
     return (
         <Card className="col-span-1 md:col-span-2">
+            {console.log(selectedDateTrips, date)}
             <CardHeader>
                 <CardTitle>{date ? format(date, 'MMMM d, yyyy') : 'Select a date'}</CardTitle>
                 <CardDescription>{selectedDateTrips.length} trips scheduled</CardDescription>
@@ -24,40 +24,42 @@ export function SelectedDayTripsSection({ selectedDateTrips, date, getStatusBadg
                 {selectedDateTrips.length > 0 ? (
                     <div className="grid gap-4">
                         {selectedDateTrips.map((trip) => (
-                            <div key={trip.id} className="flex flex-col justify-between rounded-lg border p-4 md:flex-row">
+                            <div key={trip.trip_number} className="flex flex-col justify-between rounded-lg border p-4 md:flex-row">
                                 <div className="mb-4 flex flex-col gap-2 md:mb-0">
                                     <div className="flex items-center gap-2">
-                                        <h3 className="font-semibold">{trip.title}</h3>
+                                        <h3 className="font-semibold">{trip.purpose}</h3>
                                         {getStatusBadge(trip.status)}
                                     </div>
                                     <div className="text-muted-foreground flex items-center text-sm">
                                         <Clock className="mr-2 h-4 w-4" />
-                                        {format(trip.date, 'h:mm a')} • {trip.duration}
+                                        {format(parseISO(`${trip.start_date}T${trip.departure_time}`), 'h:mm a')}
+                                        {trip.start_date !== trip.end_date && (
+                                            <span className="ml-2">
+                                                ({format(parseISO(trip.start_date), 'MMM d')} - {format(parseISO(trip.end_date), 'MMM d')})
+                                            </span>
+                                        )}
                                     </div>
                                     <div className="text-muted-foreground flex items-center text-sm">
                                         <MapPin className="mr-2 h-4 w-4" />
-                                        {trip.startLocation} to {trip.endLocation}
+                                        {trip.destination}
+                                    </div>
+                                    <div className="text-muted-foreground flex items-center text-sm">
+                                        <FileText className="mr-2 h-4 w-4" />
+                                        Trip #{trip.trip_number} • Filed on {format(parseISO(trip.date_filed), 'MMM d, yyyy')}
+                                    </div>
+                                    <div className="text-muted-foreground flex items-center text-sm">
+                                        <Users className="mr-2 h-4 w-4" />
+                                        Requested by: {trip.requesting_party}
                                     </div>
                                 </div>
                                 <div className="flex flex-row items-start gap-4 md:flex-col">
                                     <div className="flex items-center gap-2">
-                                        <Avatar className="h-8 w-8">
-                                            <AvatarImage src={trip.driverAvatar || '/placeholder.svg'} alt={trip.driver} />
-                                            <AvatarFallback>
-                                                {trip.driver
-                                                    .split(' ')
-                                                    .map((n) => n[0])
-                                                    .join('')}
-                                            </AvatarFallback>
-                                        </Avatar>
-                                        <div className="text-sm">
-                                            <p className="font-medium">{trip.driver}</p>
-                                            <p className="text-muted-foreground text-xs">{trip.vehicle}</p>
-                                        </div>
+                                        <User className="mr-2 h-4 w-4" />
+                                        <p className="font-medium">{trip.driver_name}</p>
                                     </div>
                                     <div className="flex items-center text-sm">
-                                        <Users className="mr-2 h-4 w-4" />
-                                        {trip.passengers} passengers
+                                        <Car className="mr-2 h-4 w-4" />
+                                        {trip.vehicle_name} ({trip.plate_number})
                                     </div>
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>

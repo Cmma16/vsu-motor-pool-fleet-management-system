@@ -38,13 +38,28 @@ export default function VehicleForm({ formData, formType, setData, onSubmit, pro
                     <InputError message={errors.vehicle_name} />
                 </div>
 
+                {/* Brand */}
+                <div className="space-y-2">
+                    <Label htmlFor="brand">Brand</Label>
+                    <Input
+                        id="brand"
+                        type="text"
+                        tabIndex={3}
+                        value={formData.brand}
+                        onChange={(e) => setData('brand', e.target.value)}
+                        disabled={processing}
+                        placeholder="Brand Name"
+                    />
+                    <InputError message={errors.brand} />
+                </div>
+
                 {/* Model */}
                 <div className="space-y-2">
                     <Label htmlFor="model">Model</Label>
                     <Input
                         id="model"
                         type="text"
-                        tabIndex={3}
+                        tabIndex={4}
                         value={formData.model}
                         onChange={(e) => setData('model', e.target.value)}
                         disabled={processing}
@@ -53,11 +68,41 @@ export default function VehicleForm({ formData, formType, setData, onSubmit, pro
                     <InputError message={errors.model} />
                 </div>
 
+                {/* Engine Number */}
+                <div className="space-y-2">
+                    <Label htmlFor="engine_number">Engine Number</Label>
+                    <Input
+                        id="engine_number"
+                        type="text"
+                        tabIndex={5}
+                        value={formData.engine_number}
+                        onChange={(e) => setData('engine_number', e.target.value)}
+                        disabled={processing}
+                        placeholder="Engine Number"
+                    />
+                    <InputError message={errors.engine_number} />
+                </div>
+
+                {/* Chassis Number */}
+                <div className="space-y-2">
+                    <Label htmlFor="chassis_number">Chassis Number</Label>
+                    <Input
+                        id="chassis_number"
+                        type="text"
+                        tabIndex={6}
+                        value={formData.chassis_number}
+                        onChange={(e) => setData('chassis_number', e.target.value)}
+                        disabled={processing}
+                        placeholder="Chassis Number"
+                    />
+                    <InputError message={errors.chassis_number} />
+                </div>
+
                 {/* Vehicle Type */}
                 <div className="space-y-2">
                     <Label htmlFor="vehicle_type">Vehicle Type</Label>
                     <Select value={formData.vehicle_type} onValueChange={(value) => setData('vehicle_type', value)}>
-                        <SelectTrigger id="vehicle_type" tabIndex={4}>
+                        <SelectTrigger id="vehicle_type" tabIndex={7}>
                             <SelectValue placeholder="Select vehicle type" />
                         </SelectTrigger>
                         <SelectContent>
@@ -81,7 +126,7 @@ export default function VehicleForm({ formData, formType, setData, onSubmit, pro
                         onChange={(e) => setData('capacity', e.target.value)}
                         disabled={processing}
                         placeholder="Capacity"
-                        tabIndex={5}
+                        tabIndex={8}
                     />
                     <p className="text-muted-foreground text-sm">Number of passengers</p>
                     <InputError message={errors.capacity} />
@@ -96,7 +141,7 @@ export default function VehicleForm({ formData, formType, setData, onSubmit, pro
                         onChange={(e) => setData('location', e.target.value)}
                         disabled={processing}
                         placeholder="Location"
-                        tabIndex={6}
+                        tabIndex={9}
                     />
                     <InputError message={errors.location} />
                 </div>
@@ -110,7 +155,7 @@ export default function VehicleForm({ formData, formType, setData, onSubmit, pro
                         onChange={(e) => setData('year_acquired', e.target.value)}
                         disabled={processing}
                         placeholder="Year acquired"
-                        tabIndex={7}
+                        tabIndex={10}
                     />
                     <InputError message={errors.year_acquired} />
                 </div>
@@ -119,7 +164,7 @@ export default function VehicleForm({ formData, formType, setData, onSubmit, pro
                 <div className="space-y-2">
                     <Label htmlFor="category">Category</Label>
                     <Select value={formData.category} onValueChange={(value) => setData('category', value)}>
-                        <SelectTrigger id="category" tabIndex={8}>
+                        <SelectTrigger id="category" tabIndex={11}>
                             <SelectValue placeholder="Select category" />
                         </SelectTrigger>
                         <SelectContent>
@@ -138,25 +183,9 @@ export default function VehicleForm({ formData, formType, setData, onSubmit, pro
                         value={formData.plate_number}
                         onChange={(e) => setData('plate_number', e.target.value)}
                         disabled={processing}
-                        tabIndex={9}
+                        tabIndex={12}
                     />
                     <InputError message={errors.plate_number} />
-                </div>
-
-                {/* Odometer Reading */}
-                <div className="space-y-2">
-                    <Label htmlFor="odometer_reading">Odometer Reading</Label>
-                    <Input
-                        id="odometer_reading"
-                        type="number"
-                        value={formData.odometer_reading}
-                        onChange={(e) => setData('odometer_reading', e.target.value)}
-                        disabled={processing}
-                        placeholder="in km"
-                        tabIndex={10}
-                    />
-                    <p className="text-muted-foreground text-sm">Current mileage in km</p>
-                    <InputError message={errors.odometer_reading} />
                 </div>
 
                 {/* Fuel Type */}

@@ -26,8 +26,8 @@ class StoreRepairsRequest extends FormRequest
             'request_id' => ['required', 'integer', 'exists:service_requests,request_id'],
             'performed_by' => ['required', 'integer', 'exists:users,id'],
             'confirmed_by' => ['nullable', 'integer', 'exists:users,id'],
-            'description' => ['required', 'string', 'max:255'],
-            'status' => ['required', 'string', 'in:pending,ongoing,completed,cancelled'],
+            'repair_summary' => ['required', 'string', 'max:255'],
+            'odometer_id' => ['nullable', 'integer', 'exists:odometer_logs,odometer_id'],
         ];
     }
 }

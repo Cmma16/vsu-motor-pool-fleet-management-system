@@ -17,8 +17,8 @@ return new class extends Migration
             $table->foreignId('request_id')->nullable()->constrained('service_requests', 'request_id')->onDelete('set null');
             $table->foreignId('performed_by')->nullable()->constrained('users', 'id')->onDelete('set null');
             $table->foreignId('confirmed_by')->nullable()->constrained('users', 'id')->onDelete('set null');
-            $table->string('description', 255);
-            $table->enum('status', ['pending', 'ongoing', 'completed', 'cancelled']);
+            $table->string('repair_summary', 255);
+            $table->foreignId('odometer_id')->nullable()->constrained('odometer_logs', 'odometer_id')->onDelete('set null');
             $table->timestamps();
 
             // Foreign key constraints

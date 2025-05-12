@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\OdometerLogs;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreMaintenanceRequest extends FormRequest
+class StoreOdometerLogRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,9 @@ class StoreMaintenanceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'vehicle_id' => 'required|exists:vehicles,vehicle_id',
+            'reading' => 'required|integer',
+            'logged_at' => 'required|date',
         ];
     }
 }

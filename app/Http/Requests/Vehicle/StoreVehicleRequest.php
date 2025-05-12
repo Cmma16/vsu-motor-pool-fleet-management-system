@@ -29,8 +29,17 @@ class StoreVehicleRequest extends FormRequest
             // Vehicle Name - Required and should be a string with max length
             'vehicle_name' => 'required|string|max:255',
 
+            // Vehicle brand - Required and should be a string with max length
+            'brand' => 'required|string|max:255',
+
             // Model - Required and should be a string with max length
             'model' => 'required|string|max:255',
+
+            // Engine Number - Required and should be a string with max length
+            'engine_number' => 'required|integer',
+
+            // Chassis Number - Required and should be a string with max length
+            'chassis_number' => 'required|integer',
 
             // Vehicle Type - Required and should be a string
             'vehicle_type' => 'required|string|in:sedan,truck,motorcycle,bus,other',
@@ -49,9 +58,6 @@ class StoreVehicleRequest extends FormRequest
 
             // Plate Number - Should be unique and a string
             'plate_number' => 'required|string|max:20|unique:vehicles,plate_number',
-
-            // Odometer Reading - Should be a number and is required
-            'odometer_reading' => 'required|integer|min:0',
 
             // Fuel Type - Required and should be one of the defined values (diesel, gasoline)
             'fuel_type' => 'required|string|in:diesel,gasoline',

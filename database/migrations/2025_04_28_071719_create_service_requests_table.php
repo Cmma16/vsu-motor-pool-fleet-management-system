@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('service_requests', function (Blueprint $table) {
             $table->id('request_id');
-            $table->foreignId('vehicle_id')->constrained('vehicles', 'vehicle_id')->onDelete('set null');
-            $table->foreignId('requested_by')->constrained('users', 'id')->onDelete('set null');
+            $table->foreignId('vehicle_id')->constrained('vehicles', 'vehicle_id')->onDelete('cascade');
+            $table->foreignId('requested_by')->constrained('users', 'id')->onDelete('cascade');
             $table->dateTime('date_filed');
             $table->enum ('service_type', ['maintenance', 'repair']);
             $table->string('work_description');

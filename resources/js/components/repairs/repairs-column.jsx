@@ -50,12 +50,12 @@ export const RepairsColumn = (handleView, handleEdit, handleDelete) => [
         header: () => <div className="text-left">Confirmed by</div>,
         cell: (info) => <div className="text-left">{info.getValue()}</div>,
     }),
-    columnHelper.accessor('description', {
-        header: () => <div className="text-left">Description</div>,
+    columnHelper.accessor('repair_summary', {
+        header: () => <div className="text-left">Summary</div>,
         cell: (info) => <div className="text-left">{info.getValue()}</div>,
     }),
-    columnHelper.accessor('status', {
-        header: () => <div className="text-left">Status</div>,
+    columnHelper.accessor('odometer_reading', {
+        header: () => <div className="text-left">Odometer Reading</div>,
         cell: (info) => <div className="text-left">{info.getValue()}</div>,
     }),
     {

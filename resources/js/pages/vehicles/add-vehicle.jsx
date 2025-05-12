@@ -1,11 +1,8 @@
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import VehicleForm from '@/components/vehicle/vehicle-form';
-
-import { Head, useForm } from '@inertiajs/react';
-
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-
 import AppLayout from '@/layouts/app-layout';
+import { Head, useForm } from '@inertiajs/react';
 
 const breadcrumbs = [
     { title: 'Vehicles', href: '/vehicles' },
@@ -22,13 +19,15 @@ export default function AddVehicle() {
         asset_tag: '',
         vehicle_name: '',
         model: '',
+        brand: '',
+        engine_number: '',
+        chassis_number: '',
         vehicle_type: '',
-        capacity: '0',
+        capacity: '',
         location: '',
         year_acquired: new Date().getFullYear().toString(),
         category: 'light vehicle',
         plate_number: '',
-        odometer_reading: '0',
         fuel_type: 'gasoline',
         status: 'available',
     });

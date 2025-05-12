@@ -1,9 +1,8 @@
-import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { Link } from '@inertiajs/react';
-import { BookOpen, ChartColumnBig, DrillIcon, Folder, HandHelpingIcon, LayoutGrid, LucidePuzzle, TruckIcon, Users, WrenchIcon } from 'lucide-react';
+import { BookOpen, ChartColumnBig, Folder, Gauge, HandHelpingIcon, LayoutGrid, LucidePuzzle, TruckIcon, Users, WrenchIcon } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems = [
@@ -32,25 +31,13 @@ const mainNavItems = [
         ],
     },
     {
-        title: 'Repairs',
+        title: 'Repairs & Maintenance',
         href: '#',
         icon: WrenchIcon,
         children: [
-            { title: 'All', href: '/repairs' },
-            { title: 'Ongoing', href: '/repairs?status=ongoing' },
-            { title: 'Pending', href: '/repairs?status=pending' },
-            { title: 'Completed', href: '/repairs?status=completed' },
-            { title: 'Cancelled', href: '/repairs?status=cancelled' },
-        ],
-    },
-    {
-        title: 'Maintenance',
-        href: '#',
-        icon: DrillIcon,
-        children: [
-            { title: 'All', href: '/maintenance' },
-            { title: 'Due soon', href: '#' },
-            { title: 'Overdue', href: '#' },
+            { title: 'Maintenance Plans', href: '/plans' },
+            { title: 'Maintenance Records', href: '/maintenance' },
+            { title: 'Repair Records', href: '/repairs' },
         ],
     },
     {
@@ -62,6 +49,11 @@ const mainNavItems = [
         title: 'Personnel',
         href: '/personnel',
         icon: Users,
+    },
+    {
+        title: 'Odometer Logs',
+        href: '/odometer',
+        icon: Gauge,
     },
     {
         title: 'Reports',
@@ -103,7 +95,6 @@ export function AppSidebar() {
             </SidebarContent>
 
             <SidebarFooter>
-                <NavFooter items={footerNavItems} className="mt-auto" />
                 <NavUser />
             </SidebarFooter>
         </Sidebar>

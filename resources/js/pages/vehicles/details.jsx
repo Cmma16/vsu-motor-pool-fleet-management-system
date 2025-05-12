@@ -1,11 +1,18 @@
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 
-import { Head } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 
-import { AboutVehicleCard } from '@/components/vehicle/about-vehicle-card';
-import { OdometerReadingCard } from '@/components/vehicle/odometer-reading-card';
-import { PlateNumberCard } from '@/components/vehicle/plate-number-card';
-import { VehicleStatusCard } from '@/components/vehicle/vehicle-status-card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { BasicInfoCard } from '@/components/vehicle/basic-info-card';
+import { OperationalDetailsCard } from '@/components/vehicle/operational-details-card';
+import { TechnicalDetailsCard } from '@/components/vehicle/technical-details-card';
+
+// import { Label } from '@/components/ui/label';
+// import { Link } from '@inertiajs/react';
+
+import { Button } from '@/components/ui/button';
+import { Calendar, Car, Clock, History, MapPin, PenTool, Settings, TriangleAlert, User } from 'lucide-react';
+
 import AppLayout from '@/layouts/app-layout';
 // import { Button } from 'react-day-picker';
 
@@ -25,16 +32,127 @@ const pageDetails = {
     description: 'Comprehensive information about the vehicle, including specifications and status.',
 };
 
-export default function details({ vehicle }) {
+export default function details({ vehicle, odometer_reading }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
+            {console.log(odometer_reading)}
             <Head title="Vehicle Details" />
-            <div className="mx-6 mb-3 flex flex-col gap-2 space-y-6 rounded-lg md:flex-row">
-                <AboutVehicleCard vehicle={vehicle} />
-                <div className="space-y-1.5 md:w-1/3">
-                    <OdometerReadingCard odometer_reading={vehicle.odometer_reading} />
-                    <VehicleStatusCard status={vehicle.status} />
-                    <PlateNumberCard plate_number={vehicle.plate_number} />
+            <div className="container mx-auto px-4 py-6 md:px-6">
+                <div className="mb-6 flex flex-col items-start justify-between md:flex-row md:items-center">
+                    <div>
+                        <h1 className="mt-2 flex items-center gap-2 text-2xl font-bold md:text-3xl">
+                            <Car className="h-6 w-6" />
+                            {vehicle.vehicle_name}
+                            {/* <span className="ml-2">{getStatusBadge(vehicleData.status)}</span> */}
+                        </h1>
+                    </div>
+                    <div className="mt-4 flex gap-2 md:mt-0">
+                        <Button variant="outline" size="sm">
+                            <History className="mr-2 h-4 w-4" />
+                            Trip Log
+                        </Button>
+                        <Button variant="outline" size="sm">
+                            <PenTool className="mr-2 h-4 w-4" />
+                            Schedule Service
+                        </Button>
+                        <Button onClick={() => router.get(`${vehicle.vehicle_id}/edit`)} size="sm">
+                            <Settings className="mr-2 h-4 w-4" />
+                            Edit vehicle
+                        </Button>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+                    {/* Left column - Basic info and details */}
+                    <BasicInfoCard vehicle={vehicle} />
+                    <TechnicalDetailsCard vehicle={vehicle} />
+                    <OperationalDetailsCard vehicle={vehicle} odometer_reading={odometer_reading} />
+                    <Card>
+                        <CardHeader className="pb-3">
+                            <CardTitle className="text-base">Current Assignment</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            <div className="flex items-center">
+                                <User className="text-muted-foreground mr-2 h-5 w-5" />
+                                <div>
+                                    <p className="text-muted-foreground text-sm">Driver</p>
+                                    <p className="font-medium">Carlos Miguel Advincula</p>
+                                </div>
+                            </div>
+                            <div className="flex items-center">
+                                <MapPin className="text-muted-foreground mr-2 h-5 w-5" />
+                                <div>
+                                    <p className="text-muted-foreground text-sm">Destination</p>
+                                    <p className="font-medium">VSU Tolosa Campus</p>
+                                </div>
+                            </div>
+                            <div className="flex items-center">
+                                <TriangleAlert className="text-muted-foreground mr-2 h-5 w-5" />
+                                <div>
+                                    <p className="text-muted-foreground text-sm">Status</p>
+                                    <p className="font-medium">Ongoing</p>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+                    <div className="space-y-6 md:col-span-2">
+                        <Card>
+                            <CardHeader>
+                                <div className="flex items-center justify-between">
+                                    <CardTitle>Maintenance Status</CardTitle>
+                                    <Button variant="outline" size="sm">
+                                        View Full History
+                                    </Button>
+                                </div>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="space-y-4">
+                                    <div className="flex items-start gap-4">
+                                        {/* {isMaintenanceSoon() ? (
+                                            <AlertTriangle className="mt-0.5 h-5 w-5 text-yellow-500" />
+                                        ) : (
+                                            <CheckCircle className="mt-0.5 h-5 w-5 text-green-500" />
+                                        )} */}
+                                        <div>
+                                            <p className="font-medium">Next Scheduled Maintenance</p>
+                                            <div className="mt-1 flex items-center gap-2">
+                                                <Calendar className="text-muted-foreground h-4 w-4" />
+                                                <p className={`text-sm`}>2025-05-02 (Due Soon)</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-start gap-4">
+                                        <Clock className="text-muted-foreground mt-0.5 h-5 w-5" />
+                                        <div>
+                                            <p className="font-medium">Last Service</p>
+                                            <div className="mt-1 flex items-center gap-2">
+                                                <Calendar className="text-muted-foreground h-4 w-4" />
+                                                <p className="text-muted-foreground text-sm">2024-12-28</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="mt-6">
+                                    <h4 className="mb-3 font-medium">Recent Maintenance</h4>
+                                    <div className="space-y-4">
+                                        <div key={1} className="flex justify-between border-b pb-3">
+                                            <div>
+                                                <p className="font-medium">Maintenance</p>
+                                                <p className="text-muted-foreground text-sm">2024-12-28</p>
+                                                <p className="mt-1 text-sm">Oil change, filter replacement, brake inspection</p>
+                                            </div>
+                                            <div className="text-right">
+                                                <Button variant="ghost" size="sm" className="mt-1 h-7">
+                                                    Details
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </div>
                 </div>
             </div>
             <div className="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border md:min-h-min">

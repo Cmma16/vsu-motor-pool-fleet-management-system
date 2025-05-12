@@ -1,7 +1,6 @@
 import { format } from 'date-fns';
-import { Clock, MapPin, MoreHorizontal, Users } from 'lucide-react';
+import { Clock, FileText, MapPin, MoreHorizontal, Users } from 'lucide-react';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -24,40 +23,35 @@ export function CurrentDayTripsSection({ todayTrips, formatTripDate, getStatusBa
                 {todayTrips.length > 0 ? (
                     <div className="grid gap-4">
                         {todayTrips.map((trip) => (
-                            <div key={trip.id} className="flex flex-col justify-between rounded-lg border p-4 md:flex-row">
+                            <div key={trip.trip_number} className="flex flex-col justify-between rounded-lg border p-4 md:flex-row">
                                 <div className="mb-4 flex flex-col gap-2 md:mb-0">
                                     <div className="flex items-center gap-2">
-                                        <h3 className="font-semibold">{trip.title}</h3>
+                                        <h3 className="font-semibold">{trip.purpose}</h3>
                                         {getStatusBadge(trip.status)}
                                     </div>
                                     <div className="text-muted-foreground flex items-center text-sm">
                                         <Clock className="mr-2 h-4 w-4" />
-                                        {formatTripDate(trip.date)} • {trip.duration}
+                                        {formatTripDate(trip.start_date, trip.departure_time)}
                                     </div>
                                     <div className="text-muted-foreground flex items-center text-sm">
                                         <MapPin className="mr-2 h-4 w-4" />
-                                        {trip.startLocation} to {trip.endLocation}
+                                        {trip.destination}
+                                    </div>
+                                    <div className="text-muted-foreground flex items-center text-sm">
+                                        <FileText className="mr-2 h-4 w-4" />
+                                        Trip #{trip.trip_number} • {trip.requesting_party}
                                     </div>
                                 </div>
                                 <div className="flex flex-row items-start gap-4 md:flex-col">
                                     <div className="flex items-center gap-2">
-                                        <Avatar className="h-8 w-8">
-                                            <AvatarImage src={trip.driverAvatar || '/placeholder.svg'} alt={trip.driver} />
-                                            <AvatarFallback>
-                                                {trip.driver
-                                                    .split(' ')
-                                                    .map((n) => n[0])
-                                                    .join('')}
-                                            </AvatarFallback>
-                                        </Avatar>
                                         <div className="text-sm">
-                                            <p className="font-medium">{trip.driver}</p>
-                                            <p className="text-muted-foreground text-xs">{trip.vehicle}</p>
+                                            <p className="font-medium">{trip.driver_name}</p>
+                                            <p className="text-muted-foreground text-xs">{trip.vehicle_name}</p>
                                         </div>
                                     </div>
                                     <div className="flex items-center text-sm">
                                         <Users className="mr-2 h-4 w-4" />
-                                        {trip.passengers} passengers
+                                        {trip.vehicle_capacity} capacity
                                     </div>
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>

@@ -50,14 +50,9 @@ export const columns = (handleView, handleEdit, handleDelete) => [
         header: () => <div className="text-left">Capacity</div>,
         cell: (info) => <div className="text-left">{info.getValue()} person(s)</div>,
     }),
-    columnHelper.accessor('odometer_reading', {
-        header: () => <div className="text-left">Odometer</div>,
-        cell: (info) => {
-            const meterReading = parseFloat(info.getValue());
-            const formatted = new Intl.NumberFormat('en-US').format(meterReading);
-
-            return <div className="text-left">tbd km</div>;
-        },
+    columnHelper.accessor('plate_number', {
+        header: () => <div className="text-left">License plate</div>,
+        cell: (info) => <div className="text-left">{info.getValue()}</div>,
     }),
     columnHelper.accessor('status', {
         header: () => <div className="text-left">Status</div>,

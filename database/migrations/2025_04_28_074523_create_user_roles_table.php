@@ -23,8 +23,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Schema::dropIfExists('service_requests');
-        // Schema::dropIfExists('users');
+        Schema::dropIfExists('service_requests');
+        Schema::dropIfExists('users');
         Schema::dropIfExists('user_roles');
     }
 };

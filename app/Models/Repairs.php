@@ -18,8 +18,8 @@ class Repairs extends Model
             'request_id',
             'performed_by',
             'confirmed_by',
-            'description',
-            'status',
+            'repair_summary',
+            'odometer_id',
             // 'created_at',
             // 'updated_at',
     ];
@@ -45,6 +45,12 @@ class Repairs extends Model
     public function confirmedBy()
     {
         return $this->belongsTo(User::class, 'confirmed_by');
+    }
+
+    // Relationship with OdometerLog
+    public function odometerReading()
+    {
+        return $this->belongsTo(OdometerLog::class, 'odometer_id');
     }
 }
 

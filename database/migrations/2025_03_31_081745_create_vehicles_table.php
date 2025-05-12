@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('vehicle_name');
             $table->string('brand');
             $table->string('model');
+            $table->integer('engine_number');
+            $table->integer('chassis_number');
             $table->enum('vehicle_type', ['sedan', 'truck', 'motorcycle', 'bus', 'other']);
             $table->integer('capacity');
             $table->string('location');

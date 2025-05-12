@@ -8,7 +8,10 @@ use App\Http\Controllers\ServiceRequestController;
 use App\Http\Controllers\ServiceInspectionController;
 use App\Http\Controllers\ServiceAccomplishmentController;
 use App\Http\Controllers\PartController;
-
+use App\Http\Controllers\MaintenancePlanController;
+use App\Http\Controllers\MaintenanceController;
+use App\Http\Controllers\OdometerLogController;
+use App\Http\Controllers\TripController;
 Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
@@ -32,6 +35,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('services/request-inspections', ServiceInspectionController::class);
     Route::resource('services/completed', ServiceAccomplishmentController::class);
     Route::resource('parts', PartController::class);
+    Route::resource('plans', MaintenancePlanController::class);
+    Route::resource('odometer', OdometerLogController::class);
+    Route::resource('vehicles/trips', TripController::class);
 });
 
 require __DIR__.'/settings.php';

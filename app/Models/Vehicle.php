@@ -15,7 +15,10 @@ class Vehicle extends Model
     protected $fillable = [
         'asset_tag',
         'vehicle_name',
+        'brand',
         'model',
+        'engine_number',
+        'chassis_number',
         'vehicle_type',
         'capacity',
         'location',

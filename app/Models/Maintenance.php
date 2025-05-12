@@ -13,16 +13,45 @@ class Maintenance extends Model
     protected $primaryKey = 'maintenance_id';
     protected $fillable = [
         'maintenance_id',
+        'plan_id',
+        'request_id',
         'vehicle_id',
-        'scheduled_date',
         'date_completed',
         'odometer_reading',
-        'next_service_date',
-        'next_service_km',
         'performed_by',
         'confirmed_by',
         'date_confirmed',
         'description',
         'status',
     ];
+
+    public function plan()
+    {
+        return $this->belongsTo(MaintenancePlan::class, 'plan_id');
+    }
+
+    public function request()
+    {
+        return $this->belongsTo(MaintenanceRequest::class, 'request_id');
+    }
+
+    public function vehicleName()
+    {
+        return $this->belongsTo(Vehicle::class, 'vehicle_id');
+    }
+
+    public function odometerReading()
+    {
+        return $this->belongsTo(OdometerLog::class, 'odometer_id');
+    }
+
+    public function performedBy()
+    {
+        return $this->belongsTo(User::class, 'performed_by');
+    }
+
+    public function confirmedBy()
+    {
+        return $this->belongsTo(User::class, 'confirmed_by');
+    }
 }

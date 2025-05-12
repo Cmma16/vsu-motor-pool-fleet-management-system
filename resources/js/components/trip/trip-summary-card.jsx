@@ -27,7 +27,7 @@ export function TripSummaryCard({ todayTrips, upcomingTrips, trips }) {
                 </CardHeader>
                 <CardContent>
                     <div className="text-2xl font-bold">
-                        {trips.filter((t) => t.status === 'in-progress').length}/{trips.length}
+                        {trips.filter((t) => t.status === 'ongoing').length}/{trips.length}
                     </div>
                     <p className="text-muted-foreground text-xs">Currently in use</p>
                 </CardContent>

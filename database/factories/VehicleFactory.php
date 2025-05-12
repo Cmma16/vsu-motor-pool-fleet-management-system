@@ -37,6 +37,8 @@ class VehicleFactory extends Factory
             ]),
             'brand' => $this->faker->randomElement(['Toyota', 'Honda', 'Ford', 'Chevrolet', 'Nissan']),
             'model' => $this->faker->word(),
+            'engine_number' => $this->faker->unique()->numberBetween(100000, 999999),
+            'chassis_number' => $this->faker->unique()->numberBetween(100000, 999999),
             'vehicle_type' => $this->faker->randomElement(['sedan', 'truck', 'motorcycle', 'bus', 'other']),
             'capacity' => $this->faker->numberBetween(2, 50),
             'location' => $this->faker->city(),

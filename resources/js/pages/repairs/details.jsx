@@ -57,16 +57,16 @@ export default function details({ repair }) {
                                     <span>{repair.confirmed_by ?? 'N/A'}</span>
                                 </div>
 
-                                {/* Description */}
+                                {/* Summary */}
                                 <div className="flex flex-col space-y-2">
-                                    <Label htmlFor="description">Description</Label>
-                                    <span>{repair.description}</span>
+                                    <Label htmlFor="description">Summary</Label>
+                                    <span>{repair.repair_summary}</span>
                                 </div>
 
-                                {/* Status */}
+                                {/* Odometer Reading */}
                                 <div className="flex flex-col space-y-2">
-                                    <Label htmlFor="status">Status</Label>
-                                    <span>{repair.status}</span>
+                                    <Label htmlFor="status">Odometer Reading</Label>
+                                    <span>{repair.odometer_reading}</span>
                                 </div>
 
                                 <Link

@@ -3,8 +3,24 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import React from 'react';
+import { OdometerLogModal } from '../odometer/odometer-log-modal';
 
-export default function RepairForm({ formData, formType, setData, onSubmit, processing, errors, vehicles, users, serviceRequests }) {
+export default function RepairForm({ formData, formType, setData, onSubmit, processing, errors, vehicles, users, serviceRequests, odometerLogs }) {
+    const latestOdometer = React.useMemo(() => {
+        return odometerLogs
+            .filter((log) => log.vehicle_id === formData.vehicle_id)
+            .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))[0];
+    }, [formData.vehicle_id, odometerLogs]);
+
+    React.useEffect(() => {
+        if (latestOdometer) {
+            setData('odometer_id', latestOdometer.odometer_id);
+        } else {
+            setData('odometer_id', '');
+        }
+    }, [latestOdometer]);
+
     return (
         <form onSubmit={onSubmit} className="space-y-6">
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -81,34 +97,25 @@ export default function RepairForm({ formData, formType, setData, onSubmit, proc
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="description">Description</Label>
+                    <Label htmlFor="repair_summary">Summary</Label>
                     <Input
-                        id="description"
-                        name="description"
+                        id="repair_summary"
+                        name="repair_summary"
                         placeholder="Description of the repair conducted"
-                        value={formData.description}
-                        onChange={(e) => setData('description', e.target.value)}
+                        value={formData.repair_summary}
+                        onChange={(e) => setData('repair_summary', e.target.value)}
                         disabled={processing}
                         tabIndex={5}
                     />
-                    <InputError message={errors.description} />
+                    <InputError message={errors.repair_summary} />
                 </div>
 
-                {/* Status */}
+                {/* Odometer Reading */}
                 <div className="space-y-2">
-                    <Label htmlFor="status">Status</Label>
-                    <Select value={formData.status} onValueChange={(value) => setData('status', value)}>
-                        <SelectTrigger id="status" tabIndex={6}>
-                            <SelectValue placeholder="Select status" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="pending">Pending</SelectItem>
-                            <SelectItem value="ongoing">Ongoing</SelectItem>
-                            <SelectItem value="completed">Completed</SelectItem>
-                            <SelectItem value="cancelled">Cancelled</SelectItem>
-                        </SelectContent>
-                    </Select>
-                    <InputError message={errors.status} />
+                    <Label htmlFor="odometer_id">Odometer Reading</Label>
+                    <Input value={latestOdometer?.reading ?? ''} disabled placeholder="No odometer reading available" className="bg-gray-100" />
+                    {formData.vehicle_id && <OdometerLogModal vehicles={vehicles} formType={'add'} vehicle_id={formData.vehicle_id} />}
+                    <InputError message={errors.odometer_id} />
                 </div>
             </div>
             <Button disabled={processing} className="w-1/3">

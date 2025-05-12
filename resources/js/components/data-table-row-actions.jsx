@@ -27,10 +27,12 @@ export function DataTableRowActions({ row, rowKey = 'id', handleView, handleEdit
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <DropdownMenuItem onClick={() => navigator.clipboard.writeText(row.id)}>Copy payment ID</DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => handleView(rowId)}>
-                    <NotepadText />
-                    View details
-                </DropdownMenuItem>
+                {handleView && (
+                    <DropdownMenuItem onClick={() => handleView(rowId)}>
+                        <NotepadText />
+                        View details
+                    </DropdownMenuItem>
+                )}
                 <DropdownMenuItem onClick={() => handleEdit(rowId)}>
                     <Pencil /> Edit
                 </DropdownMenuItem>

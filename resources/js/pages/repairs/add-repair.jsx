@@ -17,7 +17,7 @@ const pageDetails = {
     description: 'Record the details of a vehicle repair.',
 };
 
-export default function AddRepair({ vehicles, users, serviceRequests }) {
+export default function AddRepair({ vehicles, users, serviceRequests, odometerLogs }) {
     const { data, setData, post, processing, errors, reset } = useForm({
         vehicle_id: '',
         request_id: '',
@@ -56,6 +56,7 @@ export default function AddRepair({ vehicles, users, serviceRequests }) {
                             vehicles={vehicles}
                             users={users}
                             serviceRequests={serviceRequests}
+                            odometerLogs={odometerLogs}
                         />
                     </CardContent>
                 </Card>
