@@ -1,3 +1,3 @@
-export default function AppLogoIcon(props) {
-    return <img src="/vsufmsLogo.svg" alt="vsufms-logo" />;
+export default function AppLogoIcon({ width, height, ...props }) {
+    return <img src="/vsufmsLogo.svg" alt="vsufms-logo" style={{ width, height }} {...props} />;
 }

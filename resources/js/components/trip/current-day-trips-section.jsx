@@ -12,7 +12,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-export function CurrentDayTripsSection({ todayTrips, formatTripDate, getStatusBadge }) {
+export function CurrentDayTripsSection({ todayTrips, formatTripDate, getStatusBadge, editTrip, viewTripDetails }) {
     return (
         <Card>
             <CardHeader>
@@ -62,8 +62,8 @@ export function CurrentDayTripsSection({ todayTrips, formatTripDate, getStatusBa
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent align="end">
                                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                            <DropdownMenuItem>View Details</DropdownMenuItem>
-                                            <DropdownMenuItem>Edit Trip</DropdownMenuItem>
+                                            <DropdownMenuItem onClick={() => viewTripDetails(trip.trip_id)}>View Details</DropdownMenuItem>
+                                            <DropdownMenuItem onClick={() => editTrip(trip.trip_id)}>Edit Trip</DropdownMenuItem>
                                             <DropdownMenuSeparator />
                                             <DropdownMenuItem>Cancel Trip</DropdownMenuItem>
                                         </DropdownMenuContent>

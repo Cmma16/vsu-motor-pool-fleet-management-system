@@ -12,10 +12,9 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-export function SelectedDayTripsSection({ selectedDateTrips, date, getStatusBadge }) {
+export function SelectedDayTripsSection({ selectedDateTrips, date, getStatusBadge, editTrip, viewTripDetails }) {
     return (
         <Card className="col-span-1 md:col-span-2">
-            {console.log(selectedDateTrips, date)}
             <CardHeader>
                 <CardTitle>{date ? format(date, 'MMMM d, yyyy') : 'Select a date'}</CardTitle>
                 <CardDescription>{selectedDateTrips.length} trips scheduled</CardDescription>
@@ -70,8 +69,8 @@ export function SelectedDayTripsSection({ selectedDateTrips, date, getStatusBadg
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent align="end">
                                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                            <DropdownMenuItem>View Details</DropdownMenuItem>
-                                            <DropdownMenuItem>Edit Trip</DropdownMenuItem>
+                                            <DropdownMenuItem onClick={() => viewTripDetails(trip.trip_id)}>View Details</DropdownMenuItem>
+                                            <DropdownMenuItem onClick={() => editTrip(trip.trip_id)}>Edit Trip</DropdownMenuItem>
                                             <DropdownMenuSeparator />
                                             <DropdownMenuItem>Cancel Trip</DropdownMenuItem>
                                         </DropdownMenuContent>

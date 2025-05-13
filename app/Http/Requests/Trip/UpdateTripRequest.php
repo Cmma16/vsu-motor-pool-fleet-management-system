@@ -11,7 +11,7 @@ class UpdateTripRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,16 @@ class UpdateTripRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'trip_number' => ['required', 'integer'],
+            'date_filed' => ['required', 'date'],
+            'start_date' => ['required', 'date'],
+            'end_date' => ['required', 'date'],
+            'purpose' => ['required', 'string', 'max:255'],
+            'destination' => ['required', 'string', 'max:255'],
+            'departure_time' => ['required', 'date_format:H:i'],
+            'requesting_party' => ['required', 'string', 'max:255'],
+            'vehicle_id' => ['required', 'integer', 'exists:vehicles,vehicle_id'],
+            'driver_id' => ['required', 'integer', 'exists:users,id'],
         ];
     }
 }

@@ -4,7 +4,7 @@ import AppLayout from '@/layouts/app-layout';
 import { Head, useForm } from '@inertiajs/react';
 
 const breadcrumbs = [
-    { title: 'Trip', href: '/vehicles/trips' },
+    { title: 'Trips', href: '/vehicles/trips' },
     { title: 'New trip', href: 'vehicles/trips/add-trip' },
 ];
 

@@ -129,7 +129,7 @@ export default function TripForm({ formData, setData, onSubmit, processing, erro
                 {/* Vehicle */}
                 <div className="space-y-2">
                     <Label htmlFor="vehicle_id">Vehicle</Label>
-                    <Select value={String(formData.vehicle_id)} onValueChange={(value) => setData('vehicle_id', Number(value))}>
+                    <Select value={String(formData.vehicle_id)} disabled={processing} onValueChange={(value) => setData('vehicle_id', Number(value))}>
                         <SelectTrigger id="vehicle_id" tabIndex={9}>
                             <SelectValue placeholder="Select vehicle" />
                         </SelectTrigger>
@@ -147,7 +147,7 @@ export default function TripForm({ formData, setData, onSubmit, processing, erro
                 {/* Driver */}
                 <div className="space-y-2">
                     <Label htmlFor="driver_id">Driver</Label>
-                    <Select value={String(formData.driver_id)} onValueChange={(value) => setData('driver_id', Number(value))}>
+                    <Select value={String(formData.driver_id)} disabled={processing} onValueChange={(value) => setData('driver_id', Number(value))}>
                         <SelectTrigger id="driver_id" tabIndex={10}>
                             <SelectValue placeholder="Select driver" />
                         </SelectTrigger>

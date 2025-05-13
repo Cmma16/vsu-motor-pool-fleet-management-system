@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { format, parseISO } from 'date-fns';
 
-export function UpcomingTripsSection({ upcomingTrips, formatTripDate, getStatusBadge }) {
+export function UpcomingTripsSection({ upcomingTrips, formatTripDate, getStatusBadge, editTrip, viewTripDetails }) {
     return (
         <Card>
             <CardHeader>
@@ -67,8 +67,8 @@ export function UpcomingTripsSection({ upcomingTrips, formatTripDate, getStatusB
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent align="end">
                                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                            <DropdownMenuItem>View Details</DropdownMenuItem>
-                                            <DropdownMenuItem>Edit Trip</DropdownMenuItem>
+                                            <DropdownMenuItem onClick={() => viewTripDetails(trip.trip_id)}>View Details</DropdownMenuItem>
+                                            <DropdownMenuItem onClick={() => editTrip(trip.trip_id)}>Edit Trip</DropdownMenuItem>
                                             <DropdownMenuSeparator />
                                             <DropdownMenuItem>Cancel Trip</DropdownMenuItem>
                                         </DropdownMenuContent>

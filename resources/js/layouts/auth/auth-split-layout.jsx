@@ -9,9 +9,16 @@ export default function AuthSplitLayout({ children, title, description }) {
             <div className="bg-muted relative hidden h-full flex-col p-10 text-white lg:flex dark:border-r">
                 <div className="absolute inset-0 bg-zinc-900" />
                 <Link href={route('home')} className="relative z-20 flex items-center text-lg font-medium">
-                    <AppLogoIcon className="mr-2 size-8 fill-current text-white" />
+                    <AppLogoIcon className="mr-2 size-16 fill-current text-white" />
                     {name}
                 </Link>
+                <img
+                    src="/vsu-cover-page.jpg"
+                    width={550}
+                    height={550}
+                    alt="Fleet management illustration"
+                    className="z-20 rounded-lg object-cover"
+                />
                 {quote && (
                     <div className="relative z-20 mt-auto">
                         <blockquote className="space-y-2">

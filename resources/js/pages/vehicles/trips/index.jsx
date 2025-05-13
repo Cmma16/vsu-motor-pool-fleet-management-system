@@ -2,7 +2,7 @@ import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
 import { Head, router } from '@inertiajs/react';
 import { endOfDay, format, isToday, isTomorrow, isWithinInterval, parseISO, startOfDay } from 'date-fns';
-import { Calendar, Car, Filter, List } from 'lucide-react';
+import { Calendar, Car, Filter, List, Table } from 'lucide-react';
 import React from 'react';
 
 import { Badge } from '@/components/ui/badge';
@@ -13,11 +13,12 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
+import { DataTable } from '@/components/data-table';
 import { CurrentDayTripsSection } from '@/components/trip/current-day-trips-section';
 import { SelectedDayTripsSection } from '@/components/trip/selected-day-trips-section';
+import { TripColumn } from '@/components/trip/trip-column';
 import { TripSummaryCard } from '@/components/trip/trip-summary-card';
 import { UpcomingTripsSection } from '@/components/trip/upcoming-trips-section';
-
 const breadcrumbs = [
     {
         title: 'Trips',
@@ -84,6 +85,18 @@ function formatTripDate(date, time) {
     }
 }
 
+const editTrip = (id) => {
+    router.get(route('trips.edit', { id }));
+};
+
+const viewTripDetails = (id) => {
+    router.get(route('trips.show', { id }));
+};
+
+const deleteTrip = (id) => {
+    router.delete(route('trips.destroy', { id }));
+};
+
 export default function TripsIndex({ trips = [] }) {
     const [date, setDate] = React.useState(new Date());
 
@@ -113,7 +126,7 @@ export default function TripsIndex({ trips = [] }) {
                                 <Filter className="mr-2 h-4 w-4" />
                                 Filter
                             </Button>
-                            <Button variant="default" size="default" className="flex items-center" onClick={() => router.visit('/trips/create')}>
+                            <Button variant="default" size="default" className="flex items-center" onClick={() => router.get(route('trips.create'))}>
                                 <Car className="mr-2 h-4 w-4" />
                                 New Trip
                             </Button>
@@ -135,6 +148,10 @@ export default function TripsIndex({ trips = [] }) {
                                     <TabsTrigger value="calendar" className="flex items-center">
                                         <Calendar className="mr-2 h-4 w-4" />
                                         Calendar View
+                                    </TabsTrigger>
+                                    <TabsTrigger value="table" className="flex items-center">
+                                        <Table className="mr-2 h-4 w-4" />
+                                        Table View
                                     </TabsTrigger>
                                 </TabsList>
                                 <div className="flex items-center gap-2">
@@ -167,13 +184,21 @@ export default function TripsIndex({ trips = [] }) {
                             <TabsContent value="list" className="space-y-4">
                                 <div className="grid gap-4">
                                     {/* Today's Trips */}
-                                    <CurrentDayTripsSection todayTrips={todayTrips} formatTripDate={formatTripDate} getStatusBadge={getStatusBadge} />
+                                    <CurrentDayTripsSection
+                                        todayTrips={todayTrips}
+                                        formatTripDate={formatTripDate}
+                                        getStatusBadge={getStatusBadge}
+                                        editTrip={editTrip}
+                                        viewTripDetails={viewTripDetails}
+                                    />
 
                                     {/* Upcoming Trips */}
                                     <UpcomingTripsSection
                                         upcomingTrips={upcomingTrips}
                                         formatTripDate={formatTripDate}
                                         getStatusBadge={getStatusBadge}
+                                        editTrip={editTrip}
+                                        viewTripDetails={viewTripDetails}
                                     />
                                 </div>
                             </TabsContent>
@@ -199,8 +224,25 @@ export default function TripsIndex({ trips = [] }) {
                                         </CardContent>
                                     </Card>
 
-                                    <SelectedDayTripsSection date={date} selectedDateTrips={selectedDateTrips} getStatusBadge={getStatusBadge} />
+                                    <SelectedDayTripsSection
+                                        date={date}
+                                        selectedDateTrips={selectedDateTrips}
+                                        getStatusBadge={getStatusBadge}
+                                        editTrip={editTrip}
+                                        viewTripDetails={viewTripDetails}
+                                    />
                                 </div>
+                            </TabsContent>
+
+                            <TabsContent value="table" className="space-y-4">
+                                <DataTable
+                                    columns={TripColumn}
+                                    data={trips}
+                                    handleCreate={route('trips.create')}
+                                    handleView={viewTripDetails}
+                                    handleEdit={editTrip}
+                                    handleDelete={deleteTrip}
+                                />
                             </TabsContent>
                         </Tabs>
                     </div>

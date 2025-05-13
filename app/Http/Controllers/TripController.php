@@ -19,6 +19,7 @@ class TripController extends Controller
             ->get()
             ->map(function ($trip) {
                 return [
+                    'trip_id' => $trip->trip_id,
                     'trip_number' => $trip->trip_number,
                     'date_filed' => $trip->date_filed,
                     'start_date' => $trip->start_date,
@@ -69,7 +70,22 @@ class TripController extends Controller
      */
     public function show(Trip $trip)
     {
-        //
+        return Inertia::render('vehicles/trips/details', [
+            'trip' => [
+                'trip_id' => $trip->trip_id,
+                'trip_number' => $trip->trip_number,
+                'date_filed' => $trip->date_filed,
+                'start_date' => $trip->start_date,
+                'end_date' => $trip->end_date,
+                'purpose' => $trip->purpose,
+                'destination' => $trip->destination,
+                'departure_time' => $trip->departure_time,
+                'requesting_party' => $trip->requesting_party,
+                'vehicle_name' => $trip->vehicle->vehicle_name,
+                'driver_name' => $trip->driver->first_name . ' ' . $trip->driver->last_name,
+                'status' => $trip->status,
+            ],
+        ]);
     }
 
     /**
@@ -77,7 +93,14 @@ class TripController extends Controller
      */
     public function edit(Trip $trip)
     {
-        //
+        $vehicles = Vehicle::select('vehicle_id', 'vehicle_name')->get();
+        $users = User::where('role_id', 3)->select('id', 'first_name', 'last_name')->get();
+
+        return Inertia::render('vehicles/trips/edit-trip', [
+            'vehicles' => $vehicles,
+            'users' => $users,
+            'trip' => $trip,
+        ]);
     }
 
     /**
@@ -85,7 +108,9 @@ class TripController extends Controller
      */
     public function update(UpdateTripRequest $request, Trip $trip)
     {
-        //
+        $trip->update($request->validated());
+
+        return redirect()->route('trips.index');
     }
 
     /**
@@ -93,6 +118,8 @@ class TripController extends Controller
      */
     public function destroy(Trip $trip)
     {
-        //
+        $trip->delete();
+
+        return redirect()->route('trips.index');
     }
 }

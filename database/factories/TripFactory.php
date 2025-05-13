@@ -25,7 +25,7 @@ class TripFactory extends Factory
             'end_date' => $this->faker->dateTimeBetween('now', '+7 days')->format('Y-m-d'),
             'destination' => $this->faker->city(),
             'purpose' => $this->faker->sentence(),
-            'departure_time' => $this->faker->time(),
+            'departure_time' => $this->faker->time('H:i'),
             'requesting_party' => fake()->name(),
             'vehicle_id' => Vehicle::inRandomOrder()->first()->vehicle_id,
             'driver_id' => User::where('role_id', 3)->inRandomOrder()->first()->id,

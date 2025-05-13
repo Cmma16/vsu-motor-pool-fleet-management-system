@@ -22,7 +22,7 @@ class StoreTripRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'trip_number' => ['required', 'string', 'max:255'],
+            'trip_number' => ['required', 'integer'],
             'date_filed' => ['required', 'date'],
             'start_date' => ['required', 'date'],
             'end_date' => ['required', 'date'],
