@@ -1,0 +1,75 @@
+import { Button } from '@/components/ui/button';
+import { router } from '@inertiajs/react';
+import { createColumnHelper } from '@tanstack/react-table';
+import { ArrowUpDown } from 'lucide-react';
+import { toast } from 'sonner';
+
+const columnHelper = createColumnHelper();
+
+export const UnverifiedPersonnelColumn = (handleView, handleEdit, handleDelete, roles) => [
+    {
+        id: 'select',
+        enableSorting: false,
+        enableHiding: false,
+    },
+    columnHelper.accessor('personnel_name', {
+        header: ({ column }) => (
+            <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+                Personnel Name
+                <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+        ),
+        cell: (info) => <div className="text-left">{info.getValue()}</div>,
+    }),
+    columnHelper.accessor('email', {
+        header: () => <div className="text-left">Email</div>,
+        cell: (info) => <div className="text-left">{info.getValue()}</div>,
+    }),
+    columnHelper.accessor('phone_number', {
+        header: () => <div className="text-left">Phone Number</div>,
+        cell: (info) => <div className="text-left">{info.getValue()}</div>,
+    }),
+    columnHelper.accessor('created_at', {
+        header: () => <div className="text-left">Created At</div>,
+        cell: (info) => {
+            const date = new Date(info.getValue());
+            const formattedDate = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            return <div className="text-left">{formattedDate}</div>;
+        },
+    }),
+    {
+        id: 'actions',
+        header: () => <div className="text-left">Actions</div>,
+        cell: ({ row }) => {
+            const personnel = row.original;
+            const handleVerify = () => {
+                router.put(`/personnel/${personnel.id}/verify`, {
+                    preserveScroll: true,
+                    onSuccess: () => {
+                        toast('Verified', {
+                            description: 'Personnel has been verified',
+                        });
+                    },
+                    onError: () => {
+                        toast('Error', {
+                            description: 'Failed to verify personnel',
+                        });
+                    },
+                });
+            };
+            return (
+                <div className="flex gap-2">
+                    <Button
+                        className="bg-yellow-300 text-black hover:bg-yellow-400"
+                        onClick={() => router.get(route('personnel.show', { id: personnel.id }))}
+                    >
+                        View
+                    </Button>
+                    <Button className="bg-green-700 hover:bg-green-600" onClick={handleVerify}>
+                        Verify
+                    </Button>
+                </div>
+            );
+        },
+    },
+];

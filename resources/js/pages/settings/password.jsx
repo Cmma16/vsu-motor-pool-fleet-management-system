@@ -53,7 +53,7 @@ export default function Password() {
     };
 
     return (
-        <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
+        <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails} showQuickActions={false}>
             <Head title="Profile settings" />
 
             <SettingsLayout>

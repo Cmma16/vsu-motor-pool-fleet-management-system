@@ -2,7 +2,6 @@ import { createColumnHelper } from '@tanstack/react-table';
 import { ArrowUpDown } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 
 import { DataTableRowActions } from '@/components/data-table-row-actions';
 
@@ -11,24 +10,17 @@ const columnHelper = createColumnHelper();
 export const MaintenanceColumn = (handleView, handleEdit, handleDelete) => [
     {
         id: 'select',
-        header: ({ table }) => (
-            <Checkbox
-                checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
-                onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                aria-label="Select all"
-            />
-        ),
-        cell: ({ row }) => (
-            <Checkbox
-                className="border border-black"
-                checked={row.getIsSelected()}
-                onCheckedChange={(value) => row.toggleSelected(!!value)}
-                aria-label="Select row"
-            />
-        ),
         enableSorting: false,
         enableHiding: false,
     },
+    columnHelper.accessor('plan_id', {
+        header: () => <div className="text-left">Maintenance Plan</div>,
+        cell: (info) => <div className="text-left">{info.getValue()}</div>,
+    }),
+    columnHelper.accessor('request_description', {
+        header: () => <div className="text-left">Request Description</div>,
+        cell: (info) => <div className="text-left">{info.getValue()}</div>,
+    }),
     columnHelper.accessor('vehicle_name', {
         header: ({ column }) => (
             <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
@@ -38,20 +30,28 @@ export const MaintenanceColumn = (handleView, handleEdit, handleDelete) => [
         ),
         cell: (info) => <div className="text-left">{info.getValue()}</div>,
     }),
-    columnHelper.accessor('next_due_date', {
-        header: () => <div className="text-left">Next Due (date)</div>,
+    columnHelper.accessor('date_completed', {
+        header: () => <div className="text-left">Date Completed</div>,
         cell: (info) => <div className="text-left">{info.getValue()}</div>,
     }),
-    columnHelper.accessor('next_due_km', {
-        header: () => <div className="text-left">Next Due (km)</div>,
+    columnHelper.accessor('odometer_reading', {
+        header: () => <div className="text-left">Odometer Reading</div>,
         cell: (info) => <div className="text-left">{info.getValue()}</div>,
     }),
-    columnHelper.accessor('assigned_personnel', {
-        header: () => <div className="text-left">Assigned personnel</div>,
+    columnHelper.accessor('performed_by', {
+        header: () => <div className="text-left">Performed By</div>,
         cell: (info) => <div className="text-left">{info.getValue()}</div>,
     }),
-    columnHelper.accessor('status', {
-        header: () => <div className="text-left">Status</div>,
+    columnHelper.accessor('confirmed_by', {
+        header: () => <div className="text-left">Confirmed By</div>,
+        cell: (info) => <div className="text-left">{info.getValue()}</div>,
+    }),
+    columnHelper.accessor('date_confirmed', {
+        header: () => <div className="text-left">Date Confirmed</div>,
+        cell: (info) => <div className="text-left">{info.getValue()}</div>,
+    }),
+    columnHelper.accessor('maintenance_summary', {
+        header: () => <div className="text-left">Maintenance Summary</div>,
         cell: (info) => <div className="text-left">{info.getValue()}</div>,
     }),
     {

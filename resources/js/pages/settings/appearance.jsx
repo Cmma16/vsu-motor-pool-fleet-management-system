@@ -20,7 +20,7 @@ const pageDetails = {
 
 export default function Appearance() {
     return (
-        <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
+        <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails} showQuickActions={false}>
             <Head title="Appearance settings" />
 
             <SettingsLayout>

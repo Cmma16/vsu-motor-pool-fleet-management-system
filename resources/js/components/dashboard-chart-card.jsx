@@ -10,12 +10,12 @@ export function DashboardChartCard({ title, data, config, totalLabel, dataKey = 
     }, [data, dataKey]);
 
     return (
-        <Card className="flex flex-col pb-0">
+        <Card className="flex flex-col items-center justify-center">
             <CardHeader className="items-center pb-0">
                 <CardTitle>{title}</CardTitle>
             </CardHeader>
-            <CardContent className="mt-0 grid grid-cols-2 pb-0">
-                <ChartContainer config={config} className="aspect-square max-h-[220px]">
+            <CardContent className="mt-0 flex flex-col items-center justify-center md:flex-row">
+                <ChartContainer config={config} className="aspect-square md:min-h-[220px]">
                     <PieChart>
                         <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
                         <Pie data={data} dataKey={dataKey} nameKey={nameKey} innerRadius={60} strokeWidth={5}>
@@ -41,11 +41,8 @@ export function DashboardChartCard({ title, data, config, totalLabel, dataKey = 
                 <div className="content-center space-y-2">
                     {data.map((item, index) => (
                         <div key={index} className="flex items-center space-x-1">
-                            <div className="h-14 w-2 rounded" style={{ backgroundColor: item.fill }}></div>
-                            <div className="flex flex-col">
-                                <span className="text-xl font-bold">{item[dataKey]}</span>
-                                <span>{item[nameKey]}</span>
-                            </div>
+                            <div className="h-2 w-2 rounded" style={{ backgroundColor: item.fill }}></div>
+                            <span>{item[nameKey]}</span>
                         </div>
                     ))}
                 </div>

@@ -12,14 +12,17 @@ use App\Http\Controllers\MaintenancePlanController;
 use App\Http\Controllers\MaintenanceController;
 use App\Http\Controllers\OdometerLogController;
 use App\Http\Controllers\TripController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Admin\UserVerificationController;
+use App\Http\Controllers\PersonnelController;
+
+
 Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('vehicles/trips', function () {
         return Inertia::render('vehicles/trips/index');
     })->name('trips.index');
@@ -36,8 +39,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('services/completed', ServiceAccomplishmentController::class);
     Route::resource('parts', PartController::class);
     Route::resource('plans', MaintenancePlanController::class);
+    Route::resource('maintenance', MaintenanceController::class);
     Route::resource('odometer', OdometerLogController::class);
     Route::resource('vehicles/trips', TripController::class);
+    Route::resource('personnel', PersonnelController::class);
+    
+    Route::middleware(['role:Admin'])->group(function () {
+        Route::put('/personnel/{person}/role', [PersonnelController::class, 'updateRole'])->name('personnel.updateRole');
+        Route::put('/personnel/{person}/verify', [PersonnelController::class, 'verifyPersonnel'])->name('personnel.verify');
+        Route::put('/personnel/{person}/unverify', [PersonnelController::class, 'unverifyPersonnel'])->name('personnel.unverify');
+    });
+
 });
 
 require __DIR__.'/settings.php';

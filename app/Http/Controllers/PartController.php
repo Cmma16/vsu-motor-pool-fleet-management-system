@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Part;
+use App\Models\User;
 use App\Http\Requests\Parts\StorePartRequest;
 use App\Http\Requests\Parts\UpdatePartRequest;
 use Inertia\Inertia;

@@ -50,7 +50,7 @@ class DatabaseSeeder extends Seeder
         // Vehicle::factory(5)->create();
         // ServiceRequest::factory(3)->create();
         // OdometerLog::factory(5)->create();   
-        // Repairs::factory(1)->create();
+        Repairs::factory(1)->create();
         Trip::factory(2)->create();
     }
 }

@@ -238,7 +238,6 @@ export default function TripsIndex({ trips = [] }) {
                                 <DataTable
                                     columns={TripColumn}
                                     data={trips}
-                                    handleCreate={route('trips.create')}
                                     handleView={viewTripDetails}
                                     handleEdit={editTrip}
                                     handleDelete={deleteTrip}

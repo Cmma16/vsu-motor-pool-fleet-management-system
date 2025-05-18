@@ -4,13 +4,13 @@ import { AppSidebar } from '@/components/app-sidebar';
 import { AppSidebarHeader } from '@/components/app-sidebar-header';
 import { AppSubHeader } from '@/components/app-sub-header';
 
-export default function AppSidebarLayout({ children, breadcrumbs = [], pageDetails }) {
+export default function AppSidebarLayout({ children, breadcrumbs = [], pageDetails, showQuickActions }) {
     return (
         <AppShell variant="sidebar">
             <AppSidebar />
             <AppContent variant="sidebar">
                 <AppSidebarHeader breadcrumbs={breadcrumbs} />
-                <AppSubHeader pageDetails={pageDetails} />
+                <AppSubHeader pageDetails={pageDetails} showQuickActions={showQuickActions} />
 
                 {children}
             </AppContent>

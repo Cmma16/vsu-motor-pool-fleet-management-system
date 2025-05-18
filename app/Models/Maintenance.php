@@ -10,6 +10,7 @@ class Maintenance extends Model
     /** @use HasFactory<\Database\Factories\MaintenanceFactory> */
     use HasFactory;
 
+    protected $table = 'maintenance';
     protected $primaryKey = 'maintenance_id';
     protected $fillable = [
         'maintenance_id',
@@ -32,7 +33,7 @@ class Maintenance extends Model
 
     public function request()
     {
-        return $this->belongsTo(MaintenanceRequest::class, 'request_id');
+        return $this->belongsTo(ServiceRequest::class, 'request_id');
     }
 
     public function vehicleName()

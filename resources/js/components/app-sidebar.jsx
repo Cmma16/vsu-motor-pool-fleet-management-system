@@ -17,14 +17,15 @@ const mainNavItems = [
         icon: HandHelpingIcon,
         children: [
             { title: 'Requests', href: '/services/requests' },
-            { title: 'For inspection', href: '/services/request-inspections' },
-            { title: 'Completed', href: '/services/completed' },
+            { title: 'For inspection', href: '/services/request-inspections', allowedRoles: ['Admin', 'Technician', 'Staff'] },
+            { title: 'Completed', href: '/services/completed', allowedRoles: ['Admin', 'Technician', 'Staff'] },
         ],
     },
     {
         title: 'Vehicles',
         href: 'vehicles',
         icon: TruckIcon,
+        allowedRoles: ['Admin', 'Driver', 'Technician', 'Staff'],
         children: [
             { title: 'List', href: '/vehicles' },
             { title: 'Trips', href: '/vehicles/trips' },
@@ -34,21 +35,24 @@ const mainNavItems = [
         title: 'Repairs & Maintenance',
         href: '#',
         icon: WrenchIcon,
+        allowedRoles: ['Admin', 'Technician', 'Staff'],
         children: [
-            { title: 'Maintenance Plans', href: '/plans' },
-            { title: 'Maintenance Records', href: '/maintenance' },
-            { title: 'Repair Records', href: '/repairs' },
+            { title: 'Maintenance Plans', href: '/plans', allowedRoles: ['Admin', 'Staff'] },
+            { title: 'Maintenance Records', href: '/maintenance', allowedRoles: ['Admin', 'Technician', 'Staff'] },
+            { title: 'Repair Records', href: '/repairs', allowedRoles: ['Admin', 'Technician', 'Staff'] },
         ],
     },
     {
         title: 'Parts',
         href: '/parts',
         icon: LucidePuzzle,
+        allowedRoles: ['Admin', 'Staff'],
     },
     {
         title: 'Personnel',
         href: '/personnel',
         icon: Users,
+        allowedRoles: ['Admin'],
     },
     {
         title: 'Odometer Logs',
@@ -59,6 +63,7 @@ const mainNavItems = [
         title: 'Reports',
         href: '/reports',
         icon: ChartColumnBig,
+        allowedRoles: ['Admin', 'Staff'],
     },
 ];
 

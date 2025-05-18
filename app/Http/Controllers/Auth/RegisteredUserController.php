@@ -40,7 +40,7 @@ class RegisteredUserController extends Controller
             'city' => 'required|string|max:500',
             'barangay' => 'required|string|max:500',
             'address_details' => 'nullable|string|max:500',
-            'role_id' => 'required|integer|exists:'.UserRole::class.',role_id',
+            'role_id' => 'nullable|integer|exists:'.UserRole::class.',role_id',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
@@ -61,8 +61,9 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        Auth::login($user);
+        // Auth::login($user);
 
-        return to_route('dashboard');
+        // return to_route('dashboard');
+        return to_route('login');
     }
 }

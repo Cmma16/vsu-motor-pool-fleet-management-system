@@ -29,7 +29,7 @@ class TripFactory extends Factory
             'requesting_party' => fake()->name(),
             'vehicle_id' => Vehicle::inRandomOrder()->first()->vehicle_id,
             'driver_id' => User::where('role_id', 3)->inRandomOrder()->first()->id,
-            'status' => $this->faker->randomElement(['pending', 'approved', 'rejected']),
+            'status' => $this->faker->randomElement(['pending', 'approved', 'completed', 'cancelled', 'ongoing']),
         ];
     }
 }

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\UserRole;
+use Inertia\Inertia;
 
 class PersonnelController extends Controller
 {
@@ -12,27 +14,64 @@ class PersonnelController extends Controller
      */
     public function index()
     {
-        $personnel = User::with(['role'])
+        $roles = UserRole::select('role_id', 'name')->get();
+        $personnel = User::where('is_verified', 1)
             ->get()
             ->map(function ($personnel) {
-            return [
-                'user_id' => $personnel->user_id,
-                'first_name' => $personnel->first_name,
-                'middle_name' => $personnel->middle_name,
-                'last_name' => $personnel->last_name,
-                'email' => $personnel->email,
-                'phone_number' => $personnel->contact_number,
-                'province' => $personnel->province,
-                'city' => $personnel->city,
-                'barangay' => $personnel->barangay,
-                'address_details' => $personnel->address_details,
-                'role' => $personnel->role ? $personnel->role->role_id : 'N/A',
-            ];
+                return [
+                    'id' => $personnel->id,
+                    'personnel_name' => $personnel->first_name . ' ' . $personnel->last_name,
+                    'email' => $personnel->email,
+                    'phone_number' => $personnel->contact_number,
+                    'role_id' => $personnel->role_id,
+                    'is_verified' => $personnel->is_verified,
+                ];
+            });
+
+        $unverifiedPersonnel = User::where('is_verified', 0)
+            ->get()
+            ->map(function ($personnel) {
+                return [
+                    'id' => $personnel->id,
+                    'personnel_name' => $personnel->first_name . ' ' . $personnel->last_name,
+                    'email' => $personnel->email,
+                    'phone_number' => $personnel->contact_number,
+                    'created_at' => $personnel->created_at,
+                    'is_verified' => $personnel->is_verified,
+                ];
             });
 
         return Inertia::render('personnel/index', [
+            'unverifiedPersonnel' => $unverifiedPersonnel,
             'personnel' => $personnel,
+            'roles' => $roles,
         ]);
+    }
+
+    public function updateRole(Request $request, User $person)
+    {
+        $request->validate([
+            'role' => 'required|exists:user_roles,role_id'
+        ]);
+
+        $person->role_id = $request->role;
+        $person->save();
+
+        return back()->with('success', 'Role updated successfully');
+    }
+
+    public function verifyPersonnel(User $person)
+    {
+        $person->markAsVerified();
+
+        return back()->with('success', 'Personnel verified successfully');
+    }
+
+    public function unverifyPersonnel(User $person)
+    {
+        $person->markAsUnverified();
+
+        return back()->with('success', 'Personnel unverified successfully');
     }
 
     /**
@@ -40,15 +79,7 @@ class PersonnelController extends Controller
      */
     public function create()
     {
-        
-        $vehicles = Vehicle::select('vehicle_id', 'vehicle_name')->get();
-        $users = User::select('id', 'first_name', 'last_name')->get();
-
-        return Inertia::render('services/requests/create-request', [
-            
-            'vehicles' => $vehicles,
-            'users' => $users,
-        ]);
+        //
     }
 
     /**
@@ -56,29 +87,16 @@ class PersonnelController extends Controller
      */
     public function store(StoreServiceRequestRequest $request)
     {
-        ServiceRequest::create($request->validated());
-        
-        return redirect()->route('requests.index');
+        //
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(ServiceRequest $request)
+    public function show(User $personnel)
     {
-        $serviceRequest = $request;
-        return Inertia::render('services/requests/details', [
-            'serviceRequest' => [
-                'request_id' => $serviceRequest->request_id,
-                'vehicle_name' => $serviceRequest->vehicle->vehicle_name ?? 'N/A',
-                'requested_by' => trim(($serviceRequest->requestedBy->first_name ?? '') . ' ' . ($serviceRequest->requestedBy->middle_name ?? '') . ' ' . ($serviceRequest->requestedBy->last_name ?? '')) ?: 'N/A',
-                'date_filed' => $serviceRequest->date_filed,
-                'service_type' => $serviceRequest->service_type,
-                'work_description' => $serviceRequest->work_description,
-                'received_by' => trim(($serviceRequest->receivedBy->first_name ?? '') . ' ' . ($serviceRequest->receivedBy->middle_name ?? '') . ' ' . ($serviceRequest->receivedBy->last_name ?? '')) ?: 'N/A',
-                'date_received' => $serviceRequest->date_received ? $serviceRequest->date_received : 'N/A',
-                'status' => $serviceRequest->status,
-            ],
+        return Inertia::render('personnel/details', [
+            'personnel' => $personnel
         ]);
     }
 
@@ -87,36 +105,20 @@ class PersonnelController extends Controller
      */
     public function edit(ServiceRequest $request)
     {
-        $serviceRequest = $request;
-        $vehicles = Vehicle::select('vehicle_id', 'vehicle_name')->get();
-        $users = User::select('id', 'first_name', 'last_name')->get();
-
-        return Inertia::render('services/requests/edit-request', [
-            'serviceRequest' => [
-                'request_id' => $serviceRequest->request_id,
-                'vehicle_id' => $serviceRequest->vehicle_id,
-                'requested_by' => $serviceRequest->requested_by,
-                'date_filed' => $serviceRequest->date_filed,
-                'service_type' => $serviceRequest->service_type,
-                'work_description' => $serviceRequest->work_description,
-                'received_by' => $serviceRequest->received_by,
-                'date_received' => $serviceRequest->date_received ? $serviceRequest->date_received : 'N/A',
-                'status' => $serviceRequest->status,
-            ],
-            'vehicles' => $vehicles,
-            'users' => $users,
-        ]);
+        //
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateServiceRequestRequest $updateRequest, ServiceRequest $request)
+    public function update(Request $request, User $personnel)
     {
-        $serviceRequest = $request;
-        $serviceRequest->update($updateRequest->validated());
-
-        return redirect()->route('requests.index');
+        $request->validate([
+            'role_id' => 'required|exists:user_roles,role_id',
+        ]);
+    
+        $personnel->update($request->validated());
+        return redirect()->route('personnel.index')->with('success', 'User role updated successfully.');
     }
 
     /**
@@ -124,9 +126,6 @@ class PersonnelController extends Controller
      */
     public function destroy(ServiceRequest $request)
     {
-        $serviceRequest = $request;
-        $serviceRequest->delete();
-
-        return redirect()->route('requests.index');
+        //
     }
 }

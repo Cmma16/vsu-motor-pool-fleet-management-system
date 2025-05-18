@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Maintenance;
+use App\Models\MaintenancePlan;
+use App\Models\ServiceRequest;
+use App\Models\Vehicle;
+use App\Models\User;
+use App\Models\OdometerLog;
 use App\Http\Requests\StoreMaintenanceRequest;
 use App\Http\Requests\UpdateMaintenanceRequest;
 use Inertia\Inertia;
@@ -14,24 +19,25 @@ class MaintenanceController extends Controller
      */
     public function index()
     {
-        $maintenances = Maintenance::with(['plan', 'request', 'vehicleName', 'odometerReading', 'performedBy', 'confirmedBy'])
+        $maintenanceRecords = Maintenance::with(['plan', 'request', 'vehicleName', 'odometerReading', 'performedBy', 'confirmedBy'])
             ->get()
             ->map(function ($maintenance) {
                 return [
                     'maintenance_id' => $maintenance->maintenance_id,
-                    'plan_id' => $maintenance->plan->plan_name ?? 'N/A',
-                    'request_id' => $maintenance->request->work_description ?? 'N/A', //redundant with maintenance plan plan_name
+                    'plan_id' => $maintenance->plan->plan_id ?? 'N/A',
+                    'request_description' => $maintenance->request->work_description ?? 'N/A', //redundant with maintenance plan plan_name
                     'vehicle_name' => $maintenance->vehicleName->vehicle_name ?? 'N/A',
+                    'date_completed' => $maintenance->date_completed,
                     'odometer_reading' => $maintenance->odometerReading->reading ?? 'N/A',
                     'performed_by' => $maintenance->performedBy ? $maintenance->performedBy->first_name . ' ' . $maintenance->performedBy->last_name : 'N/A',
                     'confirmed_by' => $maintenance->confirmedBy ? $maintenance->confirmedBy->first_name . ' ' . $maintenance->confirmedBy->last_name : 'N/A',
-                    'date_completed' => $maintenance->date_completed,
-                    'description' => $maintenance->description,
+                    'date_confirmed' => $maintenance->date_confirmed,
+                    'maintenance_summary' => $maintenance->maintenance_summary,
                 ];
             });
 
         return Inertia::render('maintenance/index', [
-            'maintenances' => $maintenances,
+            'maintenanceRecords' => $maintenanceRecords,
         ]);
     }
 
@@ -40,7 +46,7 @@ class MaintenanceController extends Controller
      */
     public function create()
     {
-        $maintenancePlans = MaintenancePlan::select('plan_id', 'plan_name')->get();
+        $maintenancePlans = MaintenancePlan::select('plan_id', 'description')->get();
         $serviceRequests = ServiceRequest::select('request_id', 'work_description')->get();
         $vehicles = Vehicle::select('vehicle_id', 'vehicle_name')->get();
         $users = User::select('id', 'first_name', 'last_name')->get();
@@ -51,6 +57,7 @@ class MaintenanceController extends Controller
             'serviceRequests' => $serviceRequests,
             'vehicles' => $vehicles,
             'users' => $users,
+            'odometerLogs' => $odometerLogs,
         ]);
     }
 

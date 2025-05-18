@@ -29,12 +29,37 @@ class User extends Authenticatable
         'address_details',
         'email',
         'password',
-        'role_id'
+        'role_id',
+        'is_verified'
     ];
 
     public function role()
     {
         return $this->belongsTo(UserRole::class, 'role_id');
+    }
+
+    /**
+     * Check if the user is verified.
+     */
+    public function isVerified(): bool
+    {
+        return $this->is_verified;
+    }
+
+    /**
+     * Mark the user as verified.
+     */
+    public function markAsVerified(): bool
+    {
+        return $this->update(['is_verified' => true]);
+    }
+
+    /**
+     * Mark the user as unverified.
+     */
+    public function markAsUnverified(): bool
+    {
+        return $this->update(['is_verified' => false]);
     }
 
     /**
@@ -55,7 +80,7 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
+            'is_verified' => 'boolean',
             'password' => 'hashed',
         ];
     }

@@ -10,7 +10,18 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { DataTablePagination } from '@/components/data-table-pagination';
 import { DataTableToolbar } from '@/components/data-table-toolbar';
 
-export function DataTable({ columns, data, handleCreate, handleView, handleEdit, handleDelete }) {
+export function DataTable({
+    columns,
+    data,
+    handleCreate,
+    handleView,
+    handleEdit,
+    handleDelete,
+    filterColumn,
+    placeholder,
+    filterOptions,
+    filterColumnName,
+}) {
     const [sorting, setSorting] = React.useState([]);
     const [columnFilters, setColumnFilters] = React.useState([]);
     const [columnVisibility, setColumnVisibility] = React.useState({});
@@ -42,7 +53,14 @@ export function DataTable({ columns, data, handleCreate, handleView, handleEdit,
 
     return (
         <div>
-            <DataTableToolbar table={table} handleCreate={handleCreate} />
+            <DataTableToolbar
+                table={table}
+                handleCreate={handleCreate}
+                filterColumn={filterColumn}
+                placeholder={placeholder}
+                filterOptions={filterOptions}
+                filterColumnName={filterColumnName}
+            />
             <div className="rounded-md border bg-white">
                 <Table>
                     <TableHeader>

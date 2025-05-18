@@ -27,6 +27,7 @@ export default function Register() {
         email: '',
         password: '',
         password_confirmation: '',
+        //role_id: 2, // Adding default role_id for regular users, only a stopgap
     });
 
     const nextStage = (e) => {
@@ -36,7 +37,14 @@ export default function Register() {
 
     const submit = (e) => {
         e.preventDefault();
+        console.log('Submitting form data:', data);
         post(route('register'), {
+            onSuccess: () => {
+                console.log('Registration successful');
+            },
+            onError: (errors) => {
+                console.error('Registration failed:', errors);
+            },
             onFinish: () => reset('password', 'password_confirmation'),
         });
     };

@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\MaintenancePlan;
+use App\Models\OdometerLog;
 
 class Vehicle extends Model
 {
@@ -29,4 +31,14 @@ class Vehicle extends Model
         'fuel_type',
         'status',
     ];
+
+    public function maintenancePlans()
+    {
+        return $this->hasMany(MaintenancePlan::class, 'vehicle_id');
+    }
+
+    public function odometerLogs()
+    {
+        return $this->hasMany(OdometerLog::class, 'vehicle_id');
+    }
 }

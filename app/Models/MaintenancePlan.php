@@ -10,6 +10,7 @@ class MaintenancePlan extends Model
     /** @use HasFactory<\Database\Factories\MaintenancePlanFactory> */
     use HasFactory;
     
+    protected $table = 'maintenance_plans';
     protected $primaryKey = 'plan_id';
 
     protected $fillable = [
