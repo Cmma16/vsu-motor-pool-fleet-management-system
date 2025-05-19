@@ -1,6 +1,6 @@
 import { DashboardCard } from '@/components/dashboard-card';
 import { DashboardChartCard } from '@/components/dashboard-chart-card';
-import AdminDashboard from '@/components/dashboard/admin-dashboard';
+//import AdminDashboard from '@/components/dashboard/admin-dashboard';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
 import { Head } from '@inertiajs/react';
