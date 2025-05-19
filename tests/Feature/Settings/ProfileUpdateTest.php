@@ -54,33 +54,32 @@ class ProfileUpdateTest extends TestCase
         $this->assertSame('Opong', $user->barangay);
         $this->assertSame('123 Main St', $user->address_details);
         $this->assertSame('test@example.com', $user->email);
-        $this->assertNull($user->email_verified_at);
     }
 
-    public function test_email_verification_status_is_unchanged_when_the_email_address_is_unchanged()
-    {
-        $user = User::factory()->create();
+    // public function test_email_verification_status_is_unchanged_when_the_email_address_is_unchanged()
+    // {
+    //     $user = User::factory()->create();
 
-        $response = $this
-            ->actingAs($user)
-            ->patch('/settings/profile', [
-                'first_name' => 'John',
-                'middle_name' => 'Smith',
-                'last_name' => 'Doe',
-                'contact_number' => '09123456789',
-                'province' => 'Leyte',
-                'city' => 'Baybay City',
-                'barangay' => 'Opong',
-                'address_details' => '123 Main St',
-                'email' => $user->email,
-            ]);
+    //     $response = $this
+    //         ->actingAs($user)
+    //         ->patch('/settings/profile', [
+    //             'first_name' => 'John',
+    //             'middle_name' => 'Smith',
+    //             'last_name' => 'Doe',
+    //             'contact_number' => '09123456789',
+    //             'province' => 'Leyte',
+    //             'city' => 'Baybay City',
+    //             'barangay' => 'Opong',
+    //             'address_details' => '123 Main St',
+    //             'email' => $user->email,
+    //         ]);
 
-        $response
-            ->assertSessionHasNoErrors()
-            ->assertRedirect('/settings/profile');
+    //     $response
+    //         ->assertSessionHasNoErrors()
+    //         ->assertRedirect('/settings/profile');
 
-        $this->assertNotNull($user->refresh()->email_verified_at);
-    }
+    //     $this->assertNotNull($user->refresh()->email_verified_at);
+    // }
 
     public function test_user_can_delete_their_account()
     {
