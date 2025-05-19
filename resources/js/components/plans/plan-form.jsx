@@ -57,27 +57,12 @@ export default function PlanForm({ formData, formType, setData, onSubmit, proces
                     <InputError message={errors.next_service_km} />
                 </div>
 
-                {/* Description */}
-                <div className="space-y-2">
-                    <Label htmlFor="description">Description</Label>
-                    <Input
-                        id="description"
-                        name="description"
-                        placeholder="Description of the repair conducted"
-                        value={formData.description}
-                        onChange={(e) => setData('description', e.target.value)}
-                        disabled={processing}
-                        tabIndex={5}
-                    />
-                    <InputError message={errors.description} />
-                </div>
-
                 {/* Created By */}
                 <div className="space-y-2">
                     <Label htmlFor="created_by">Created By</Label>
                     <Select value={String(formData.created_by)} onValueChange={(value) => setData('created_by', Number(value))}>
                         <SelectTrigger id="created_by" tabIndex={4}>
-                            <SelectValue placeholder="Select requester" />
+                            <SelectValue placeholder="Select planner" />
                         </SelectTrigger>
                         <SelectContent>
                             {users.map((user) => (

@@ -17,7 +17,7 @@ const pageDetails = {
     description: 'Record the details of a vehicle repair.',
 };
 
-export default function CreateRequest({ vehicles, users }) {
+export default function CreateRequest({ vehicles }) {
     const { data, setData, post, processing, errors, reset } = useForm({
         vehicle_id: '',
         requested_by: '',
@@ -56,7 +56,6 @@ export default function CreateRequest({ vehicles, users }) {
                             processing={processing}
                             errors={errors}
                             vehicles={vehicles}
-                            users={users}
                         />
                     </CardContent>
                 </Card>

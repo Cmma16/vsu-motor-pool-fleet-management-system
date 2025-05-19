@@ -22,7 +22,6 @@ class MaintenancePlanFactory extends Factory
             'vehicle_id' => Vehicle::inRandomOrder()->first()->vehicle_id, 
             'scheduled_date' => $this->faker->dateTimeBetween('now', '+1 year'),
             'next_service_km' => $this->faker->numberBetween(1000, 20000),
-            'description' => $this->faker->sentence(),
             'created_by' => User::inRandomOrder()->first()->id, // Create a new personnel if needed
             'status' => $this->faker->randomElement(['pending', 'ongoing', 'completed', 'cancelled']),
         ];

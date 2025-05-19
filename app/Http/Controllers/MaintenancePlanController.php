@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Vehicle;
 use App\Http\Requests\MaintenancePlan\StoreMaintenancePlanRequest;
 use App\Http\Requests\MaintenancePlan\UpdateMaintenancePlanRequest;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class MaintenancePlanController extends Controller
@@ -25,7 +26,6 @@ class MaintenancePlanController extends Controller
                     'sheduled_date' => $plan->scheduled_date,
                     'next_service_km' => $plan->next_service_km,
                     'created_by' => $plan->createdBy ? $plan->createdBy->first_name . ' ' . $plan->createdBy->last_name : 'N/A',
-                    'description' => $plan->description,
                     'status' => $plan->status,
                 ];
             });
@@ -71,7 +71,6 @@ class MaintenancePlanController extends Controller
                 'scheduled_date' => $maintenancePlan->scheduled_date,
                 'next_service_km' => $maintenancePlan->next_service_km,
                 'created_by' => $maintenancePlan->createdBy ? $maintenancePlan->createdBy->first_name . ' ' . $maintenancePlan->createdBy->last_name : 'N/A',
-                'description' => $maintenancePlan->description,
                 'status' => $maintenancePlan->status,
             ],
         ]);
@@ -93,7 +92,6 @@ class MaintenancePlanController extends Controller
                 'scheduled_date' => $maintenancePlan->scheduled_date,
                 'next_service_km' => $maintenancePlan->next_service_km,
                 'created_by' => $maintenancePlan->created_by,
-                'description' => $maintenancePlan->description,
                 'status' => $maintenancePlan->status,
             ],
             'vehicles' => $vehicles,

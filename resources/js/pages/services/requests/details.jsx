@@ -1,6 +1,7 @@
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 
 import AppLayout from '@/layouts/app-layout';
 // import { Button } from 'react-day-picker';
@@ -21,7 +22,14 @@ const pageDetails = {
     description: 'Comprehensive information about the service being requested.',
 };
 
+const handleStatusUpdate = (id, status) => {
+    router.patch(route('requests.updateStatus', id), {
+        status: status,
+    });
+};
+
 export default function RequestDetails({ serviceRequest }) {
+    const user = usePage().props.auth.user;
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             <Head title="Repair Details" />
@@ -75,12 +83,23 @@ export default function RequestDetails({ serviceRequest }) {
                                     <span>{serviceRequest.status}</span>
                                 </div>
 
-                                <Link
-                                    href={`${serviceRequest.request_id}/edit`}
-                                    className="col-span-2 w-1/3 rounded-md bg-[#006600] px-3 py-2 text-center text-white hover:bg-[#005500]"
-                                >
-                                    Edit Request
-                                </Link>
+                                {serviceRequest.status === 'inspected' && user.role.name === 'Staff' && (
+                                    <div className="col-span-2 flex gap-2">
+                                        <Button onClick={() => handleStatusUpdate(serviceRequest.request_id, 'approved')}>Approve Request</Button>
+                                        <Button variant="destructive" onClick={() => handleStatusUpdate(serviceRequest.request_id, 'rejected')}>
+                                            Reject Request
+                                        </Button>
+                                    </div>
+                                )}
+
+                                {serviceRequest.status === 'pending' && user.role.name === 'Driver' && (
+                                    <Link
+                                        href={`${serviceRequest.request_id}/edit`}
+                                        className="col-span-2 w-1/3 rounded-md bg-[#006600] px-3 py-2 text-center text-white hover:bg-[#005500]"
+                                    >
+                                        Edit Request
+                                    </Link>
+                                )}
                             </div>
                         </div>
                     </CardContent>

@@ -102,42 +102,6 @@ export default function InspectionForm({ formData, formType, setData, onSubmit, 
                     />
                     <InputError message={errors.estimated_duration} />
                 </div>
-
-                {/* Conducted By */}
-                <div className="space-y-2">
-                    <Label htmlFor="conducted_by">Conducted By</Label>
-                    <Select value={String(formData.conducted_by)} onValueChange={(value) => setData('conducted_by', Number(value))}>
-                        <SelectTrigger id="conducted_by" tabIndex={7}>
-                            <SelectValue placeholder="Select requester" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {users.map((user) => (
-                                <SelectItem key={user.id} value={String(user.id)}>
-                                    {`${user.first_name} ${user.last_name}`}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-                    <InputError message={errors.conducted_by} />
-                </div>
-
-                {/* Confirmed by */}
-                <div className="space-y-2">
-                    <Label htmlFor="confirmed_by">Confirmed By</Label>
-                    <Select value={String(formData.confirmed_by)} onValueChange={(value) => setData('confirmed_by', Number(value))}>
-                        <SelectTrigger id="confirmed_by" tabIndex={8}>
-                            <SelectValue placeholder="Select requester" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {users.map((user) => (
-                                <SelectItem key={user.id} value={String(user.id)}>
-                                    {`${user.first_name} ${user.last_name}`}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-                    <InputError message={errors.confirmed_by} />
-                </div>
             </div>
             <Button disabled={processing} className="w-1/3">
                 {formType === 'edit' ? 'Save Changes' : 'Submit Inspection'}

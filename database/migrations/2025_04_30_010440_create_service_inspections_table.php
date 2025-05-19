@@ -20,7 +20,7 @@ return new class extends Migration
             $table->boolean('personnel_available')->default(true);
             $table->string('estimated_duration');
             $table->foreignId('conducted_by')->constrained('users', 'id')->onDelete('set null');
-            $table->foreignId('confirmed_by')->constrained('users', 'id')->onDelete('set null');
+            $table->foreignId('confirmed_by')->nullable()->constrained('users', 'id')->onDelete('set null');
             $table->timestamps();
         });
     }

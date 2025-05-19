@@ -26,7 +26,7 @@ class ServiceRequestFactory extends Factory
             'work_description' => $this->faker->sentence(),
             'date_received' => $this->faker->dateTimeThisYear(),
             'received_by' => User::inRandomOrder()->first()->id,
-            'status' => $this->faker->randomElement(['pending', 'received', 'cancelled']),
+            'status' => $this->faker->randomElement(['pending', 'received', 'inspected', 'approved', 'completed', 'cancelled']),
         ];
     }
 }

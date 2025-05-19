@@ -87,7 +87,7 @@ export default function Dashboard() {
                             title="Employee Summary"
                             data={[
                                 { label: 'Drivers', quantity: 34, fill: 'green' },
-                                { label: 'Technicians', quantity: 14, fill: 'yellow' },
+                                { label: 'Mechanics', quantity: 14, fill: 'yellow' },
                                 { label: 'Staff', quantity: 12, fill: 'orange' },
                             ]}
                             config={{

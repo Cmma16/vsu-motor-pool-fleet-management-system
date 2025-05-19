@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreignId('performed_by')->nullable()->constrained('users')->onDelete('set null');
             $table->foreignId('confirmed_by')->nullable()->constrained('users')->onDelete('set null');
             $table->dateTime('date_confirmed')->nullable();
-            $table->text('description')->nullable();
+            $table->text('maintenance_summary')->nullable();
             $table->timestamps();
         });
     }

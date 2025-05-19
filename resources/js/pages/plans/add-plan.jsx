@@ -28,7 +28,6 @@ export default function AddPlan({ vehicles, users }) {
         vehicle_id: '',
         scheduled_date: '',
         next_service_km: '',
-        description: '',
         created_by: '',
         status: '',
     });

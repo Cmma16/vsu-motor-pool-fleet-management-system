@@ -1,8 +1,10 @@
 import { DataTableActions } from '@/components/data-table-actions';
 import { DataTableExportOptions } from '@/components/data-table-export-options';
 import { DataTableViewOptions } from '@/components/data-table-view-options';
+import { usePage } from '@inertiajs/react';
 
 export function DataTableToolbar({ table, handleCreate, filterColumn, placeholder, filterOptions, filterColumnName }) {
+    const { auth } = usePage().props;
     return (
         <div className="flex items-center gap-4 py-4">
             <DataTableActions
@@ -13,7 +15,7 @@ export function DataTableToolbar({ table, handleCreate, filterColumn, placeholde
                 filterOptions={filterOptions}
                 filterColumnName={filterColumnName}
             />
-            <DataTableExportOptions />
+            {auth.user.role.name === 'Staff' || (auth.user.role.name === 'Admin' && <DataTableExportOptions />)}
             <DataTableViewOptions table={table} />
         </div>
     );

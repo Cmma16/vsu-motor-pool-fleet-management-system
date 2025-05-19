@@ -42,23 +42,19 @@ export const MaintenanceColumn = (handleView, handleEdit, handleDelete) => [
         header: () => <div className="text-left">Performed By</div>,
         cell: (info) => <div className="text-left">{info.getValue()}</div>,
     }),
-    columnHelper.accessor('confirmed_by', {
-        header: () => <div className="text-left">Confirmed By</div>,
-        cell: (info) => <div className="text-left">{info.getValue()}</div>,
-    }),
-    columnHelper.accessor('date_confirmed', {
-        header: () => <div className="text-left">Date Confirmed</div>,
-        cell: (info) => <div className="text-left">{info.getValue()}</div>,
-    }),
-    columnHelper.accessor('maintenance_summary', {
-        header: () => <div className="text-left">Maintenance Summary</div>,
-        cell: (info) => <div className="text-left">{info.getValue()}</div>,
-    }),
     {
         id: 'actions',
         cell: ({ row }) => {
-            const vehicle = row.original;
-            return <DataTableRowActions row={vehicle} handleView={handleView} handleEdit={handleEdit} handleDelete={handleDelete} />;
+            const maintenance = row.original;
+            return (
+                <DataTableRowActions
+                    row={maintenance}
+                    rowKey={'maintenance_id'}
+                    handleView={handleView}
+                    handleEdit={handleEdit}
+                    handleDelete={handleDelete}
+                />
+            );
         },
     },
 ];

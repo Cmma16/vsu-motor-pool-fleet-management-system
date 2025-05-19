@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ServiceRequest;
 use App\Models\User;
 use App\Models\Vehicle;
+use Illuminate\Http\Request;
 use App\Http\Requests\ServiceRequests\StoreServiceRequestRequest;
 use App\Http\Requests\ServiceRequests\UpdateServiceRequestRequest;
 use Inertia\Inertia;
@@ -16,40 +17,58 @@ class ServiceRequestController extends Controller
      */
     public function index()
     {
-        $serviceRequests = ServiceRequest::with(['vehicle', 'requestedBy', 'receivedBy'])
-            ->get()
-            ->map(function ($serviceRequest) {
+        $user = auth()->user();
+        $role = $user->role->name;
+
+        $query = ServiceRequest::with(['vehicle', 'requestedBy', 'receivedBy']);
+
+        // Apply filtering based on role
+        if ($role === 'Driver') {
+            $query->where('requested_by', $user->id);
+        } elseif ($role === 'Mechanic') {
+            $query->whereIn('status', ['received', 'inspected', 'approved', 'completed']);
+        }
+        // Admin and staff: no filters
+
+        $serviceRequests = $query->get()->map(function ($serviceRequest) {
             return [
                 'request_id' => $serviceRequest->request_id,
                 'vehicle_name' => $serviceRequest->vehicle->vehicle_name ?? 'N/A',
-                'requested_by' => $serviceRequest->requestedBy ? $serviceRequest->requestedBy->first_name . ' ' . $serviceRequest->requestedBy->last_name : 'N/A',
+                'vehicle_id' => $serviceRequest->vehicle_id,
+                'requested_by' => $serviceRequest->requestedBy
+                    ? $serviceRequest->requestedBy->first_name . ' ' . $serviceRequest->requestedBy->last_name
+                    : 'N/A',
                 'date_filed' => $serviceRequest->date_filed,
                 'service_type' => $serviceRequest->service_type,
                 'work_description' => $serviceRequest->work_description,
-                'received_by' => $serviceRequest->receivedBy ? $serviceRequest->receivedBy->first_name . ' ' . $serviceRequest->receivedBy->last_name : 'N/A',
-                'date_received' => $serviceRequest->date_received ? $serviceRequest->date_received : 'N/A',
+                'received_by' => $serviceRequest->receivedBy
+                    ? $serviceRequest->receivedBy->first_name . ' ' . $serviceRequest->receivedBy->last_name
+                    : 'N/A',
+                'date_received' => $serviceRequest->date_received ?: 'N/A',
                 'status' => $serviceRequest->status,
             ];
-            });
+        });
 
         return Inertia::render('services/requests/index', [
             'serviceRequests' => $serviceRequests,
+            'userRole' => $role, // optionally pass this to conditionally render buttons on the frontend
+            'userId' => $user->id, // optional if needed on frontend
         ]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        
+    public function create(Request $request)
+    {   
         $vehicles = Vehicle::select('vehicle_id', 'vehicle_name')->get();
-        $users = User::select('id', 'first_name', 'last_name')->get();
+        // $users = User::select('id', 'first_name', 'last_name')->get(); delete this
 
         return Inertia::render('services/requests/create-request', [
-            
+            'workDescription' => $request->input('data.work_description'),
             'vehicles' => $vehicles,
-            'users' => $users,
+            //'users' => $users, delete this
+            
         ]);
     }
 
@@ -58,8 +77,10 @@ class ServiceRequestController extends Controller
      */
     public function store(StoreServiceRequestRequest $request)
     {
-        ServiceRequest::create($request->validated());
-        
+        $serviceRequest = $request->validated();
+        $serviceRequest['requested_by'] = auth()->id();
+        $serviceRequest['status'] = 'pending';
+        ServiceRequest::create($serviceRequest);
         return redirect()->route('requests.index');
     }
 
@@ -117,6 +138,19 @@ class ServiceRequestController extends Controller
     {
         $serviceRequest = $request;
         $serviceRequest->update($updateRequest->validated());
+
+        return redirect()->route('requests.index');
+    }
+
+    public function updateStatus(Request $updateRequest, ServiceRequest $request)
+    {
+        $serviceRequest = $request;
+
+        $updateRequest->validate([
+            'status' => 'required|string|in:pending,received,inspected,approved,completed,cancelled',
+        ]);
+
+        $serviceRequest->update(['status' => $updateRequest->status]);
 
         return redirect()->route('requests.index');
     }

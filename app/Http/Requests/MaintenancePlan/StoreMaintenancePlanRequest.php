@@ -25,7 +25,6 @@ class StoreMaintenancePlanRequest extends FormRequest
             'vehicle_id' => 'required|exists:vehicles,vehicle_id',
             'scheduled_date' => 'required|date',
             'next_service_km' => 'required|integer',
-            'description' => 'required|string|max:255',
             'created_by' => 'required|exists:users,id',
             'status' => 'required|string|in:scheduled,overdue,completed,cancelled',
         ];

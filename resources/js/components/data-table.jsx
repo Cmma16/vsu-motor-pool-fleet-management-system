@@ -21,6 +21,7 @@ export function DataTable({
     placeholder,
     filterOptions,
     filterColumnName,
+    handleStatusUpdate,
 }) {
     const [sorting, setSorting] = React.useState([]);
     const [columnFilters, setColumnFilters] = React.useState([]);
@@ -29,7 +30,10 @@ export function DataTable({
 
     const table = useReactTable({
         data,
-        columns: React.useMemo(() => columns(handleView, handleEdit, handleDelete), [handleView, handleEdit, handleDelete]),
+        columns: React.useMemo(
+            () => columns(handleView, handleEdit, handleDelete, handleStatusUpdate),
+            [handleView, handleEdit, handleDelete, handleStatusUpdate],
+        ),
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         onSortingChange: setSorting,

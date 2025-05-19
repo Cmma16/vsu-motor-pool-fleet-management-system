@@ -54,7 +54,7 @@ export default function Dashboard({ vehicleStats, maintenanceStats, tripStats, s
 
     const personnelSummary = [
         { label: 'Drivers', quantity: personnelStats.driver || 0, fill: 'green' },
-        { label: 'Technicians', quantity: personnelStats.technician || 0, fill: 'yellow' },
+        { label: 'Mechanics', quantity: personnelStats.mechanic || 0, fill: 'yellow' },
         { label: 'Staff', quantity: personnelStats.staff || 0, fill: 'orange' },
     ];
     return (

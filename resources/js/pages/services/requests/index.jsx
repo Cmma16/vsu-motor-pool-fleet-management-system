@@ -32,6 +32,12 @@ export default function RequestsIndex({ serviceRequests }) {
     const editRequest = (id) => {
         router.get(route('requests.edit', { id }));
     };
+
+    const handleStatusUpdate = (id, status) => {
+        router.patch(route('requests.updateStatus', id), {
+            status: status,
+        });
+    };
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             <Head title="Repairs" />
@@ -39,10 +45,11 @@ export default function RequestsIndex({ serviceRequests }) {
                 <DataTable
                     columns={RequestsColumn}
                     data={serviceRequests}
-                    handleCreate={route('requests.create')}
+                    handleCreate={route('requests.create', { data: { work_description: 'test' } })}
                     handleView={veiwRequestDetails}
                     handleEdit={editRequest}
                     handleDelete={deleteRequest}
+                    handleStatusUpdate={handleStatusUpdate}
                     filterColumn={'vehicle_name'}
                     placeholder={'Search vehicle name'}
                 />

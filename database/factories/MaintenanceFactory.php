@@ -27,11 +27,11 @@ class MaintenanceFactory extends Factory
             'request_id' => ServiceRequest::inRandomOrder()->first()->request_id,
             'vehicle_id' => Vehicle::inRandomOrder()->first()->vehicle_id,
             'date_completed' => $this->faker->dateTimeBetween('now', '+1 year'),
-            'odometer_reading' => OdometerLog::inRandomOrder()->first()->odometer_id,
+            'odometer_id' => OdometerLog::inRandomOrder()->first()->odometer_id,
             'performed_by' => User::inRandomOrder()->first()->id,
             'confirmed_by' => User::inRandomOrder()->first()->id,
             'date_confirmed' => $this->faker->dateTimeBetween('now', '+1 year'),
-            'description' => $this->faker->sentence(),
+            'maintenance_summary' => $this->faker->sentence(),
         ];
     }
 }

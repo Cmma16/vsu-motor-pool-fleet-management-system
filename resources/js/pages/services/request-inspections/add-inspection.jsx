@@ -17,9 +17,9 @@ const pageDetails = {
     description: 'Record the details of a vehicle repair.',
 };
 
-export default function CreateInspection({ serviceRequests, users }) {
+export default function CreateInspection({ serviceRequests, users, requestId }) {
     const { data, setData, post, processing, errors, reset } = useForm({
-        request_id: '',
+        request_id: requestId,
         started_at: '',
         completed_at: '',
         parts_available: '',
@@ -40,6 +40,7 @@ export default function CreateInspection({ serviceRequests, users }) {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
+            {console.log(requestId)}
             <Head title="Repairs" />
             <div className="mx-6 mb-3 space-y-6 rounded-lg bg-white">
                 <Card className="w-full">

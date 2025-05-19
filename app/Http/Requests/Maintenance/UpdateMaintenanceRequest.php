@@ -30,7 +30,7 @@ class UpdateMaintenanceRequest extends FormRequest
             'performed_by' => 'required|exists:users,id',
             'confirmed_by' => 'required|exists:users,id',
             'date_confirmed' => 'required|date',
-            'description' => 'required|string|max:255',
+            'maintenance_summary' => 'required|string|max:255',
         ];
     }
 }

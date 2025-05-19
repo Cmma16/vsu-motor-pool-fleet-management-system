@@ -23,13 +23,13 @@ class StoreServiceRequestRequest extends FormRequest
     {
         return [
             'vehicle_id' => ['required', 'integer', 'exists:vehicles,vehicle_id'],
-            'requested_by' => ['required', 'integer', 'exists:users,id'],
+            // 'requested_by' => ['required', 'integer', 'exists:users,id'], delete this
             'date_filed' => ['required', 'date'],
             'service_type' => ['required', 'string', 'max:255'],
             'work_description' => ['required', 'string', 'max:255'],
-            'received_by' => ['nullable', 'integer', 'exists:users,id'],
-            'date_received' => ['nullable', 'date'],
-            'status' => ['required', 'string', 'in:pending,received,cancelled'],
+            // 'received_by' => ['nullable', 'integer', 'exists:users,id'], delete this
+            // 'date_received' => ['nullable', 'date'], delete this
+            // 'status' => ['required', 'string', 'in:pending,received,cancelled'], delete this
         ];
     }
 }

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->timestamp('started_at');
             $table->timestamp('completed_at');
             $table->foreignId('conducted_by')->constrained('users', 'id')->onDelete('set null');
-            $table->foreignId('verified_by')->constrained('users', 'id')->onDelete('set null');
+            $table->foreignId('verified_by')->nullable()->constrained('users', 'id')->onDelete('set null');
             $table->timestamps();
         });
     }

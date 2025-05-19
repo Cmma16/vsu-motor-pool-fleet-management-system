@@ -46,10 +46,6 @@ export const PlansColumn = (handleView, handleEdit, handleDelete) => [
         header: () => <div className="text-left">Next service (km)</div>,
         cell: (info) => <div className="text-left">{info.getValue()} km</div>,
     }),
-    columnHelper.accessor('description', {
-        header: () => <div className="text-left">Description</div>,
-        cell: (info) => <div className="text-left">{info.getValue()}</div>,
-    }),
     columnHelper.accessor('created_by', {
         header: () => <div className="text-left">Created by</div>,
         cell: (info) => <div className="text-left">{info.getValue()}</div>,

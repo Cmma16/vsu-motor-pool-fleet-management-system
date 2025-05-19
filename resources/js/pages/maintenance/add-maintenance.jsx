@@ -14,13 +14,13 @@ const pageDetails = {
     description: 'Record the details of a vehicle maintenance.',
 };
 
-export default function AddMaintenance({ maintenancePlans, vehicles, users, serviceRequests, odometerLogs }) {
+export default function AddMaintenance({ maintenancePlans, vehicles, users, serviceRequests, odometerLogs, requestId, vehicleId }) {
     const { data, setData, post, processing, errors, reset } = useForm({
         plan_id: '',
-        vehicle_id: '',
-        request_id: '',
+        vehicle_id: vehicleId || '',
+        request_id: requestId || '',
         date_completed: '',
-        odometer_reading: '',
+        odometer_id: '',
         performed_by: '',
         confirmed_by: '',
         date_confirmed: '',
@@ -28,6 +28,7 @@ export default function AddMaintenance({ maintenancePlans, vehicles, users, serv
     });
 
     const createMaintenance = (e) => {
+        console.log(data);
         e.preventDefault();
         post(route('maintenance.store'), {
             data,
@@ -58,6 +59,7 @@ export default function AddMaintenance({ maintenancePlans, vehicles, users, serv
                             serviceRequests={serviceRequests}
                             odometerLogs={odometerLogs}
                             maintenancePlans={maintenancePlans}
+                            lockInputs={requestId && vehicleId}
                         />
                     </CardContent>
                 </Card>

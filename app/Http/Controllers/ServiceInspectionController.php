@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ServiceInspection;
 use App\Models\User;
 use App\Models\ServiceRequest;
+use Illuminate\Http\Request;
 use App\Http\Requests\ServiceInspections\StoreServiceInspectionRequest;
 use App\Http\Requests\ServiceInspections\UpdateServiceInspectionRequest;
 use Inertia\Inertia;
@@ -28,7 +29,7 @@ class ServiceInspectionController extends Controller
                     'personnel_available' => $serviceInspection->personnel_available,
                     'estimated_duration' => $serviceInspection->estimated_duration,
                     'conducted_by' => $serviceInspection->conductedBy ? $serviceInspection->conductedBy->first_name . ' ' . $serviceInspection->conductedBy->last_name : 'N/A',
-                    'confirmed_by' => $serviceInspection->confirmedBy ? $serviceInspection->confirmedBy->first_name . ' ' . $serviceInspection->confirmedBy->last_name : 'N/A',
+                    'confirmed_by' => $serviceInspection->confirmedBy ? $serviceInspection->confirmedBy->first_name . ' ' . $serviceInspection->confirmedBy->last_name : '',
                 ];
             });
 
@@ -40,13 +41,13 @@ class ServiceInspectionController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        $serviceRequests = ServiceRequest::select('request_id', 'work_description')->get();
+        $serviceRequests = ServiceRequest::select('request_id', 'work_description')->where('status', 'received')->get();
         $users = User::select('id', 'first_name', 'last_name')->get();
 
         return Inertia::render('services/request-inspections/add-inspection', [
-            
+            'requestId' => $request->input('data.requestId'),
             'serviceRequests' => $serviceRequests,
             'users' => $users,
         ]);
@@ -57,9 +58,14 @@ class ServiceInspectionController extends Controller
      */
     public function store(StoreServiceInspectionRequest $request)
     {
-        ServiceInspection::create($request->validated());
+        $validatedData = $request->validated();
+        $validatedData['conducted_by'] = auth()->id();
+        $inspection = ServiceInspection::create($validatedData);
+        $inspection->serviceRequest->update(['status' => 'inspected']);
         
-        return redirect()->route('request-inspections.index');
+        $requestId = $validatedData['request_id'];
+
+        return redirect()->route('requests.show', $requestId);
     }
 
     /**

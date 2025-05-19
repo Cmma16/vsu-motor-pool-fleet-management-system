@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-export default function RequestForm({ formData, formType, setData, onSubmit, processing, errors, vehicles, users }) {
+export default function RequestForm({ formData, formType, setData, onSubmit, processing, errors, vehicles }) {
     return (
         <form onSubmit={onSubmit} className="space-y-6">
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -24,24 +24,6 @@ export default function RequestForm({ formData, formType, setData, onSubmit, pro
                         </SelectContent>
                     </Select>
                     <InputError message={errors.vehicle_id} />
-                </div>
-
-                {/* Requested by */}
-                <div className="space-y-2">
-                    <Label htmlFor="requested_by">Requested by</Label>
-                    <Select value={String(formData.requested_by)} onValueChange={(value) => setData('requested_by', Number(value))}>
-                        <SelectTrigger id="requested_by" tabIndex={2}>
-                            <SelectValue placeholder="Select personnel" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {users.map((user) => (
-                                <SelectItem key={user.id} value={String(user.id)}>
-                                    {`${user.first_name} ${user.last_name}`}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-                    <InputError message={errors.requested_by} />
                 </div>
 
                 {/* Date filed */}
@@ -90,7 +72,7 @@ export default function RequestForm({ formData, formType, setData, onSubmit, pro
                     <InputError message={errors.work_description} />
                 </div>
 
-                {/* Date received */}
+                {/* Date received
                 <div className="space-y-2">
                     <Label htmlFor="date_received">Date received</Label>
                     <input
@@ -106,7 +88,7 @@ export default function RequestForm({ formData, formType, setData, onSubmit, pro
                     <InputError message={errors.date_received} />
                 </div>
 
-                {/* Received By */}
+                {/* Received By 
                 <div className="space-y-2">
                     <Label htmlFor="received_by">Received By</Label>
                     <Select value={String(formData.received_by)} onValueChange={(value) => setData('received_by', Number(value))}>
@@ -124,7 +106,7 @@ export default function RequestForm({ formData, formType, setData, onSubmit, pro
                     <InputError message={errors.received_by} />
                 </div>
 
-                {/* Status */}
+                {/* Status 
                 <div className="space-y-2">
                     <Label htmlFor="status">Status</Label>
                     <Select value={formData.status} onValueChange={(value) => setData('status', value)}>
@@ -138,7 +120,7 @@ export default function RequestForm({ formData, formType, setData, onSubmit, pro
                         </SelectContent>
                     </Select>
                     <InputError message={errors.status} />
-                </div>
+                </div> */}
             </div>
             <Button disabled={processing} className="w-1/3">
                 {formType === 'edit' ? 'Save Changes' : 'Submit Request'}

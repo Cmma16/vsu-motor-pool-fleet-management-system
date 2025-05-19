@@ -2,30 +2,14 @@ import { createColumnHelper } from '@tanstack/react-table';
 import { ArrowUpDown } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 
-import { DataTableRowActions } from '@/components/data-table-row-actions';
+import { InspectionRowActions } from '@/components/inspection/inspection-row-actions';
 
 const columnHelper = createColumnHelper();
 
 export const InspectionsColumn = (handleView, handleEdit, handleDelete) => [
     {
         id: 'select',
-        header: ({ table }) => (
-            <Checkbox
-                checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
-                onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                aria-label="Select all"
-            />
-        ),
-        cell: ({ row }) => (
-            <Checkbox
-                className="border border-black"
-                checked={row.getIsSelected()}
-                onCheckedChange={(value) => row.toggleSelected(!!value)}
-                aria-label="Select row"
-            />
-        ),
         enableSorting: false,
         enableHiding: false,
     },
@@ -47,11 +31,37 @@ export const InspectionsColumn = (handleView, handleEdit, handleDelete) => [
     }),
     columnHelper.accessor('started_at', {
         header: () => <div className="text-left">Started at</div>,
-        cell: (info) => <div className="text-left">{info.getValue()}</div>,
+        cell: (info) => {
+            const dateObj = new Date(info.getValue());
+
+            const formattedDateTime = dateObj.toLocaleString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true,
+            });
+
+            return <div className="text-left">{formattedDateTime}</div>;
+        },
     }),
     columnHelper.accessor('completed_at', {
         header: () => <div className="text-left">Completed at</div>,
-        cell: (info) => <div className="text-left">{info.getValue()}</div>,
+        cell: (info) => {
+            const dateObj = new Date(info.getValue());
+
+            const formattedDateTime = dateObj.toLocaleString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true,
+            });
+
+            return <div className="text-left">{formattedDateTime}</div>;
+        },
     }),
     columnHelper.accessor('parts_available', {
         header: () => <div className="text-left">Parts available</div>,
@@ -73,20 +83,13 @@ export const InspectionsColumn = (handleView, handleEdit, handleDelete) => [
         header: () => <div className="text-left">Estimated duration</div>,
         cell: (info) => <div className="text-left">{info.getValue()}</div>,
     }),
-    columnHelper.accessor('conducted_by', {
-        header: () => <div className="text-left">Conducted by</div>,
-        cell: (info) => <div className="text-left">{info.getValue()}</div>,
-    }),
-    columnHelper.accessor('confirmed_by', {
-        header: () => <div className="text-left">Confirmed_by</div>,
-        cell: (info) => <div className="text-left">{info.getValue()}</div>,
-    }),
     {
         id: 'actions',
+        header: () => <div className="text-left">Actions</div>,
         cell: ({ row }) => {
             const inspection = row.original;
             return (
-                <DataTableRowActions
+                <InspectionRowActions
                     row={inspection}
                     rowKey="inspection_id"
                     handleView={handleView}

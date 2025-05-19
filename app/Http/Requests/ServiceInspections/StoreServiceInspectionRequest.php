@@ -28,8 +28,6 @@ class StoreServiceInspectionRequest extends FormRequest
             'parts_available' => 'required|boolean',
             'personnel_available' => 'required|boolean',
             'estimated_duration' => 'required|string|max:25',
-            'conducted_by' => 'required|exists:users,id',
-            'confirmed_by' => 'nullable|exists:users,id',
         ];
     }
 }

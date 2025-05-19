@@ -35,6 +35,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('vehicles', VehicleController::class);
     Route::resource('repairs', RepairsController::class);
     Route::resource('services/requests', ServiceRequestController::class);
+    Route::patch('services/requests/{request}/status', [ServiceRequestController::class, 'updateStatus'])->name('requests.updateStatus');
     Route::resource('services/request-inspections', ServiceInspectionController::class);
     Route::resource('services/completed', ServiceAccomplishmentController::class);
     Route::resource('parts', PartController::class);

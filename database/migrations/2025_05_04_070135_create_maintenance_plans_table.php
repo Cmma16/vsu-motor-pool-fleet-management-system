@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('vehicle_id')->constrained('vehicles', 'vehicle_id')->onDelete('cascade');
             $table->date('scheduled_date');
             $table->integer('next_service_km');
-            $table->string('description', 255);
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onDelete('set null');
             $table->enum('status', ['scheduled', 'overdue', 'completed', 'cancelled']);
             $table->timestamps();

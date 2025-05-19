@@ -19,18 +19,22 @@ class DashboardController extends Controller
     public function index()
     {
         $user = auth()->user();
-        
-        // Get data based on user role
-        switch($user->role->name) {
-        case 'Admin':
-            return $this->getAdminDashboard();
-        case 'Driver':
-            return $this->getDriverDashboard();
-        case 'Technician':
-            return $this->getMechanicDashboard();
-        case 'Staff':
-            return $this->getStaffDashboard();
-        default:
+        if($user->role->name) {
+            // Get data based on user role
+            switch($user->role->name) {
+            case 'Admin':
+                return $this->getAdminDashboard();
+            case 'Driver':
+                return $this->getDriverDashboard();
+            case 'Mechanic':
+                return $this->getMechanicDashboard();
+            case 'Staff':
+                return $this->getStaffDashboard();
+            default:
+                return redirect()->route('login');
+            }
+        }
+        else {
             return redirect()->route('login');
         }
     }
@@ -65,8 +69,8 @@ class DashboardController extends Controller
                     $query->where('name', 'Driver');
                 })->count(),
             
-                'technician' => User::whereHas('role', function ($query) {
-                    $query->where('name', 'Technician');
+                'mechanic' => User::whereHas('role', function ($query) {
+                    $query->where('name', 'Mechanic');
                 })->count(),
             
                 'staff' => User::whereHas('role', function ($query) {
@@ -95,6 +99,9 @@ class DashboardController extends Controller
                         ->whereDate('scheduled_date', '>=', now())
                         ->orderBy('scheduled_date')
                         ->first();
+                } else {
+                    $latestOdometerReading = 0;
+                    $nextMaintenance = 0;
                 }
         
         return Inertia::render('dashboard/driver', [
@@ -121,8 +128,8 @@ class DashboardController extends Controller
                     $query->where('name', 'Driver');
                 })->count(),
             
-                'technician' => User::whereHas('role', function ($query) {
-                    $query->where('name', 'Technician');
+                'mechanic' => User::whereHas('role', function ($query) {
+                    $query->where('name', 'Mechanic');
                 })->count(),
             
                 'staff' => User::whereHas('role', function ($query) {
@@ -146,23 +153,39 @@ class DashboardController extends Controller
         $mechanic = auth()->user();
         
         return Inertia::render('dashboard/mechanic', [
-            'assignedMaintenance' => MaintenancePlan::where('assigned_to', $mechanic->id)
-                ->where('status', 'scheduled')
-                ->get(),
-            'pendingRepairs' => Repairs::where('performed_by', $mechanic->id)
-                ->where('status', 'pending')
-                ->get(),
-            'partsInventory' => Part::where('quantity', '<', 'minimum_quantity')->get(),
-            'inspectionRequests' => ServiceRequest::where('service_type', 'inspection')
-                ->where('status', 'pending')
-                ->get(),
-            'maintenanceSchedule' => MaintenancePlan::where('assigned_to', $mechanic->id)
-                ->orderBy('scheduled_date')
-                ->take(5)
-                ->get(),
-            'serviceQueue' => ServiceRequest::where('status', 'received')
-                ->orderBy('date_received')
-                ->get()
+            'vehicleStats' => [
+                'total' => Vehicle::count(),
+                'available' => Vehicle::where('status', 'available')->count(),
+                'inUse' => Vehicle::where('status', 'in use')->count(),
+                'underMaintenance' => Vehicle::where('status', 'under maintenance')->count(),
+                'retired' => Vehicle::where('status', 'retired')->count(),
+            ],
+            'maintenanceStats' => [
+                'dueToday' => MaintenancePlan::where('scheduled_date', now())->count(),
+                'dueSoon' => MaintenancePlan::where('scheduled_date', '>', now())->where('scheduled_date', '<=', now()->addDays(7))->count(),
+            ],
+            'serviceStats' => [
+                'pending' => ServiceRequest::where('status', 'pending')->count(),
+            ],
+            'tripStats' => [
+                'today' => Trip::whereDate('start_date', now())->count(),
+            ],
+            'personnelStats' => [
+                'total' => User::count(),
+                'driver' => User::whereHas('role', function ($query) {
+                    $query->where('name', 'Driver');
+                })->count(),
+            
+                'mechanic' => User::whereHas('role', function ($query) {
+                    $query->where('name', 'Mechanic');
+                })->count(),
+            
+                'staff' => User::whereHas('role', function ($query) {
+                    $query->where('name', 'Staff');
+                })->count(),
+            ], 
+            'uninspectedRequests' => ServiceRequest::where('status', 'received')->get(),
+            'approvedRequests' => ServiceRequest::where('status', 'approved')->get(),
         ]);
     }
 

@@ -2,7 +2,7 @@ import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { Link } from '@inertiajs/react';
-import { BookOpen, ChartColumnBig, Folder, Gauge, HandHelpingIcon, LayoutGrid, LucidePuzzle, TruckIcon, Users, WrenchIcon } from 'lucide-react';
+import { ChartColumnBig, Gauge, HandHelpingIcon, LayoutGrid, LucidePuzzle, TruckIcon, Users, WrenchIcon } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems = [
@@ -17,15 +17,15 @@ const mainNavItems = [
         icon: HandHelpingIcon,
         children: [
             { title: 'Requests', href: '/services/requests' },
-            { title: 'For inspection', href: '/services/request-inspections', allowedRoles: ['Admin', 'Technician', 'Staff'] },
-            { title: 'Completed', href: '/services/completed', allowedRoles: ['Admin', 'Technician', 'Staff'] },
+            { title: 'For inspection', href: '/services/request-inspections', allowedRoles: ['Admin', 'Mechanic', 'Staff'] },
+            { title: 'Completed', href: '/services/completed', allowedRoles: ['Admin', 'Mechanic', 'Staff'] },
         ],
     },
     {
         title: 'Vehicles',
         href: 'vehicles',
         icon: TruckIcon,
-        allowedRoles: ['Admin', 'Driver', 'Technician', 'Staff'],
+        allowedRoles: ['Admin', 'Driver', 'Mechanic', 'Staff'],
         children: [
             { title: 'List', href: '/vehicles' },
             { title: 'Trips', href: '/vehicles/trips' },
@@ -35,11 +35,11 @@ const mainNavItems = [
         title: 'Repairs & Maintenance',
         href: '#',
         icon: WrenchIcon,
-        allowedRoles: ['Admin', 'Technician', 'Staff'],
+        allowedRoles: ['Admin', 'Mechanic', 'Staff'],
         children: [
             { title: 'Maintenance Plans', href: '/plans', allowedRoles: ['Admin', 'Staff'] },
-            { title: 'Maintenance Records', href: '/maintenance', allowedRoles: ['Admin', 'Technician', 'Staff'] },
-            { title: 'Repair Records', href: '/repairs', allowedRoles: ['Admin', 'Technician', 'Staff'] },
+            { title: 'Maintenance Records', href: '/maintenance', allowedRoles: ['Admin', 'Mechanic', 'Staff'] },
+            { title: 'Repair Records', href: '/repairs', allowedRoles: ['Admin', 'Mechanic', 'Staff'] },
         ],
     },
     {
@@ -68,16 +68,16 @@ const mainNavItems = [
 ];
 
 const footerNavItems = [
-    {
-        title: 'Repository',
-        url: 'https://github.com/laravel/react-starter-kit',
-        icon: Folder,
-    },
-    {
-        title: 'Documentation',
-        url: 'https://laravel.com/docs/starter-kits',
-        icon: BookOpen,
-    },
+    // {
+    //     title: 'Repository',
+    //     url: 'https://github.com/laravel/react-starter-kit',
+    //     icon: Folder,
+    // },
+    // {
+    //     title: 'Documentation',
+    //     url: 'https://laravel.com/docs/starter-kits',
+    //     icon: BookOpen,
+    // },
 ];
 
 export function AppSidebar() {

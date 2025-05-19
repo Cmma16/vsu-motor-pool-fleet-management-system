@@ -18,11 +18,11 @@ export default function MaintenanceForm({
     serviceRequests,
     odometerLogs,
     maintenancePlans,
+    lockInputs,
 }) {
     const latestOdometer = React.useMemo(() => {
-        return odometerLogs
-            .filter((log) => log.vehicle_id === formData.vehicle_id)
-            .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))[0];
+        const vehicleId = Number(formData.vehicle_id);
+        return odometerLogs.filter((log) => log.vehicle_id === vehicleId).sort((a, b) => new Date(b.created_at) - new Date(a.created_at))[0];
     }, [formData.vehicle_id, odometerLogs]);
 
     React.useEffect(() => {
@@ -31,50 +31,15 @@ export default function MaintenanceForm({
         } else {
             setData('odometer_id', '');
         }
-    }, [latestOdometer]);
+    }, [latestOdometer, formData.vehicle_id]);
 
     return (
         <form onSubmit={onSubmit} className="space-y-6">
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                {/* Maintenance Plan */}
-                <div className="space-y-2">
-                    <Label htmlFor="plan_id">Maintenance Plan</Label>
-                    <Select value={String(formData.plan_id)} onValueChange={(value) => setData('plan_id', Number(value))}>
-                        <SelectTrigger id="plan_id" tabIndex={1}>
-                            <SelectValue placeholder="Select maintenance plan" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {maintenancePlans.map((plan) => (
-                                <SelectItem key={plan.plan_id} value={String(plan.plan_id)}>
-                                    {plan.description}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-                    <InputError message={errors.plan_id} />
-                </div>
-                {/* Vehicle */}
-                <div className="space-y-2">
-                    <Label htmlFor="vehicle_id">Vehicle</Label>
-                    <Select value={String(formData.vehicle_id)} onValueChange={(value) => setData('vehicle_id', Number(value))}>
-                        <SelectTrigger id="vehicle_id" tabIndex={1}>
-                            <SelectValue placeholder="Select vehicle" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {vehicles.map((vehicle) => (
-                                <SelectItem key={vehicle.vehicle_id} value={String(vehicle.vehicle_id)}>
-                                    {vehicle.vehicle_name}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-                    <InputError message={errors.vehicle_id} />
-                </div>
-
                 {/* Request Description */}
                 <div className="space-y-2">
                     <Label htmlFor="request_id">Request Description</Label>
-                    <Select value={String(formData.request_id)} onValueChange={(value) => setData('request_id', Number(value))}>
+                    <Select disabled={lockInputs} value={String(formData.request_id)} onValueChange={(value) => setData('request_id', Number(value))}>
                         <SelectTrigger id="request_id" tabIndex={2}>
                             <SelectValue placeholder="Select service request" />
                         </SelectTrigger>
@@ -89,54 +54,52 @@ export default function MaintenanceForm({
                     <InputError message={errors.request_id} />
                 </div>
 
+                {/* Vehicle */}
+                <div className="space-y-2">
+                    <Label htmlFor="vehicle_id">Vehicle</Label>
+                    <Select disabled={lockInputs} value={String(formData.vehicle_id)} onValueChange={(value) => setData('vehicle_id', Number(value))}>
+                        <SelectTrigger id="vehicle_id" tabIndex={1}>
+                            <SelectValue placeholder="Select vehicle" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {vehicles.map((vehicle) => (
+                                <SelectItem key={vehicle.vehicle_id} value={String(vehicle.vehicle_id)}>
+                                    {vehicle.vehicle_name}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                    <InputError message={errors.vehicle_id} />
+                </div>
+
+                {/* Maintenance Plan */}
+                <div className="space-y-2">
+                    <Label htmlFor="plan_id">Maintenance Plan</Label>
+                    <Select value={String(formData.plan_id)} onValueChange={(value) => setData('plan_id', Number(value))}>
+                        <SelectTrigger id="plan_id" tabIndex={1}>
+                            <SelectValue placeholder="Select maintenance plan" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {maintenancePlans.map((plan) => (
+                                <SelectItem key={plan.plan_id} value={String(plan.plan_id)}>
+                                    {`${plan.vehicle_name} - ${plan.scheduled_date} - ${plan.next_service_km} km`}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                    <InputError message={errors.plan_id} />
+                </div>
+
                 {/* Date Completed */}
                 <div className="space-y-2">
                     <Label htmlFor="date_completed">Date Completed</Label>
-                    <Input type="date" value={formData.date_completed} onChange={(e) => setData('date_completed', e.target.value)} />
+                    <Input
+                        id="date_completed"
+                        type="date"
+                        value={formData.date_completed}
+                        onChange={(e) => setData('date_completed', e.target.value)}
+                    />
                     <InputError message={errors.date_completed} />
-                </div>
-
-                {/* Performed by */}
-                <div className="space-y-2">
-                    <Label htmlFor="performed_by">Performed by</Label>
-                    <Select value={String(formData.performed_by)} onValueChange={(value) => setData('performed_by', Number(value))}>
-                        <SelectTrigger id="performed_by" tabIndex={3}>
-                            <SelectValue placeholder="Select personnel" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {users.map((user) => (
-                                <SelectItem key={user.id} value={String(user.id)}>
-                                    {`${user.first_name} ${user.last_name}`}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-                    <InputError message={errors.performed_by} />
-                </div>
-
-                {/* Confirmed By */}
-                <div className="space-y-2">
-                    <Label htmlFor="confirmed_by">Confirmed By</Label>
-                    <Select value={String(formData.confirmed_by)} onValueChange={(value) => setData('confirmed_by', Number(value))}>
-                        <SelectTrigger id="confirmed_by" tabIndex={4}>
-                            <SelectValue placeholder="Select requester" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {users.map((user) => (
-                                <SelectItem key={user.id} value={String(user.id)}>
-                                    {`${user.first_name} ${user.last_name}`}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-                    <InputError message={errors.confirmed_by} />
-                </div>
-
-                {/* Date Confirmed */}
-                <div className="space-y-2">
-                    <Label htmlFor="date_confirmed">Date Confirmed</Label>
-                    <Input type="date" value={formData.date_confirmed} onChange={(e) => setData('date_confirmed', e.target.value)} />
-                    <InputError message={errors.date_confirmed} />
                 </div>
 
                 <div className="space-y-2">
@@ -156,8 +119,14 @@ export default function MaintenanceForm({
                 {/* Odometer Reading */}
                 <div className="space-y-2">
                     <Label htmlFor="odometer_id">Odometer Reading</Label>
-                    <Input value={latestOdometer?.reading ?? ''} disabled placeholder="No odometer reading available" className="bg-gray-100" />
-                    {formData.vehicle_id && <OdometerLogModal vehicles={vehicles} formType={'add'} vehicle_id={formData.vehicle_id} />}
+                    <Input
+                        id="odometer_id"
+                        value={latestOdometer?.reading ?? ''}
+                        disabled
+                        placeholder="No odometer reading available"
+                        className="bg-gray-100"
+                    />
+                    {formData.vehicle_id && <OdometerLogModal vehicles={vehicles} formType={'add'} vehicle_id={latestOdometer?.vehicle_id} />}
                     <InputError message={errors.odometer_id} />
                 </div>
             </div>

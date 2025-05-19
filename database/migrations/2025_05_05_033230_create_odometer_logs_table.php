@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('vehicle_id')->constrained('vehicles', 'vehicle_id')->onDelete('cascade');
             $table->integer('reading');
             $table->datetime('logged_at');
-            $table->foreignId('recorded_by')->constrained('users', 'id')->onDelete('cascade');
+            $table->foreignId('recorded_by')->nullable()->constrained('users', 'id')->onDelete('set null');
             $table->timestamps();
         });
     }
