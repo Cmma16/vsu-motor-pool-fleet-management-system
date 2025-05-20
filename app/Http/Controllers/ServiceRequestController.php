@@ -26,7 +26,7 @@ class ServiceRequestController extends Controller
         if ($role === 'Driver') {
             $query->where('requested_by', $user->id);
         } elseif ($role === 'Mechanic') {
-            $query->whereIn('status', ['received', 'inspected', 'approved', 'completed']);
+            $query->whereIn('status', ['received', 'inspected', 'approved', 'conducted', 'cancelled', 'completed']);
         }
         // Admin and staff: no filters
 
@@ -51,8 +51,8 @@ class ServiceRequestController extends Controller
 
         return Inertia::render('services/requests/index', [
             'serviceRequests' => $serviceRequests,
-            'userRole' => $role, // optionally pass this to conditionally render buttons on the frontend
-            'userId' => $user->id, // optional if needed on frontend
+            //'userRole' => $role, // optionally pass this to conditionally render buttons on the frontend
+            //'userId' => $user->id, // optional if needed on frontend
         ]);
     }
 
@@ -147,7 +147,7 @@ class ServiceRequestController extends Controller
         $serviceRequest = $request;
 
         $updateRequest->validate([
-            'status' => 'required|string|in:pending,received,inspected,approved,completed,cancelled',
+            'status' => 'required|string|in:pending,received,inspected,approved,cancelled,conducted,completed',
         ]);
 
         $serviceRequest->update(['status' => $updateRequest->status]);

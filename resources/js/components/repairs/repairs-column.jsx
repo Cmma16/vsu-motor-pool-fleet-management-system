@@ -2,30 +2,14 @@ import { createColumnHelper } from '@tanstack/react-table';
 import { ArrowUpDown } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 
-import { DataTableRowActions } from '@/components/data-table-row-actions';
+import { ColorfulRowActions } from '@/components/display/colorful-row-actions';
 
 const columnHelper = createColumnHelper();
 
 export const RepairsColumn = (handleView, handleEdit, handleDelete) => [
     {
         id: 'select',
-        header: ({ table }) => (
-            <Checkbox
-                checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
-                onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                aria-label="Select all"
-            />
-        ),
-        cell: ({ row }) => (
-            <Checkbox
-                className="border border-black"
-                checked={row.getIsSelected()}
-                onCheckedChange={(value) => row.toggleSelected(!!value)}
-                aria-label="Select row"
-            />
-        ),
         enableSorting: false,
         enableHiding: false,
     },
@@ -38,9 +22,15 @@ export const RepairsColumn = (handleView, handleEdit, handleDelete) => [
         ),
         cell: (info) => <div className="text-left">{info.getValue()}</div>,
     }),
-    columnHelper.accessor('request_id', {
-        header: () => <div className="text-left">Request</div>,
-        cell: (info) => <div className="text-left">{info.getValue()}</div>,
+    columnHelper.accessor('request_description', {
+        header: () => <div className="text-left">Request description</div>,
+        cell: (info) => {
+            const value = info.getValue() || '';
+            const maxLength = 20;
+            const isTrimmed = value.length > maxLength;
+            const displayValue = isTrimmed ? value.slice(0, maxLength) + '...' : value;
+            return <div className="text-left">{displayValue}</div>;
+        },
     }),
     columnHelper.accessor('performed_by', {
         header: () => <div className="text-left">Performed by</div>,
@@ -52,7 +42,13 @@ export const RepairsColumn = (handleView, handleEdit, handleDelete) => [
     }),
     columnHelper.accessor('repair_summary', {
         header: () => <div className="text-left">Summary</div>,
-        cell: (info) => <div className="text-left">{info.getValue()}</div>,
+        cell: (info) => {
+            const value = info.getValue() || '';
+            const maxLength = 30;
+            const isTrimmed = value.length > maxLength;
+            const displayValue = isTrimmed ? value.slice(0, maxLength) + '...' : value;
+            return <div className="text-left">{displayValue}</div>;
+        },
     }),
     columnHelper.accessor('odometer_reading', {
         header: () => <div className="text-left">Odometer Reading</div>,
@@ -60,11 +56,10 @@ export const RepairsColumn = (handleView, handleEdit, handleDelete) => [
     }),
     {
         id: 'actions',
+        header: () => <div className="text-center">Actions</div>,
         cell: ({ row }) => {
             const repair = row.original;
-            return (
-                <DataTableRowActions row={repair} rowKey="repair_id" handleView={handleView} handleEdit={handleEdit} handleDelete={handleDelete} />
-            );
+            return <ColorfulRowActions row={repair} rowKey="repair_id" handleView={handleView} handleEdit={handleEdit} handleDelete={handleDelete} />;
         },
     },
 ];

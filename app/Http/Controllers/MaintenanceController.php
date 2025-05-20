@@ -22,18 +22,19 @@ class MaintenanceController extends Controller
      */
     public function index()
     {
-        $maintenanceRecords = Maintenance::with(['plan', 'request', 'vehicle', 'odometerReading', 'performedBy', 'confirmedBy'])
+        $maintenanceRecords = Maintenance::with(['plan', 'serviceRequest', 'vehicle', 'odometerReading', 'performedBy', 'confirmedBy'])
             ->get()
             ->map(function ($maintenance) {
                 return [
                     'maintenance_id' => $maintenance->maintenance_id,
-                    'plan_id' => $maintenance->plan->plan_id ?? 'N/A',
-                    'request_description' => $maintenance->request->work_description ?? 'N/A', //redundant with maintenance plan plan_name
+                    'maintenance_plan' => $maintenance->plan->vehicle->vehicle_name . ' - ' . $maintenance->plan->scheduled_date . ' - ' . $maintenance->plan->next_service_km . 'km' ?? 'N/A',
+                    'request_description' => $maintenance->serviceRequest->work_description ?? 'N/A', 
                     'vehicle_name' => $maintenance->vehicle->vehicle_name ?? 'N/A',
+                    'date_in' => $maintenance->date_in,
                     'date_completed' => $maintenance->date_completed,
                     'odometer_reading' => $maintenance->odometerReading->reading ?? 'N/A',
-                    'performed_by' => $maintenance->performedBy ? $maintenance->performedBy->first_name . ' ' . $maintenance->performedBy->last_name : 'unassigned',
-                    'confirmed_by' => $maintenance->confirmedBy ? $maintenance->confirmedBy->first_name . ' ' . $maintenance->confirmedBy->last_name : 'Not yet confirmed',
+                    'performed_by' => $maintenance->performedBy ? $maintenance->performedBy->first_name . ' ' . $maintenance->performedBy->last_name : 'N/A',
+                    'confirmed_by' => $maintenance->confirmedBy ? $maintenance->confirmedBy->first_name . ' ' . $maintenance->confirmedBy->last_name : '',
                     'date_confirmed' => $maintenance->date_confirmed,
                     'maintenance_summary' => $maintenance->maintenance_summary,
                 ];
@@ -62,7 +63,7 @@ class MaintenanceController extends Controller
                     'next_service_km' => $plan->next_service_km,
                 ];
             });
-        $serviceRequests = ServiceRequest::select('request_id', 'work_description')->get();
+        $serviceRequests = ServiceRequest::select('request_id', 'work_description')->where('status', 'approved')->get();
         $vehicles = Vehicle::select('vehicle_id', 'vehicle_name')->get();
         $odometerLogs = OdometerLog::select('odometer_id', 'vehicle_id', 'reading', 'created_at')->get();
 
@@ -85,6 +86,7 @@ class MaintenanceController extends Controller
         $validatedData = $request->validated();
         $validatedData['performed_by'] = auth()->id();
         $newMaintenance = Maintenance::create($validatedData);
+        $newMaintenance->serviceRequest->update(['status' => 'conducted']);
         // Redirect to the index page with a success message
         return redirect()->route('maintenance.show', $newMaintenance->maintenance_id)->with('success', 'Maintenance record created successfully.');
     }
@@ -109,12 +111,13 @@ class MaintenanceController extends Controller
             'maintenance' => [
                 'maintenance_id' => $maintenance->maintenance_id,
                 'maintenance_plan' => $maintenance->plan->vehicle->vehicle_name . ' - ' . $maintenance->plan->scheduled_date . ' - ' . $maintenance->plan->next_service_km . 'km' ?? 'N/A',
-                'request_description' => $maintenance->request->work_description ?? 'N/A',
+                'request_description' => $maintenance->serviceRequest->work_description ?? 'N/A',
                 'vehicle_name' => $maintenance->vehicle->vehicle_name ?? 'N/A',
                 'odometer_reading' => $maintenance->odometerReading->reading ?? 'N/A',
                 'performed_by' => $maintenance->performedBy ? $maintenance->performedBy->first_name . ' ' . $maintenance->performedBy->last_name : 'N/A',
                 'confirmed_by' => $maintenance->confirmedBy ? $maintenance->confirmedBy->first_name . ' ' . $maintenance->confirmedBy->last_name : null,
                 'date_completed' => $maintenance->date_completed,
+                'date_in' => $maintenance->date_in,
                 'date_confirmed' => $maintenance->date_confirmed,
                 'maintenance_summary' => $maintenance->maintenance_summary,
             ],
@@ -128,7 +131,18 @@ class MaintenanceController extends Controller
      */
     public function edit(Maintenance $maintenance)
     {
-        $maintenancePlans = MaintenancePlan::select('plan_id', 'plan_name')->get();
+        $maintenancePlans = MaintenancePlan::with('vehicle')
+            ->select('plan_id', 'vehicle_id', 'scheduled_date', 'next_service_km')
+            ->get()
+                ->map(function ($plan) {
+                return [
+                    'plan_id' => $plan->plan_id,
+                    'vehicle_id' => $plan->vehicle_id,
+                    'vehicle_name' => $plan->vehicle->vehicle_name,
+                    'scheduled_date' => $plan->scheduled_date,
+                    'next_service_km' => $plan->next_service_km,
+                ];
+            });
         $serviceRequests = ServiceRequest::select('request_id', 'work_description')->get();
         $vehicles = Vehicle::select('vehicle_id', 'vehicle_name')->get();
         $users = User::select('id', 'first_name', 'last_name')->get();
@@ -143,13 +157,14 @@ class MaintenanceController extends Controller
                 'odometer_id' => $maintenance->odometer_id,
                 'performed_by' => $maintenance->performed_by,
                 'confirmed_by' => $maintenance->confirmed_by,
+                'date_in' => $maintenance->date_in,
                 'date_completed' => $maintenance->date_completed,
-                'description' => $maintenance->description,
+                'maintenance_summary' => $maintenance->maintenance_summary,
             ],
+            'odometerLogs' => $odometerLogs,
             'maintenancePlans' => $maintenancePlans,
             'serviceRequests' => $serviceRequests,
             'vehicles' => $vehicles,
-            'users' => $users,
         ]);
     }
 

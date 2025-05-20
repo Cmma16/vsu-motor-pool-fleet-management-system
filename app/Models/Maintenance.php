@@ -18,6 +18,7 @@ class Maintenance extends Model
         'request_id',
         'vehicle_id',
         'date_completed',
+        'date_in',
         'odometer_id',
         'performed_by',
         'confirmed_by',
@@ -30,7 +31,7 @@ class Maintenance extends Model
         return $this->belongsTo(MaintenancePlan::class, 'plan_id');
     }
 
-    public function request()
+    public function serviceRequest()
     {
         return $this->belongsTo(ServiceRequest::class, 'request_id');
     }

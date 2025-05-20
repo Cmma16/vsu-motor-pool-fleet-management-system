@@ -1,8 +1,10 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 
+import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
+import { usePage } from '@inertiajs/react';
 // import { Button } from 'react-day-picker';
 
 const breadcrumbs = [
@@ -22,6 +24,10 @@ const pageDetails = {
 };
 
 export default function InspectionDetails({ serviceInspection }) {
+    const user = usePage().props.auth.user;
+    const handleConfirmInspection = () => {
+        router.patch(`/services/request-inspections/${serviceInspection.inspection_id}/confirm`);
+    };
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             {console.log(serviceInspection)}
@@ -83,12 +89,22 @@ export default function InspectionDetails({ serviceInspection }) {
                                     <span>{serviceInspection.confirmed_by}</span>
                                 </div>
 
-                                <Link
-                                    href={`${serviceInspection.inspection_id}/edit`}
-                                    className="col-span-2 w-1/3 rounded-md bg-[#006600] px-3 py-2 text-center text-white hover:bg-[#005500]"
-                                >
-                                    Edit Request
-                                </Link>
+                                {user.role.name == 'Mechanic' && !serviceInspection.confirmed_by && (
+                                    <Link
+                                        href={`${serviceInspection.inspection_id}/edit`}
+                                        className="col-span-2 w-1/3 rounded-md bg-[#006600] px-3 py-2 text-center text-white hover:bg-[#005500]"
+                                    >
+                                        Edit Inspection
+                                    </Link>
+                                )}
+                                {user.role.name == 'Staff' && !serviceInspection.confirmed_by && (
+                                    <Button
+                                        className="col-span-2 w-1/3 rounded-md bg-[#006600] px-3 py-2 text-center text-white hover:bg-[#005500]"
+                                        onClick={handleConfirmInspection}
+                                    >
+                                        Confirm Inspection
+                                    </Button>
+                                )}
                             </div>
                         </div>
                     </CardContent>

@@ -3,7 +3,7 @@ import { ArrowUpDown } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 
-import { DataTableRowActions } from '@/components/data-table-row-actions';
+import { ColorfulRowActions } from '@/components/display/colorful-row-actions';
 
 const columnHelper = createColumnHelper();
 
@@ -13,13 +13,25 @@ export const MaintenanceColumn = (handleView, handleEdit, handleDelete) => [
         enableSorting: false,
         enableHiding: false,
     },
-    columnHelper.accessor('plan_id', {
+    columnHelper.accessor('maintenance_plan', {
         header: () => <div className="text-left">Maintenance Plan</div>,
-        cell: (info) => <div className="text-left">{info.getValue()}</div>,
+        cell: (info) => {
+            const value = info.getValue() || '';
+            const maxLength = 30;
+            const isTrimmed = value.length > maxLength;
+            const displayValue = isTrimmed ? value.slice(0, maxLength) + '...' : value;
+            return <div className="text-left">{displayValue}</div>;
+        },
     }),
     columnHelper.accessor('request_description', {
         header: () => <div className="text-left">Request Description</div>,
-        cell: (info) => <div className="text-left">{info.getValue()}</div>,
+        cell: (info) => {
+            const value = info.getValue() || '';
+            const maxLength = 20;
+            const isTrimmed = value.length > maxLength;
+            const displayValue = isTrimmed ? value.slice(0, maxLength) + '...' : value;
+            return <div className="text-left">{displayValue}</div>;
+        },
     }),
     columnHelper.accessor('vehicle_name', {
         header: ({ column }) => (
@@ -28,6 +40,16 @@ export const MaintenanceColumn = (handleView, handleEdit, handleDelete) => [
                 <ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>
         ),
+        cell: (info) => {
+            const value = info.getValue() || '';
+            const maxLength = 20;
+            const isTrimmed = value.length > maxLength;
+            const displayValue = isTrimmed ? value.slice(0, maxLength) + '...' : value;
+            return <div className="text-left">{displayValue}</div>;
+        },
+    }),
+    columnHelper.accessor('date_in', {
+        header: () => <div className="text-left">Date In</div>,
         cell: (info) => <div className="text-left">{info.getValue()}</div>,
     }),
     columnHelper.accessor('date_completed', {
@@ -44,10 +66,11 @@ export const MaintenanceColumn = (handleView, handleEdit, handleDelete) => [
     }),
     {
         id: 'actions',
+        header: () => <div className="text-center">Actions</div>,
         cell: ({ row }) => {
             const maintenance = row.original;
             return (
-                <DataTableRowActions
+                <ColorfulRowActions
                     row={maintenance}
                     rowKey={'maintenance_id'}
                     handleView={handleView}

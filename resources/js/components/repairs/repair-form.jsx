@@ -1,10 +1,10 @@
 import InputError from '@/components/input-error';
+import { OdometerLogModal } from '@/components/odometer/odometer-log-modal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import React from 'react';
-import { OdometerLogModal } from '../odometer/odometer-log-modal';
 
 export default function RepairForm({
     formData,
@@ -31,6 +31,7 @@ export default function RepairForm({
             setData('odometer_id', '');
         }
     }, [latestOdometer]);
+    console.log(latestOdometer, odometerLogs, formData);
 
     return (
         <form onSubmit={onSubmit} className="space-y-6">

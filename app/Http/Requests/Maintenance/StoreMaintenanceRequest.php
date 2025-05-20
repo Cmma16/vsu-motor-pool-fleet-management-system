@@ -26,6 +26,7 @@ class StoreMaintenanceRequest extends FormRequest
             'request_id' => 'required|exists:service_requests,request_id',
             'vehicle_id' => 'required|exists:vehicles,vehicle_id',
             'date_completed' => 'required|date',
+            'date_in' => 'required|date',
             'odometer_id' => 'required|exists:odometer_logs,odometer_id',
             'maintenance_summary' => 'required|string|max:255',
         ];

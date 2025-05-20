@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\RepairParts;
+use App\Models\MaintenanceParts;
+use App\Observers\PartUsageObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +22,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        RepairParts::observe(PartUsageObserver::class);
+        MaintenanceParts::observe(PartUsageObserver::class);
     }
 }

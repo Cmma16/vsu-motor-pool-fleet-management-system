@@ -27,9 +27,9 @@ class RepairsController extends Controller
                 return [
                     'repair_id' => $repair->repair_id,
                     'vehicle_name' => $repair->vehicle->vehicle_name ?? 'N/A',
-                    'request_id' => $repair->request_id,
+                    'request_description' => $repair->serviceRequest->work_description ?? 'N/A',
                     'performed_by' => $repair->performedBy ? $repair->performedBy->first_name . ' ' . $repair->performedBy->last_name : 'N/A',
-                    'confirmed_by' => $repair->confirmedBy ? $repair->confirmedBy->first_name . ' ' . $repair->confirmedBy->last_name : 'N/A',
+                    'confirmed_by' => $repair->confirmedBy ? $repair->confirmedBy->first_name . ' ' . $repair->confirmedBy->last_name : '',
                     'repair_summary' => $repair->repair_summary,
                     'odometer_reading' => $repair->odometerReading ? $repair->odometerReading->reading : 'N/A',
                 ];
@@ -69,6 +69,8 @@ class RepairsController extends Controller
         $validatedData = $request->validated();
         $validatedData['performed_by'] = auth()->id();
         $newRepair = Repairs::create($validatedData);
+        
+        $newRepair->serviceRequest->update(['status' => 'conducted']);
 
         return redirect()->route('repairs.show', $newRepair->repair_id)->with('success', 'Repair record created successfully.');
     }

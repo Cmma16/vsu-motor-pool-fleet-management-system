@@ -25,7 +25,8 @@ class StoreServiceRequestRequest extends FormRequest
             'vehicle_id' => ['required', 'integer', 'exists:vehicles,vehicle_id'],
             // 'requested_by' => ['required', 'integer', 'exists:users,id'], delete this
             'date_filed' => ['required', 'date'],
-            'service_type' => ['required', 'string', 'max:255'],
+            'service_type' => ['required', 'string', 'in:maintenance,repair'],
+            // 'plan_id' => ['required_if:service_type,maintenance', 'integer', 'exists:maintenance_plans,plan_id'],
             'work_description' => ['required', 'string', 'max:255'],
             // 'received_by' => ['nullable', 'integer', 'exists:users,id'], delete this
             // 'date_received' => ['nullable', 'date'], delete this

@@ -35,6 +35,7 @@ export default function PlansIndex({ maintenancePlans }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             <Head title="Plans" />
+            {console.log(maintenancePlans)}
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <DataTable
                     columns={PlansColumn}
@@ -43,8 +44,8 @@ export default function PlansIndex({ maintenancePlans }) {
                     handleView={veiwPlanDetails}
                     handleEdit={editPlan}
                     handleDelete={deletePlan}
-                    filterColumn={'description'}
-                    placeholder={'Search plan description'}
+                    filterColumn={'vehicle_name'}
+                    placeholder={'Search plan by vehicle name'}
                 />
                 <div className="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border md:min-h-min">
                     <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />

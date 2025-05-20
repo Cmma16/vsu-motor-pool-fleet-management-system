@@ -25,11 +25,12 @@ class UpdateServiceRequestRequest extends FormRequest
             'vehicle_id' => ['required', 'integer', 'exists:vehicles,vehicle_id'],
             'requested_by' => ['required', 'integer', 'exists:users,id'],
             'date_filed' => ['required', 'date'],
-            'service_type' => ['required', 'string', 'max:255'],
+            'service_type' => ['required', 'string', 'in:maintenance,repair'],
+            // 'plan_id' => ['required_if:service_type,maintenance', 'integer', 'exists:maintenance_plans,plan_id'],
             'work_description' => ['required', 'string', 'max:255'],
-            'received_by' => ['nullable', 'integer', 'exists:users,id', 'required_if:status,received,cancelled'],
-            'date_received' => ['nullable', 'date', 'required_if:status,received,cancelled'],
-            'status' => ['required', 'string', 'in:pending,received,cancelled'],
+            // 'received_by' => ['nullable', 'integer', 'exists:users,id', 'required_if:status,received,cancelled'],
+            // 'date_received' => ['nullable', 'date', 'required_if:status,received,cancelled'],
+            // 'status' => ['required', 'string', 'in:pending,received,approved,cancelled,conducted,completed'],
         ];
     }
 }

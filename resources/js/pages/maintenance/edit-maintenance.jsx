@@ -1,4 +1,4 @@
-import RepairForm from '@/components/repairs/repair-form';
+import MaintenanceForm from '@/components/maintenance/maintenance-form';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 
 import { Head, useForm } from '@inertiajs/react';
@@ -9,34 +9,38 @@ import AppLayout from '@/layouts/app-layout';
 
 const breadcrumbs = [
     {
-        title: 'Repairs',
-        href: '/repairs',
+        title: 'Maintenance',
+        href: '/maintenance',
     },
     {
         title: 'Edit',
-        href: 'repairs/edit',
+        href: 'maintenance/edit',
     },
 ];
 
 const pageDetails = {
-    title: 'Edit Repair Details',
-    description: 'Update the details of the repair record.',
+    title: 'Edit Maintenance Details',
+    description: 'Update the details of the maintenance request.',
 };
 
-export default function EditRepair({ repair, vehicles, users, serviceRequests, odometerLogs }) {
+export default function EditMaintenance({ maintenance, vehicles, odometerLogs, maintenancePlans, users, serviceRequests }) {
     const { data, setData, put, processing, errors, reset } = useForm({
-        vehicle_id: repair.vehicle_id,
-        request_id: repair.request_id,
-        performed_by: repair.performed_by,
-        confirmed_by: repair.confirmed_by,
-        repair_summary: repair.repair_summary,
-        odometer_id: repair.odometer_id,
+        vehicle_id: maintenance.vehicle_id,
+        request_id: maintenance.request_id,
+        plan_id: maintenance.plan_id,
+        date_in: maintenance.date_in,
+        date_completed: maintenance.date_completed,
+        performed_by: maintenance.performed_by,
+        confirmed_by: maintenance.confirmed_by,
+        date_confirmed: maintenance.date_confirmed,
+        maintenance_summary: maintenance.maintenance_summary,
+        odometer_id: maintenance.odometer_id,
     });
 
-    const editRepair = (e) => {
+    const editMaintenance = (e) => {
         e.preventDefault();
 
-        put(route('repairs.update', repair.repair_id), {
+        put(route('maintenance.update', maintenance.maintenance_id), {
             // data, // Sends all form data
             // forceFormData: true, // Ensures file uploads and proper formatting
             preserveScroll: true,
@@ -51,25 +55,26 @@ export default function EditRepair({ repair, vehicles, users, serviceRequests, o
 
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
-            <Head title="Repairs" />
+            <Head title="Maintenance" />
             <div className="mx-6 mb-3 space-y-6 rounded-lg bg-white">
                 <Card className="w-full">
                     <CardHeader>
-                        <CardTitle>Repair Information</CardTitle>
-                        <CardDescription>Update the details of the repair record.</CardDescription>
+                        <CardTitle>Maintenance Information</CardTitle>
+                        <CardDescription>Update the details of the maintenance record.</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <RepairForm
+                        <MaintenanceForm
                             formData={data}
                             formType={'edit'}
                             setData={setData}
-                            onSubmit={editRepair}
+                            onSubmit={editMaintenance}
                             processing={processing}
                             errors={errors}
                             vehicles={vehicles}
                             users={users}
                             serviceRequests={serviceRequests}
                             odometerLogs={odometerLogs}
+                            maintenancePlans={maintenancePlans}
                         />
                     </CardContent>
                 </Card>

@@ -65,6 +65,12 @@ export default function details({ maintenance, maintenanceParts, parts }) {
                                     <span>{maintenance.maintenance_plan ?? 'N/A'}</span>
                                 </div>
 
+                                {/* Date In */}
+                                <div className="flex flex-col space-y-2">
+                                    <Label htmlFor="date_in">Date In</Label>
+                                    <span>{maintenance.date_in ?? 'N/A'}</span>
+                                </div>
+
                                 {/* Date Completed */}
                                 <div className="flex flex-col space-y-2">
                                     <Label htmlFor="date_completed">Date Completed</Label>

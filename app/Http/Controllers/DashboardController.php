@@ -192,26 +192,40 @@ class DashboardController extends Controller
     private function getStaffDashboard()
     {
         return Inertia::render('dashboard/staff', [
-            'serviceRequests' => [
-                'pending' => ServiceRequest::where('status', 'pending')->count(),
-                'received' => ServiceRequest::where('status', 'received')->count(),
-                'cancelled' => ServiceRequest::where('status', 'cancelled')->count(),
-            ],
-            'vehicleAvailability' => [
+            
+            'vehicleStats' => [
+                'total' => Vehicle::count(),
                 'available' => Vehicle::where('status', 'available')->count(),
                 'inUse' => Vehicle::where('status', 'in use')->count(),
                 'underMaintenance' => Vehicle::where('status', 'under maintenance')->count(),
+                'retired' => Vehicle::where('status', 'retired')->count(),
             ],
-            'tripSchedule' => Trip::where('status', 'approved')
-                ->where('start_date', '>=', now())
-                ->orderBy('start_date')
-                ->take(5)
-                ->get(),
-            'maintenanceSchedule' => MaintenancePlan::where('status', 'scheduled')
-                ->orderBy('scheduled_date')
-                ->take(5)
-                ->get(),
-            'partsInventory' => Part::where('quantity', '<', 'minimum_quantity')->get()
+            'maintenanceStats' => [
+                'dueToday' => MaintenancePlan::where('scheduled_date', now())->count(),
+                'dueSoon' => MaintenancePlan::where('scheduled_date', '>', now())->where('scheduled_date', '<=', now()->addDays(7))->count(),
+            ],
+            'serviceStats' => [
+                'pending' => ServiceRequest::where('status', 'pending')->count(),
+            ],
+            'tripStats' => [
+                'today' => Trip::whereDate('start_date', now())->count(),
+            ],
+            'personnelStats' => [
+                'total' => User::count(),
+                'driver' => User::whereHas('role', function ($query) {
+                    $query->where('name', 'Driver');
+                })->count(),
+            
+                'mechanic' => User::whereHas('role', function ($query) {
+                    $query->where('name', 'Mechanic');
+                })->count(),
+            
+                'staff' => User::whereHas('role', function ($query) {
+                    $query->where('name', 'Staff');
+                })->count(),
+            ], 
+            'pendingTrips' => Trip::where('status', 'pending')->get(),
+            'pendingRequests' => ServiceRequest::where('status', 'pending')->get(),
         ]);
     }
 }

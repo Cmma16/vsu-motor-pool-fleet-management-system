@@ -2,29 +2,67 @@ import { router, usePage } from '@inertiajs/react';
 import { createColumnHelper } from '@tanstack/react-table';
 import { ArrowUpDown, Pencil, Printer, ScanSearch, Trash, Wrench } from 'lucide-react';
 
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
+
+function getStatusBadge(status) {
+    switch (status) {
+        case 'pending':
+            return (
+                <Badge variant="outline" className="bg-gray-100">
+                    Pending
+                </Badge>
+            );
+        case 'received':
+            return (
+                <Badge variant="default" className="bg-blue-500">
+                    Received
+                </Badge>
+            );
+        case 'inspected':
+            return (
+                <Badge variant="default" className="bg-yellow-500">
+                    Inspected
+                </Badge>
+            );
+        case 'approved':
+            return (
+                <Badge variant="default" className="bg-green-500">
+                    Approved
+                </Badge>
+            );
+        case 'cancelled':
+            return (
+                <Badge variant="default" className="bg-red-500">
+                    Cancelled
+                </Badge>
+            );
+        case 'conducted':
+            return (
+                <Badge variant="default" className="bg-purple-500">
+                    Conducted
+                </Badge>
+            );
+        case 'completed':
+            return (
+                <Badge variant="default" className="bg-green-600">
+                    Completed
+                </Badge>
+            );
+        default:
+            return (
+                <Badge variant="outline" className="bg-gray-200">
+                    {status}
+                </Badge>
+            );
+    }
+}
 
 const columnHelper = createColumnHelper();
 
 export const RequestsColumn = (handleView, handleEdit, handleDelete, handleStatusUpdate) => [
     {
         id: 'select',
-        header: ({ table }) => (
-            <Checkbox
-                checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
-                onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                aria-label="Select all"
-            />
-        ),
-        cell: ({ row }) => (
-            <Checkbox
-                className="border border-black"
-                checked={row.getIsSelected()}
-                onCheckedChange={(value) => row.toggleSelected(!!value)}
-                aria-label="Select row"
-            />
-        ),
         enableSorting: false,
         enableHiding: false,
     },
@@ -69,7 +107,7 @@ export const RequestsColumn = (handleView, handleEdit, handleDelete, handleStatu
     }),
     columnHelper.accessor('status', {
         header: () => <div className="text-left">Status</div>,
-        cell: (info) => <div className="text-left">{info.getValue()}</div>,
+        cell: (info) => <div className="text-left">{getStatusBadge(info.getValue())}</div>,
     }),
     {
         id: 'actions',

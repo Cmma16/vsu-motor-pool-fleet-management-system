@@ -17,6 +17,7 @@ class ServiceRequest extends Model
     protected $fillable = [
         'request_id',
         'vehicle_id',
+        'plan_id',
         'requested_by',
         'date_filed',
         'service_type',
@@ -32,6 +33,12 @@ class ServiceRequest extends Model
         return $this->belongsTo(Vehicle::class, 'vehicle_id');
     }
 
+    // Relationship with MaintenancePlan
+    public function maintenancePlan()
+    {
+        return $this->belongsTo(MaintenancePlan::class, 'plan_id');
+    }
+
     // Relationship with User (Requested By)
     public function requestedBy()
     {
@@ -43,4 +50,23 @@ class ServiceRequest extends Model
     {
         return $this->belongsTo(User::class, 'received_by');
     }
+
+    // Relationship with Repairs
+    public function repairs()
+    {
+        return $this->hasOne(Repairs::class, 'request_id');
+    }
+
+    // Relationship with Maintenance
+    public function maintenance()
+    {
+        return $this->hasOne(Maintenance::class, 'request_id');
+    }
+
+    // Relationship with ServiceInspection
+    public function serviceInspection()
+    {
+        return $this->hasOne(ServiceInspection::class, 'request_id');
+    }
+
 }

@@ -34,9 +34,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('parts.index');
     Route::resource('vehicles', VehicleController::class);
     Route::resource('repairs', RepairsController::class);
+
     Route::resource('services/requests', ServiceRequestController::class);
     Route::patch('services/requests/{request}/status', [ServiceRequestController::class, 'updateStatus'])->name('requests.updateStatus');
+
     Route::resource('services/request-inspections', ServiceInspectionController::class);
+    Route::patch('services/request-inspections/{request_inspection}/confirm', [ServiceInspectionController::class, 'confirmInspection'])->name('request-inspections.confirm');
+
     Route::resource('services/completed', ServiceAccomplishmentController::class);
     Route::resource('parts', PartController::class);
     Route::resource('plans', MaintenancePlanController::class);

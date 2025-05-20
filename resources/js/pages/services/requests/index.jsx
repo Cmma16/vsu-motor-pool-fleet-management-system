@@ -45,7 +45,7 @@ export default function RequestsIndex({ serviceRequests }) {
                 <DataTable
                     columns={RequestsColumn}
                     data={serviceRequests}
-                    handleCreate={route('requests.create', { data: { work_description: 'test' } })}
+                    handleCreate={route('requests.create')}
                     handleView={veiwRequestDetails}
                     handleEdit={editRequest}
                     handleDelete={deleteRequest}

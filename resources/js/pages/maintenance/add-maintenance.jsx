@@ -19,6 +19,7 @@ export default function AddMaintenance({ maintenancePlans, vehicles, users, serv
         plan_id: '',
         vehicle_id: vehicleId || '',
         request_id: requestId || '',
+        date_in: '',
         date_completed: '',
         odometer_id: '',
         performed_by: '',

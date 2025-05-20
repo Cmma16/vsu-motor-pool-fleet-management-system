@@ -17,7 +17,7 @@ const mainNavItems = [
         icon: HandHelpingIcon,
         children: [
             { title: 'Requests', href: '/services/requests' },
-            { title: 'For inspection', href: '/services/request-inspections', allowedRoles: ['Admin', 'Mechanic', 'Staff'] },
+            { title: 'Inspection', href: '/services/request-inspections', allowedRoles: ['Admin', 'Mechanic', 'Staff'] },
             { title: 'Completed', href: '/services/completed', allowedRoles: ['Admin', 'Mechanic', 'Staff'] },
         ],
     },
@@ -39,7 +39,7 @@ const mainNavItems = [
         icon: WrenchIcon,
         allowedRoles: ['Admin', 'Mechanic', 'Staff'],
         children: [
-            { title: 'Maintenance Plans', href: '/plans', allowedRoles: ['Admin', 'Staff'] },
+            { title: 'Maintenance Plans', href: '/plans', allowedRoles: ['Admin', 'Staff', 'Mechanic'] },
             { title: 'Maintenance Records', href: '/maintenance', allowedRoles: ['Admin', 'Mechanic', 'Staff'] },
             { title: 'Repair Records', href: '/repairs', allowedRoles: ['Admin', 'Mechanic', 'Staff'] },
         ],

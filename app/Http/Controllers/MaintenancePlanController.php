@@ -23,7 +23,7 @@ class MaintenancePlanController extends Controller
                 return [
                     'plan_id' => $plan->plan_id,
                     'vehicle_name' => $plan->vehicle->vehicle_name ?? 'N/A',
-                    'sheduled_date' => $plan->scheduled_date,
+                    'scheduled_date' => $plan->scheduled_date,
                     'next_service_km' => $plan->next_service_km,
                     'created_by' => $plan->createdBy ? $plan->createdBy->first_name . ' ' . $plan->createdBy->last_name : 'N/A',
                     'status' => $plan->status,

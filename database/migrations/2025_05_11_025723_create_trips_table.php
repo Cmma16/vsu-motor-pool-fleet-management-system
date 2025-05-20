@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('trips', function (Blueprint $table) {
            $table->id('trip_id');
-           $table->integer('trip_number');
+           $table->integer('trip_number')->nullable();
            $table->date('date_filed');
            $table->date('start_date');
            $table->date('end_date');
@@ -23,7 +23,8 @@ return new class extends Migration
            $table->string('requesting_party');
            $table->foreignId('vehicle_id')->nullable()->constrained('vehicles', 'vehicle_id')->onDelete('set null');
            $table->foreignId('driver_id')->nullable()->constrained('users', 'id')->onDelete('set null');
-           $table->enum('status', ['pending', 'approved', 'ongoing', 'completed', 'cancelled']);
+           $table->foreignId('dispatcher_id')->nullable()->constrained('users', 'id')->onDelete('set null');
+           $table->enum('status', ['pending', 'rejected', 'assigned', 'received', 'dispatched', 'approved', 'ongoing', 'completed', 'cancelled']);
            $table->timestamps();
         });
     }

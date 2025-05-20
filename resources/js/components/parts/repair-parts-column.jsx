@@ -3,6 +3,7 @@ import { ArrowUpDown } from 'lucide-react';
 
 import { RepairPartModal } from '@/components/parts/repair-part-modal';
 import { Button } from '@/components/ui/button';
+import { router } from '@inertiajs/react';
 
 import { TrashIcon } from 'lucide-react';
 const columnHelper = createColumnHelper();
@@ -33,11 +34,16 @@ export const RepairPartsColumn = (showActions, handleEdit, handleDelete) => [
         cell: ({ row }) => {
             const repairPart = row.original;
             if (!showActions) return null;
+            const deleteRepairPart = (id) => {
+                if (confirm('Are you sure?')) {
+                    router.delete(route('repair-parts.destroy', { id }));
+                }
+            };
 
             return (
                 <div className="flex justify-center gap-2">
                     <RepairPartModal repair_id={repairPart.repair_id} repairPart={repairPart} formType="edit" />
-                    <Button variant="destructive" size="sm" onClick={() => handleDelete(repairPart.part_id)}>
+                    <Button variant="destructive" size="sm" onClick={() => deleteRepairPart(repairPart.part_id)}>
                         <TrashIcon />
                         Delete
                     </Button>

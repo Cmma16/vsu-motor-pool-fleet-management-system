@@ -4,6 +4,8 @@ import { createColumnHelper } from '@tanstack/react-table';
 import { ArrowUpDown } from 'lucide-react';
 import { toast } from 'sonner';
 
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+
 const columnHelper = createColumnHelper();
 
 export const UnverifiedPersonnelColumn = (handleView, handleEdit, handleDelete, roles) => [
@@ -65,9 +67,26 @@ export const UnverifiedPersonnelColumn = (handleView, handleEdit, handleDelete, 
                     >
                         View
                     </Button>
-                    <Button className="bg-green-700 hover:bg-green-600" onClick={handleVerify}>
-                        Verify
-                    </Button>
+                    <Dialog>
+                        <DialogTrigger className="rounded bg-green-700 px-3 text-white hover:bg-green-600">Verify</DialogTrigger>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Confirmation</DialogTitle>
+                                <DialogDescription>Are you absolutely sure you want to verify this personnel?</DialogDescription>
+                                <div className="mt-4 flex justify-end gap-2">
+                                    <Button className="border-2 border-red-600 bg-red-600 transition-all hover:bg-transparent hover:text-black">
+                                        No
+                                    </Button>
+                                    <Button
+                                        className="border-2 border-green-600 bg-green-600 transition-all hover:bg-transparent hover:text-black"
+                                        onClick={handleVerify}
+                                    >
+                                        Yes
+                                    </Button>
+                                </div>
+                            </DialogHeader>
+                        </DialogContent>
+                    </Dialog>
                 </div>
             );
         },

@@ -53,6 +53,13 @@ class ServiceInspectionController extends Controller
         ]);
     }
 
+    public function confirmInspection(ServiceInspection $request_inspection)
+    {
+        $request_inspection->update(['confirmed_by' => auth()->id()]);
+
+        return redirect()->route('requests.show', $request_inspection->request_id);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -84,7 +91,7 @@ class ServiceInspectionController extends Controller
                 'personnel_available' => $serviceInspection->personnel_available,
                 'estimated_duration' => $serviceInspection->estimated_duration,
                 'conducted_by' => trim(($serviceInspection->conductedBy->first_name ?? '') . ' ' . ($serviceInspection->conductedBy->middle_name ?? '') . ' ' . ($serviceInspection->conductedBy->last_name ?? '')) ?: 'N/A',
-                'confirmed_by' => trim(($serviceInspection->confirmedBy->first_name ?? '') . ' ' . ($serviceInspection->confirmedBy->middle_name ?? '') . ' ' . ($serviceInspection->confirmedBy->last_name ?? '')) ?: 'N/A',
+                'confirmed_by' => trim(($serviceInspection->confirmedBy->first_name ?? '') . ' ' . ($serviceInspection->confirmedBy->middle_name ?? '') . ' ' . ($serviceInspection->confirmedBy->last_name ?? '')) ?: '',
             ],
         ]);
     }

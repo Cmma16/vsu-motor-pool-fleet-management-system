@@ -3,7 +3,7 @@ import { usePage } from '@inertiajs/react';
 
 import { Check, Eye, Pencil, Printer, TrashIcon } from 'lucide-react';
 
-export function InspectionRowActions({ row, rowKey = 'id', handleView, handleEdit, handleDelete, handleConfirm }) {
+export function ColorfulRowActions({ row, rowKey = 'id', handleView, handleEdit, handleDelete, handleConfirm }) {
     const rowId = row[rowKey];
     const user = usePage().props.auth.user;
 

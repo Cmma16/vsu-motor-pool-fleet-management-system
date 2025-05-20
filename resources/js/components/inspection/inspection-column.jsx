@@ -2,6 +2,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 import { ArrowUpDown } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
+import { router } from '@inertiajs/react';
 
 import { InspectionRowActions } from '@/components/inspection/inspection-row-actions';
 
@@ -83,11 +84,19 @@ export const InspectionsColumn = (handleView, handleEdit, handleDelete) => [
         header: () => <div className="text-left">Estimated duration</div>,
         cell: (info) => <div className="text-left">{info.getValue()}</div>,
     }),
+
+    columnHelper.accessor('confirmed_by', {
+        header: () => <div className="text-left">Confirmed by</div>,
+        cell: (info) => <div className="text-left">{info.getValue() || 'Unconfirmed'}</div>,
+    }),
     {
         id: 'actions',
-        header: () => <div className="text-left">Actions</div>,
+        header: () => <div className="text-center">Actions</div>,
         cell: ({ row }) => {
             const inspection = row.original;
+            const confirmInspection = (id) => {
+                router.patch(`/services/request-inspections/${id}/confirm`);
+            };
             return (
                 <InspectionRowActions
                     row={inspection}
@@ -95,6 +104,7 @@ export const InspectionsColumn = (handleView, handleEdit, handleDelete) => [
                     handleView={handleView}
                     handleEdit={handleEdit}
                     handleDelete={handleDelete}
+                    handleConfirm={confirmInspection}
                 />
             );
         },
