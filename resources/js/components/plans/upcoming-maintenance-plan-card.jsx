@@ -22,12 +22,12 @@ export default function UpcomingMaintenancePlanCard({ upcomingMaintenancePlans }
                                 <div className="flex flex-col justify-between gap-1 sm:flex-row sm:items-center">
                                     <div>
                                         <div className="flex items-center gap-2">
-                                            <h3 className="font-semibold">{plan.description}</h3>
+                                            <h3 className="font-semibold">{`Maintenance Plan for ${plan.vehicle.vehicle_name}`}</h3>
                                             <Badge key={`badge-${plan.id}`} variant={plan.status === 'Pending Approval' ? 'outline' : 'secondary'}>
                                                 {plan.status}
                                             </Badge>
                                         </div>
-                                        <div className="text-muted-foreground text-sm">{plan.vehicle_name}</div>
+                                        <div className="text-muted-foreground text-sm">{plan.vehicle.vehicle_name}</div>
                                     </div>
                                     <div className="mt-1 text-sm sm:mt-0 sm:text-right">
                                         <div>{plan.scheduled_date}</div>

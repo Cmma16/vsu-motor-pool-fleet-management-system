@@ -84,7 +84,7 @@ export default function PartForm({ formData, formType, setData, onSubmit, proces
                 </div>
             </div>
             <Button disabled={processing} className="w-1/3">
-                {formType === 'edit' ? 'Save Changes' : 'Add Vehicle'}
+                {formType === 'edit' ? 'Save Changes' : 'Add Part'}
             </Button>
         </form>
     );

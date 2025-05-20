@@ -54,4 +54,9 @@ class Maintenance extends Model
     {
         return $this->belongsTo(User::class, 'confirmed_by');
     }
+
+    public function partsUsed()
+    {
+        return $this->hasMany(MaintenanceParts::class, 'maintenance_id');
+    }
 }

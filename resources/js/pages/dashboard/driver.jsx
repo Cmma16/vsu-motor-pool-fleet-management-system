@@ -79,14 +79,6 @@ export default function Dashboard({
                     <h2 className="text-2xl">About Fleet</h2>
                 </div>
                 <div className="flex flex-col gap-4 p-4 md:gap-8">
-                    <GeneralDashboard
-                        totalVehicles={totalVehicles}
-                        todayTrips={todayTrips}
-                        maintenanceDue={maintenanceDue}
-                        pendingRequests={pendingRequests}
-                        vehicleSummary={vehicleSummary}
-                        personnelSummary={personnelSummary}
-                    />
                     <div className="grid gap-6">
                         <div className="flex flex-col gap-4 md:flex-row">
                             <Card className="flex-1">
@@ -179,6 +171,14 @@ export default function Dashboard({
                             </Card>
                         </div>
                     </div>
+                    <GeneralDashboard
+                        totalVehicles={totalVehicles}
+                        todayTrips={todayTrips}
+                        maintenanceDue={maintenanceDue}
+                        pendingRequests={pendingRequests}
+                        vehicleSummary={vehicleSummary}
+                        personnelSummary={personnelSummary}
+                    />
                 </div>
             </div>
         </AppLayout>

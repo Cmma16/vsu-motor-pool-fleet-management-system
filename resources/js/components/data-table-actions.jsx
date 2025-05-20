@@ -27,12 +27,14 @@ export function DataTableActions({
                     <Plus className="h-5" /> New
                 </Link>
             )}
-            <Input
-                placeholder={placeholder || `Filter ${filterColumn}...`}
-                value={table.getColumn(filterColumn)?.getFilterValue() ?? ''}
-                onChange={(event) => table.getColumn(filterColumn)?.setFilterValue(event.target.value)}
-                className="max-w-xs bg-white"
-            />
+            {filterColumn && (
+                <Input
+                    placeholder={placeholder || `Filter ${filterColumn}...`}
+                    value={table.getColumn(filterColumn)?.getFilterValue() ?? ''}
+                    onChange={(event) => table.getColumn(filterColumn)?.setFilterValue(event.target.value)}
+                    className="max-w-xs bg-white"
+                />
+            )}
             {filterOptions && (
                 <Select
                     value={table.getColumn(filterColumnName)?.getFilterValue() ?? ''}

@@ -1,9 +1,12 @@
+import { DisplayTable } from '@/components/display-table';
+import { MaintenancePartColumn } from '@/components/parts/maintenance-part-column';
+import { MaintenancePartModal } from '@/components/parts/maintenance-part-modal';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { Head, Link } from '@inertiajs/react';
-
 import AppLayout from '@/layouts/app-layout';
-import { usePage } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
+import React from 'react';
+
 // import { Button } from 'react-day-picker';
 
 const breadcrumbs = [
@@ -22,12 +25,21 @@ const pageDetails = {
     description: 'Comprehensive information about the conducted maintenance.',
 };
 
-export default function details({ maintenance }) {
-    const { user } = usePage().props.auth.user;
+export default function details({ maintenance, maintenanceParts, parts }) {
+    const user = usePage().props.auth.user;
+
+    const [isEditDialogOpen, setIsEditDialogOpen] = React.useState(false);
+
+    const deleteMaintenancePart = (id) => {
+        if (confirm('Are you sure?')) {
+            router.delete(route('maintenance-part.destroy', { id }));
+        }
+    };
+
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             <Head title="Maintenance Details" />
-            <div className="mx-6 mb-3 space-y-6 rounded-lg bg-white">
+            <div className="mx-6 mb-3 space-y-6 rounded-lg">
                 <Card className="w-full">
                     <CardHeader>
                         <CardTitle>Maintenance Information</CardTitle>
@@ -83,7 +95,7 @@ export default function details({ maintenance }) {
                                     <span>{maintenance.odometer_reading}</span>
                                 </div>
 
-                                {maintenance.date_confirmed && user.role === 'Mechanic' && (
+                                {!maintenance.confirmed_by && user.role.name === 'Mechanic' && (
                                     <Link
                                         href={`${maintenance.maintenance_id}/edit`}
                                         className="col-span-2 w-1/3 rounded-md bg-[#006600] px-3 py-2 text-center text-white hover:bg-[#005500]"
@@ -93,6 +105,26 @@ export default function details({ maintenance }) {
                                 )}
                             </div>
                         </div>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Parts Used</CardTitle>
+                        <CardDescription className="flex justify-between">
+                            Parts used during the maintenance.
+                            {!maintenance.confirmed_by && (
+                                <MaintenancePartModal maintenance_id={maintenance.maintenance_id} parts={parts} formType="create" />
+                            )}
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <DisplayTable
+                            columns={MaintenancePartColumn}
+                            data={maintenanceParts}
+                            parts={parts}
+                            handleDelete={deleteMaintenancePart}
+                            showActions={!maintenance.confirmed_by}
+                        />
                     </CardContent>
                 </Card>
             </div>

@@ -2,7 +2,7 @@ import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { Link } from '@inertiajs/react';
-import { ChartColumnBig, Gauge, HandHelpingIcon, LayoutGrid, LucidePuzzle, TruckIcon, Users, WrenchIcon } from 'lucide-react';
+import { ChartColumnBig, Gauge, HandHelpingIcon, LayoutGrid, LucidePuzzle, MapPinIcon, TruckIcon, Users, WrenchIcon } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems = [
@@ -23,13 +23,15 @@ const mainNavItems = [
     },
     {
         title: 'Vehicles',
-        href: 'vehicles',
+        href: '/vehicles',
         icon: TruckIcon,
+        allowedRoles: ['Admin', 'Staff'],
+    },
+    {
+        title: 'Trips',
+        href: '/vehicles/trips',
+        icon: MapPinIcon,
         allowedRoles: ['Admin', 'Driver', 'Mechanic', 'Staff'],
-        children: [
-            { title: 'List', href: '/vehicles' },
-            { title: 'Trips', href: '/vehicles/trips' },
-        ],
     },
     {
         title: 'Repairs & Maintenance',

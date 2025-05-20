@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Repair;
+namespace App\Http\Requests\RepairPart;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreRepairsRequest extends FormRequest
+class UpdateRepairPartsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,10 +22,9 @@ class StoreRepairsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'vehicle_id' => ['required', 'integer', 'exists:vehicles,vehicle_id'],
-            'request_id' => ['required', 'integer', 'exists:service_requests,request_id'],
-            'repair_summary' => ['required', 'string', 'max:255'],
-            'odometer_id' => ['nullable', 'integer', 'exists:odometer_logs,odometer_id'],
+            'repair_id' => ['required', 'integer', 'exists:repairs,repair_id'],
+            'part_id' => ['required', 'integer', 'exists:parts,part_id'],
+            'quantity_used' => ['required', 'integer', 'min:1'],
         ];
     }
 }

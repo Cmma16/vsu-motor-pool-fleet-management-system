@@ -6,11 +6,22 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import React from 'react';
 import { OdometerLogModal } from '../odometer/odometer-log-modal';
 
-export default function RepairForm({ formData, formType, setData, onSubmit, processing, errors, vehicles, users, serviceRequests, odometerLogs }) {
+export default function RepairForm({
+    formData,
+    formType,
+    setData,
+    onSubmit,
+    processing,
+    errors,
+    vehicles,
+    users,
+    serviceRequests,
+    odometerLogs,
+    lockInputs,
+}) {
     const latestOdometer = React.useMemo(() => {
-        return odometerLogs
-            .filter((log) => log.vehicle_id === formData.vehicle_id)
-            .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))[0];
+        const vehicleId = Number(formData.vehicle_id);
+        return odometerLogs.filter((log) => log.vehicle_id === vehicleId).sort((a, b) => new Date(b.created_at) - new Date(a.created_at))[0];
     }, [formData.vehicle_id, odometerLogs]);
 
     React.useEffect(() => {
@@ -27,7 +38,7 @@ export default function RepairForm({ formData, formType, setData, onSubmit, proc
                 {/* Vehicle */}
                 <div className="space-y-2">
                     <Label htmlFor="vehicle_id">Vehicle</Label>
-                    <Select value={String(formData.vehicle_id)} onValueChange={(value) => setData('vehicle_id', Number(value))}>
+                    <Select disabled={lockInputs} value={String(formData.vehicle_id)} onValueChange={(value) => setData('vehicle_id', Number(value))}>
                         <SelectTrigger id="vehicle_id" tabIndex={1}>
                             <SelectValue placeholder="Select vehicle" />
                         </SelectTrigger>
@@ -45,7 +56,7 @@ export default function RepairForm({ formData, formType, setData, onSubmit, proc
                 {/* Request Description */}
                 <div className="space-y-2">
                     <Label htmlFor="request_id">Request Description</Label>
-                    <Select value={String(formData.request_id)} onValueChange={(value) => setData('request_id', Number(value))}>
+                    <Select disabled={lockInputs} value={String(formData.request_id)} onValueChange={(value) => setData('request_id', Number(value))}>
                         <SelectTrigger id="request_id" tabIndex={2}>
                             <SelectValue placeholder="Select service request" />
                         </SelectTrigger>
@@ -58,42 +69,6 @@ export default function RepairForm({ formData, formType, setData, onSubmit, proc
                         </SelectContent>
                     </Select>
                     <InputError message={errors.request_id} />
-                </div>
-
-                {/* Performed by */}
-                <div className="space-y-2">
-                    <Label htmlFor="performed_by">Performed by</Label>
-                    <Select value={String(formData.performed_by)} onValueChange={(value) => setData('performed_by', Number(value))}>
-                        <SelectTrigger id="performed_by" tabIndex={3}>
-                            <SelectValue placeholder="Select personnel" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {users.map((user) => (
-                                <SelectItem key={user.id} value={String(user.id)}>
-                                    {`${user.first_name} ${user.last_name}`}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-                    <InputError message={errors.performed_by} />
-                </div>
-
-                {/* Confirmed By */}
-                <div className="space-y-2">
-                    <Label htmlFor="confirmed_by">Confirmed By</Label>
-                    <Select value={String(formData.confirmed_by)} onValueChange={(value) => setData('confirmed_by', Number(value))}>
-                        <SelectTrigger id="confirmed_by" tabIndex={4}>
-                            <SelectValue placeholder="Select requester" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {users.map((user) => (
-                                <SelectItem key={user.id} value={String(user.id)}>
-                                    {`${user.first_name} ${user.last_name}`}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-                    <InputError message={errors.confirmed_by} />
                 </div>
 
                 <div className="space-y-2">

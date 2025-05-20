@@ -1,3 +1,6 @@
+import { DisplayTable } from '@/components/display-table';
+import { RepairPartModal } from '@/components/parts/repair-part-modal';
+import { RepairPartsColumn } from '@/components/parts/repair-parts-column';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Head, Link } from '@inertiajs/react';
@@ -21,7 +24,12 @@ const pageDetails = {
     description: 'Comprehensive information about the scheduled repair, including specifications and status.',
 };
 
-export default function details({ repair }) {
+export default function details({ repair, parts, repairParts }) {
+    const deleteRepairPart = (id) => {
+        if (confirm('Are you sure?')) {
+            router.delete(route('repair-part.destroy', { id }));
+        }
+    };
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             <Head title="Repair Details" />
@@ -77,6 +85,24 @@ export default function details({ repair }) {
                                 </Link>
                             </div>
                         </div>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Parts Used</CardTitle>
+                        <CardDescription className="flex justify-between">
+                            Parts used during the repair.
+                            {!repair.confirmed_by && <RepairPartModal repair_id={repair.repair_id} parts={parts} formType="create" />}
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <DisplayTable
+                            columns={RepairPartsColumn}
+                            data={repairParts}
+                            parts={parts}
+                            handleDelete={deleteRepairPart}
+                            showActions={!repair.confirmed_by}
+                        />
                     </CardContent>
                 </Card>
             </div>

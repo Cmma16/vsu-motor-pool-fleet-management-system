@@ -8,6 +8,8 @@ use App\Models\ServiceRequest;
 use App\Models\Vehicle;
 use App\Models\User;
 use App\Models\OdometerLog;
+use App\Models\MaintenanceParts;
+use App\Models\Part;
 use Illuminate\Http\Request;
 use App\Http\Requests\Maintenance\StoreMaintenanceRequest;
 use App\Http\Requests\Maintenance\UpdateMaintenanceRequest;
@@ -92,19 +94,32 @@ class MaintenanceController extends Controller
      */
     public function show(Maintenance $maintenance)
     {
-
+        $maintenanceParts = MaintenanceParts::with('part')->where('maintenance_id', $maintenance->maintenance_id)->get()
+            ->map(function ($maintenancePart) {
+            return [
+                'id' => $maintenancePart->id,
+                'maintenance_id' => $maintenancePart->maintenance_id,
+                'part_id' => $maintenancePart->part_id,
+                'part_name' => $maintenancePart->part->part_name,
+                'quantity_used' => $maintenancePart->quantity_used,
+            ];
+        });
+        $parts = Part::select('part_id', 'part_name')->get();
         return Inertia::render('maintenance/details', [
             'maintenance' => [
+                'maintenance_id' => $maintenance->maintenance_id,
                 'maintenance_plan' => $maintenance->plan->vehicle->vehicle_name . ' - ' . $maintenance->plan->scheduled_date . ' - ' . $maintenance->plan->next_service_km . 'km' ?? 'N/A',
                 'request_description' => $maintenance->request->work_description ?? 'N/A',
                 'vehicle_name' => $maintenance->vehicle->vehicle_name ?? 'N/A',
                 'odometer_reading' => $maintenance->odometerReading->reading ?? 'N/A',
                 'performed_by' => $maintenance->performedBy ? $maintenance->performedBy->first_name . ' ' . $maintenance->performedBy->last_name : 'N/A',
-                'confirmed_by' => $maintenance->confirmedBy ? $maintenance->confirmedBy->first_name . ' ' . $maintenance->confirmedBy->last_name : 'N/A',
+                'confirmed_by' => $maintenance->confirmedBy ? $maintenance->confirmedBy->first_name . ' ' . $maintenance->confirmedBy->last_name : null,
                 'date_completed' => $maintenance->date_completed,
                 'date_confirmed' => $maintenance->date_confirmed,
                 'maintenance_summary' => $maintenance->maintenance_summary,
-            ]
+            ],
+            'maintenanceParts' => $maintenanceParts,
+            'parts' => $parts,
         ]);
     }
 

@@ -5,7 +5,7 @@ import { DataTablePagination } from '@/components/data-table-pagination';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
 
-export function DisplayTable({ columns, data, handleCreate, handleView, handleEdit, handleDelete }) {
+export function DisplayTable({ columns, data, handleCreate, handleView, handleEdit, handleDelete, showActions }) {
     const [sorting, setSorting] = React.useState([]);
     const [columnFilters, setColumnFilters] = React.useState([]);
     const [columnVisibility, setColumnVisibility] = React.useState({});
@@ -13,7 +13,7 @@ export function DisplayTable({ columns, data, handleCreate, handleView, handleEd
 
     const table = useReactTable({
         data,
-        columns: React.useMemo(() => columns(handleView, handleEdit, handleDelete), [handleView, handleEdit, handleDelete]),
+        columns: React.useMemo(() => columns(showActions, handleView, handleEdit, handleDelete), [showActions, handleView, handleEdit, handleDelete]),
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         onSortingChange: setSorting,

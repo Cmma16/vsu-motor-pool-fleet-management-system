@@ -52,7 +52,7 @@ class DashboardController extends Controller
             'maintenanceStats' => [
                 'dueToday' => MaintenancePlan::where('scheduled_date', now())->count(),
                 'dueSoon' => MaintenancePlan::where('scheduled_date', '>', now())->where('scheduled_date', '<=', now()->addDays(7))->count(),
-                'upcoming' => MaintenancePlan::where('scheduled_date', '>', now())->where('scheduled_date', '<=', now()->addDays(7))->get(),
+                'upcoming' => MaintenancePlan::where('scheduled_date', '>', now())->with('vehicle')->where('scheduled_date', '<=', now()->addDays(7))->get(),
             ],
             'serviceStats' => [
                 'pending' => ServiceRequest::where('status', 'pending')->count(),

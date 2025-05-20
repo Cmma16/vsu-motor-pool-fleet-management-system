@@ -15,8 +15,8 @@ use App\Http\Controllers\TripController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\UserVerificationController;
 use App\Http\Controllers\PersonnelController;
-
-
+use App\Http\Controllers\MaintenancePartsController;
+use App\Http\Controllers\RepairPartsController;
 Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
@@ -44,6 +44,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('odometer', OdometerLogController::class);
     Route::resource('vehicles/trips', TripController::class);
     Route::resource('personnel', PersonnelController::class);
+
+    Route::post('maintenance-parts', [MaintenancePartsController::class, 'store'])->name('maintenance-parts.store');
+    Route::put('maintenance-parts/{maintenancePart}', [MaintenancePartsController::class, 'update'])->name('maintenance-parts.update');
+    Route::delete('maintenance-parts/{maintenancePart}', [MaintenancePartsController::class, 'destroy'])->name('maintenance-parts.destroy');
+
+    Route::post('repair-parts', [RepairPartsController::class, 'store'])->name('repair-parts.store');
+    Route::put('repair-parts/{repairPart}', [RepairPartsController::class, 'update'])->name('repair-parts.update');
+    Route::delete('repair-parts/{repairPart}', [RepairPartsController::class, 'destroy'])->name('repair-parts.destroy');
     
     Route::middleware(['role:Admin'])->group(function () {
         Route::put('/personnel/{person}/role', [PersonnelController::class, 'updateRole'])->name('personnel.updateRole');
