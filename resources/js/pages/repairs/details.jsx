@@ -33,7 +33,7 @@ export default function details({ repair, parts, repairParts }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             <Head title="Repair Details" />
-            <div className="mx-6 mb-3 space-y-6 rounded-lg bg-white">
+            <div className="mx-6 mb-3 space-y-6 rounded-lg">
                 <Card className="w-full">
                     <CardHeader>
                         <CardTitle>Repair Information</CardTitle>
@@ -77,12 +77,14 @@ export default function details({ repair, parts, repairParts }) {
                                     <span>{repair.odometer_reading}</span>
                                 </div>
 
-                                <Link
-                                    href={`${repair.repair_id}/edit`}
-                                    className="col-span-2 w-1/3 rounded-md bg-[#006600] px-3 py-2 text-center text-white hover:bg-[#005500]"
-                                >
-                                    Edit
-                                </Link>
+                                {!repair.confirmed_by && (
+                                    <Link
+                                        href={`${repair.repair_id}/edit`}
+                                        className="col-span-2 w-1/3 rounded-md bg-[#006600] px-3 py-2 text-center text-white hover:bg-[#005500]"
+                                    >
+                                        Edit
+                                    </Link>
+                                )}
                             </div>
                         </div>
                     </CardContent>

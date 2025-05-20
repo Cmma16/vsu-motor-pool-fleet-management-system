@@ -53,9 +53,9 @@ class RepairPartsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateRepairPartsRequest $request, RepairParts $repairParts)
+    public function update(UpdateRepairPartsRequest $request, RepairParts $repairPart)
     {
-        $repairParts->update($request->validated());
+        $repairPart->update($request->validated());
     }
 
     /**
