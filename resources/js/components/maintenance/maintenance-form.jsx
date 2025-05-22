@@ -75,7 +75,7 @@ export default function MaintenanceForm({
                 {/* Maintenance Plan */}
                 <div className="space-y-2">
                     <Label htmlFor="plan_id">Maintenance Plan</Label>
-                    <Select value={String(formData.plan_id)} onValueChange={(value) => setData('plan_id', Number(value))}>
+                    <Select disabled={lockInputs} value={String(formData.plan_id)} onValueChange={(value) => setData('plan_id', Number(value))}>
                         <SelectTrigger id="plan_id" tabIndex={1}>
                             <SelectValue placeholder="Select maintenance plan" />
                         </SelectTrigger>

@@ -1,9 +1,8 @@
+import { ColorfulRowActions } from '@/components/display/colorful-row-actions';
+import { Button } from '@/components/ui/button';
+import { router } from '@inertiajs/react';
 import { createColumnHelper } from '@tanstack/react-table';
 import { ArrowUpDown } from 'lucide-react';
-
-import { Button } from '@/components/ui/button';
-
-import { ColorfulRowActions } from '@/components/display/colorful-row-actions';
 
 const columnHelper = createColumnHelper();
 
@@ -69,6 +68,10 @@ export const MaintenanceColumn = (handleView, handleEdit, handleDelete) => [
         header: () => <div className="text-center">Actions</div>,
         cell: ({ row }) => {
             const maintenance = row.original;
+            const handleConfirm = () => {
+                router.patch(`/maintenance/${maintenance.maintenance_id}/confirm`);
+            };
+
             return (
                 <ColorfulRowActions
                     row={maintenance}
@@ -76,6 +79,7 @@ export const MaintenanceColumn = (handleView, handleEdit, handleDelete) => [
                     handleView={handleView}
                     handleEdit={handleEdit}
                     handleDelete={handleDelete}
+                    handleConfirm={handleConfirm}
                 />
             );
         },

@@ -21,10 +21,10 @@ export default function AddRepair({ vehicles, users, serviceRequests, odometerLo
     const { data, setData, post, processing, errors, reset } = useForm({
         vehicle_id: vehicleId || '',
         request_id: requestId || '',
-        performed_by: '',
-        confirmed_by: '',
-        description: '',
-        status: '',
+        date_in: '',
+        date_completed: '',
+        odometer_id: '',
+        maintenance_summary: '',
     });
 
     const createRepair = (e) => {

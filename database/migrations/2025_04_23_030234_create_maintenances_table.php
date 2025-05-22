@@ -13,9 +13,7 @@ return new class extends Migration
     {
         Schema::create('maintenance', function (Blueprint $table) {
             $table->id('maintenance_id');
-            $table->foreignId('plan_id')->constrained('maintenance_plans', 'plan_id')->onDelete('set null');
             $table->foreignId('request_id')->nullable()->constrained('service_requests', 'request_id')->onDelete('set null');
-            $table->foreignId('vehicle_id')->constrained('vehicles', 'vehicle_id')->onDelete('cascade');
             $table->date('date_in')->nullable();
             $table->date('date_completed')->nullable();
             $table->foreignId('odometer_id')->nullable()->constrained('odometer_logs', 'odometer_id')->onDelete('set null');

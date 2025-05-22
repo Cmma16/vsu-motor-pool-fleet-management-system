@@ -99,6 +99,19 @@ class MaintenancePlanController extends Controller
         ]);
     }
 
+    public function updateStatus(Request $request, MaintenancePlan $plan)
+    {
+        $maintenancePlan = $plan;
+
+        $request->validate([
+            'status' => 'required|string|in:pending,scheduled,completed,cancelled',
+        ]);
+
+        $maintenancePlan->update(['status' => $request->status]);
+
+        return with('success', 'Maintenance plan status updated successfully.');
+    }
+
     /**
      * Update the specified resource in storage.
      */

@@ -33,8 +33,6 @@ export default function EditTrip({ vehicles, users, trip }) {
         destination: trip.destination,
         departure_time: formattedDepartureTime,
         requesting_party: trip.requesting_party,
-        vehicle_id: trip.vehicle_id,
-        driver_id: trip.driver_id,
         status: trip.status,
     });
 

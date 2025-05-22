@@ -43,7 +43,15 @@ class ServiceInspectionController extends Controller
      */
     public function create(Request $request)
     {
-        $serviceRequests = ServiceRequest::select('request_id', 'work_description')->where('status', 'received')->get();
+        $serviceRequests = ServiceRequest::with(['vehicle', 'maintenancePlan'])->where('status', 'received')->get()
+        ->map(function ($serviceRequest) {
+            return [
+                'request_id' => $serviceRequest->request_id,
+                'work_description' => $serviceRequest->work_description,
+                'vehicle_name' => $serviceRequest->vehicle->vehicle_name,
+                'plan_name' => $serviceRequest->maintenancePlan?->scheduled_date . ' - ' . $serviceRequest->maintenancePlan?->next_service_km || "",
+            ];
+        });
         $users = User::select('id', 'first_name', 'last_name')->get();
 
         return Inertia::render('services/request-inspections/add-inspection', [
@@ -72,7 +80,7 @@ class ServiceInspectionController extends Controller
         
         $requestId = $validatedData['request_id'];
 
-        return redirect()->route('requests.show', $requestId);
+        return redirect()->route('request-inspections.show', $inspection->inspection_id);
     }
 
     /**

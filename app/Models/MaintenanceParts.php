@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Services\PartStockService;
 
 class MaintenanceParts extends Model
 {
@@ -26,6 +27,11 @@ class MaintenanceParts extends Model
         return $this->belongsTo(Part::class, 'part_id');
     }
     
-
+    public static function booted()
+    {
+        static::deleting(function ($part) {
+            app(PartStockService::class)->increaseStock($part->id, $part->quantity_used);
+        });
+    }
     
 }

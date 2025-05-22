@@ -24,7 +24,7 @@ return new class extends Migration
            $table->foreignId('vehicle_id')->nullable()->constrained('vehicles', 'vehicle_id')->onDelete('set null');
            $table->foreignId('driver_id')->nullable()->constrained('users', 'id')->onDelete('set null');
            $table->foreignId('dispatcher_id')->nullable()->constrained('users', 'id')->onDelete('set null');
-           $table->enum('status', ['pending', 'rejected', 'assigned', 'received', 'dispatched', 'approved', 'ongoing', 'completed', 'cancelled']);
+           $table->enum('status', ['pending', 'rejected', 'assigned', 'received', 'ongoing', 'completed', 'cancelled']);
            $table->timestamps();
         });
     }

@@ -35,7 +35,7 @@ export default function InspectionDetails({ serviceInspection }) {
             <div className="mx-6 mb-3 space-y-6 rounded-lg bg-white">
                 <Card className="w-full">
                     <CardHeader>
-                        <CardTitle>Service Request Inspection Information</CardTitle>
+                        <CardTitle>Request Inspection Information</CardTitle>
                         <CardDescription>General overview of the inspection.</CardDescription>
                     </CardHeader>
                     <CardContent>

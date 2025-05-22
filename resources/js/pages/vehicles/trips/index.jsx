@@ -1,8 +1,11 @@
+import { Checkbox } from '@/components/ui/checkbox';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import AppLayout from '@/layouts/app-layout';
 import { Head, router } from '@inertiajs/react';
 import { endOfDay, format, isToday, isTomorrow, isWithinInterval, parseISO, startOfDay } from 'date-fns';
-import { Calendar, Car, Filter, List, Table } from 'lucide-react';
+import { Calendar, Car, Check, Filter, List, Table, X } from 'lucide-react';
 import React from 'react';
 
 import { Badge } from '@/components/ui/badge';
@@ -12,6 +15,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useEffect, useState } from 'react';
 
 import { DataTable } from '@/components/data-table';
 import { CurrentDayTripsSection } from '@/components/trip/current-day-trips-section';
@@ -31,18 +35,44 @@ const pageDetails = {
     description: 'Monitor and manage all fleet trips',
 };
 
+const getUniqueVehicles = (trips) => {
+    const vehicleMap = new Map();
+
+    trips.forEach((trip) => {
+        // Only add vehicles that are actually assigned
+        if (trip.vehicle && trip.vehicle.vehicle_id && typeof trip.vehicle === 'object') {
+            if (!vehicleMap.has(trip.vehicle.vehicle_id)) {
+                vehicleMap.set(trip.vehicle.vehicle_id, {
+                    id: trip.vehicle.vehicle_id,
+                    name: trip.vehicle.vehicle_name || 'N/A',
+                    type: trip.vehicle.vehicle_type || 'N/A',
+                    plate_number: trip.vehicle.plate_number || 'N/A',
+                });
+            }
+        }
+    });
+
+    return Array.from(vehicleMap.values());
+};
+
 function getStatusBadge(status) {
     switch (status) {
         case 'pending':
             return (
                 <Badge variant="outline" className="bg-gray-100">
-                    Scheduled
+                    Pending
                 </Badge>
             );
-        case 'approved':
+        case 'assigned':
             return (
                 <Badge variant="default" className="bg-green-500">
-                    Approved
+                    Assigned
+                </Badge>
+            );
+        case 'received':
+            return (
+                <Badge variant="default" className="bg-blue-500">
+                    Received
                 </Badge>
             );
         case 'ongoing':
@@ -99,14 +129,74 @@ const deleteTrip = (id) => {
 
 export default function TripsIndex({ trips = [] }) {
     const [date, setDate] = React.useState(new Date());
+    const [searchQuery, setSearchQuery] = useState('');
+    const [statusFilter, setStatusFilter] = useState('all');
+    const [isFilterOpen, setIsFilterOpen] = useState(false);
+    const [selectedVehicles, setSelectedVehicles] = useState([]);
+    const [filteredTrips, setFilteredTrips] = useState(trips);
+    const [uniqueVehicles, setUniqueVehicles] = useState([]);
 
-    const todayTrips = trips.filter((trip) => isToday(parseISO(trip.start_date)));
-    const upcomingTrips = trips.filter((trip) => {
+    // Initialize unique vehicles
+    useEffect(() => {
+        setUniqueVehicles(getUniqueVehicles(trips));
+    }, []);
+
+    // Apply filters whenever filter criteria change
+    useEffect(() => {
+        let result = trips;
+
+        // Apply vehicle filter if any vehicles are selected
+        if (selectedVehicles.length > 0) {
+            result = result.filter((trip) => selectedVehicles.includes(trip.vehicle.vehicle_id));
+        }
+
+        // Apply status filter if not "all"
+        if (statusFilter !== 'all') {
+            result = result.filter((trip) => trip.status === statusFilter);
+        }
+
+        // Apply search query if not empty
+        if (searchQuery.trim() !== '') {
+            const query = searchQuery.toLowerCase();
+            result = result.filter(
+                (trip) =>
+                    trip.purpose.toLowerCase().includes(query) ||
+                    trip.destination.toLowerCase().includes(query) ||
+                    trip.requesting_party.toLowerCase().includes(query) ||
+                    trip.trip_number.toString().toLowerCase().includes(query) ||
+                    (trip.vehicle?.vehicle_name?.toLowerCase() || '').includes(query) ||
+                    (trip.driver_name?.toLowerCase() || '').includes(query),
+            );
+        }
+
+        setFilteredTrips(result);
+    }, [selectedVehicles, statusFilter, searchQuery]);
+
+    // Toggle vehicle selection
+    const toggleVehicleSelection = (vehicleId) => {
+        setSelectedVehicles((prev) => {
+            if (prev.includes(vehicleId)) {
+                return prev.filter((id) => id !== vehicleId);
+            } else {
+                return [...prev, vehicleId];
+            }
+        });
+    };
+
+    // Clear all filters
+    const clearFilters = () => {
+        setSelectedVehicles([]);
+        setStatusFilter('all');
+        setSearchQuery('');
+    };
+
+    const todayTrips = filteredTrips.filter((trip) => isToday(parseISO(trip.start_date)));
+    const upcomingTrips = filteredTrips.filter((trip) => {
         const startDate = parseISO(trip.start_date);
         return startDate > new Date() && !isToday(startDate);
     });
 
-    const selectedDateTrips = trips.filter((trip) => {
+    const selectedDateTrips = filteredTrips.filter((trip) => {
         const startDate = startOfDay(parseISO(trip.start_date));
         const endDate = endOfDay(parseISO(trip.end_date));
         const selectedDate = startOfDay(date || new Date());
@@ -122,10 +212,59 @@ export default function TripsIndex({ trips = [] }) {
                 <div className="container mx-auto py-6">
                     <div className="mb-6 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
                         <div className="flex items-center gap-2">
-                            <Button variant="default" size="default" className="flex items-center">
-                                <Filter className="mr-2 h-4 w-4" />
-                                Filter
-                            </Button>
+                            <Dialog open={isFilterOpen} onOpenChange={setIsFilterOpen}>
+                                <DialogTrigger asChild>
+                                    <Button variant={selectedVehicles.length > 0 ? 'default' : 'outline'}>
+                                        <Filter className="mr-2 h-4 w-4" />
+                                        Filter
+                                        {selectedVehicles.length > 0 && (
+                                            <Badge variant="secondary" className="ml-2">
+                                                {selectedVehicles.length}
+                                            </Badge>
+                                        )}
+                                    </Button>
+                                </DialogTrigger>
+                                <DialogContent className="sm:max-w-[425px]">
+                                    <DialogHeader>
+                                        <DialogTitle>Filter Trips</DialogTitle>
+                                    </DialogHeader>
+                                    <div className="py-4">
+                                        <h3 className="mb-4 text-sm font-medium">Filter by Vehicle</h3>
+                                        <ScrollArea className="h-[300px] pr-4">
+                                            <div className="space-y-4">
+                                                {uniqueVehicles.map((vehicle) => (
+                                                    <div key={vehicle.id} className="flex items-center space-x-2">
+                                                        <Checkbox
+                                                            id={vehicle.id}
+                                                            checked={selectedVehicles.includes(vehicle.id)}
+                                                            onCheckedChange={() => toggleVehicleSelection(vehicle.id)}
+                                                        />
+                                                        <label
+                                                            htmlFor={vehicle.id}
+                                                            className="flex-1 text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                                        >
+                                                            <div>
+                                                                {vehicle.name} ({vehicle.type})
+                                                            </div>
+                                                            <div className="text-muted-foreground text-xs">{vehicle.plate_number}</div>
+                                                        </label>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </ScrollArea>
+                                    </div>
+                                    <div className="flex justify-between">
+                                        <Button variant="outline" onClick={clearFilters}>
+                                            <X className="mr-2 h-4 w-4" />
+                                            Clear Filters
+                                        </Button>
+                                        <Button onClick={() => setIsFilterOpen(false)}>
+                                            <Check className="mr-2 h-4 w-4" />
+                                            Apply Filters
+                                        </Button>
+                                    </div>
+                                </DialogContent>
+                            </Dialog>
                             <Button variant="default" size="default" className="flex items-center" onClick={() => router.get(route('trips.create'))}>
                                 <Car className="mr-2 h-4 w-4" />
                                 New Trip
@@ -155,8 +294,14 @@ export default function TripsIndex({ trips = [] }) {
                                     </TabsTrigger>
                                 </TabsList>
                                 <div className="flex items-center gap-2">
-                                    <Input type="text" placeholder="Search trips..." className="w-[200px] md:w-[300px]" />
-                                    <Select defaultValue="all">
+                                    <Input
+                                        type="text"
+                                        placeholder="Search trips..."
+                                        className="w-[200px] md:w-[300px]"
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                    />
+                                    <Select value={statusFilter} onValueChange={setStatusFilter}>
                                         <SelectTrigger className="w-[130px] bg-white">
                                             <SelectValue placeholder="Status" />
                                         </SelectTrigger>
@@ -164,11 +309,20 @@ export default function TripsIndex({ trips = [] }) {
                                             <SelectItem value="all" className="bg-white">
                                                 All Statuses
                                             </SelectItem>
-                                            <SelectItem value="scheduled" className="bg-white">
-                                                Scheduled
+                                            <SelectItem value="pending" className="bg-white">
+                                                Pending
                                             </SelectItem>
-                                            <SelectItem value="in-progress" className="bg-white">
-                                                In Progress
+                                            <SelectItem value="rejected" className="bg-white">
+                                                Rejected
+                                            </SelectItem>
+                                            <SelectItem value="assigned" className="bg-white">
+                                                Assigned
+                                            </SelectItem>
+                                            <SelectItem value="received" className="bg-white">
+                                                Received
+                                            </SelectItem>
+                                            <SelectItem value="ongoing" className="bg-white">
+                                                Ongoing
                                             </SelectItem>
                                             <SelectItem value="completed" className="bg-white">
                                                 Completed

@@ -17,9 +17,10 @@ const pageDetails = {
     description: 'Record the details of a vehicle repair.',
 };
 
-export default function CreateRequest({ vehicles }) {
+export default function CreateRequest({ vehicles, maintenancePlans }) {
     const { data, setData, post, processing, errors, reset } = useForm({
         vehicle_id: '',
+        plan_id: '',
         requested_by: '',
         date_filed: '',
         service_type: '',
@@ -31,6 +32,11 @@ export default function CreateRequest({ vehicles }) {
 
     const createRepair = (e) => {
         e.preventDefault();
+
+        if (data.service_type === 'repair') {
+            data.plan_id = null;
+        }
+
         post(route('requests.store'), {
             data,
             onSuccess: () => reset(),
@@ -56,6 +62,7 @@ export default function CreateRequest({ vehicles }) {
                             processing={processing}
                             errors={errors}
                             vehicles={vehicles}
+                            maintenancePlans={maintenancePlans}
                         />
                     </CardContent>
                 </Card>

@@ -10,7 +10,7 @@ use App\Models\ServiceRequest;
 use App\Models\OdometerLog;
 use App\Models\Trip;
 use App\Models\Part;
-
+use App\Models\MaintenancePlan;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -92,9 +92,10 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Vehicle::factory(5)->create();
+        MaintenancePlan::factory(3)->create();
         ServiceRequest::factory(3)->create();
         OdometerLog::factory(5)->create();   
-        Repairs::factory(1)->create();
+        //Repairs::factory(1)->create();
         Trip::factory(2)->create();
         Part::factory()->create([
             'part_name' => 'engine oil',

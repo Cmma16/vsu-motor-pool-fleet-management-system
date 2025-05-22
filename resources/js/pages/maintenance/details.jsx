@@ -4,7 +4,7 @@ import { MaintenancePartModal } from '@/components/parts/maintenance-part-modal'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/app-layout';
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import React from 'react';
 
 // import { Button } from 'react-day-picker';
@@ -32,7 +32,7 @@ export default function details({ maintenance, maintenanceParts, parts }) {
 
     const deleteMaintenancePart = (id) => {
         if (confirm('Are you sure?')) {
-            router.delete(route('maintenance-part.destroy', { id }));
+            router.delete(route('maintenance-parts.destroy', { id }));
         }
     };
 
@@ -128,8 +128,9 @@ export default function details({ maintenance, maintenanceParts, parts }) {
                             columns={MaintenancePartColumn}
                             data={maintenanceParts}
                             parts={parts}
+                            handleEdit={undefined}
+                            handleView={undefined}
                             handleDelete={deleteMaintenancePart}
-                            showActions={!maintenance.confirmed_by}
                         />
                     </CardContent>
                 </Card>

@@ -61,7 +61,7 @@ function formatTripDate(date, time) {
 
 export default function TripDisplaySection({ trips, sectionTitle, sectionDescription }) {
     return (
-        <Card>
+        <Card className="flex-1">
             <CardHeader>
                 <CardTitle>{sectionTitle}</CardTitle>
                 <CardDescription>{sectionDescription}</CardDescription>
@@ -125,7 +125,7 @@ export default function TripDisplaySection({ trips, sectionTitle, sectionDescrip
                         ))}
                     </div>
                 ) : (
-                    <div className="text-muted-foreground py-6 text-center">No upcoming trips scheduled</div>
+                    <div className="text-muted-foreground py-6 text-center">No upcoming trips data found</div>
                 )}
             </CardContent>
         </Card>

@@ -27,9 +27,11 @@ export default function EditRepair({ repair, vehicles, users, serviceRequests, o
     const { data, setData, put, processing, errors, reset } = useForm({
         vehicle_id: repair.vehicle_id,
         request_id: repair.request_id,
+        date_in: repair.date_in,
+        date_completed: repair.date_completed,
         performed_by: repair.performed_by,
         confirmed_by: repair.confirmed_by,
-        repair_summary: repair.repair_summary,
+        maintenance_summary: repair.summary,
         odometer_id: repair.odometer_id,
     });
 
@@ -70,6 +72,7 @@ export default function EditRepair({ repair, vehicles, users, serviceRequests, o
                             users={users}
                             serviceRequests={serviceRequests}
                             odometerLogs={odometerLogs}
+                            lockInputs={true}
                         />
                     </CardContent>
                 </Card>

@@ -1,3 +1,4 @@
+import ConfirmationDialog from '@/components/display/confirmation-dialog';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { router } from '@inertiajs/react';
@@ -5,7 +6,6 @@ import { createColumnHelper } from '@tanstack/react-table';
 import { ArrowUpDown, Loader2 } from 'lucide-react';
 import React from 'react';
 import { toast } from 'sonner';
-
 const columnHelper = createColumnHelper();
 
 export const PersonnelColumn = (handleView, handleEdit, handleDelete, roles) => [
@@ -93,9 +93,13 @@ export const PersonnelColumn = (handleView, handleEdit, handleDelete, roles) => 
                     <Button className="bg-yellow-300 text-black hover:bg-yellow-400" onClick={() => handleView(personnel.id)}>
                         View
                     </Button>
-                    <Button className="bg-red-700 hover:bg-red-600" onClick={handleUnverify}>
-                        Unverify
-                    </Button>
+                    <ConfirmationDialog
+                        title="Confirmation"
+                        message="Are you sure you want to unverify this personnel?"
+                        onConfirm={handleUnverify}
+                        triggerVariant="destructive"
+                        trigger="Unverify"
+                    />
                 </div>
             );
         },

@@ -58,6 +58,7 @@ export default function CreateInspection({ serviceRequests, users, requestId }) 
                             errors={errors}
                             serviceRequests={serviceRequests}
                             users={users}
+                            lockInputs={requestId ? true : false}
                         />
                     </CardContent>
                 </Card>

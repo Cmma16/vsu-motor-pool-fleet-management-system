@@ -58,7 +58,7 @@ export function SelectedDayTripsSection({ selectedDateTrips, date, getStatusBadg
                                     </div>
                                     <div className="flex items-center text-sm">
                                         <Car className="mr-2 h-4 w-4" />
-                                        {trip.vehicle_name} ({trip.plate_number})
+                                        {trip.vehicle.vehicle_name} ({trip.vehicle.plate_number})
                                     </div>
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>

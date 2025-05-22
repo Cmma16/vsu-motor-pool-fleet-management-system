@@ -25,6 +25,7 @@ class Trip extends Model
         'requesting_party',
         'vehicle_id',
         'driver_id',
+        'dispatcher_id',
         'status',
     ];
 
@@ -36,5 +37,10 @@ class Trip extends Model
     public function driver()
     {
         return $this->belongsTo(User::class, 'driver_id');
+    }
+
+    public function passengers()
+    {
+        return $this->hasMany(Passenger::class, 'trip_id');
     }
 }

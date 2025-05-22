@@ -174,7 +174,11 @@ export const RequestsColumn = (handleView, handleEdit, handleDelete, handleStatu
                                             onClick={() =>
                                                 router.get(
                                                     route('maintenance.create', {
-                                                        data: { requestId: request.request_id, vehicleId: request.vehicle_id },
+                                                        data: {
+                                                            requestId: request.request_id,
+                                                            vehicleId: request.vehicle_id,
+                                                            planId: request.plan_id,
+                                                        },
                                                     }),
                                                 )
                                             }

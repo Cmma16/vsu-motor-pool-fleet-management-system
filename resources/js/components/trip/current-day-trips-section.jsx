@@ -1,16 +1,8 @@
 import { format } from 'date-fns';
-import { Clock, FileText, MapPin, MoreHorizontal, Users } from 'lucide-react';
+import { Clock, FileText, MapPin, Users } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 
 export function CurrentDayTripsSection({ todayTrips, formatTripDate, getStatusBadge, editTrip, viewTripDetails }) {
     return (
@@ -42,38 +34,38 @@ export function CurrentDayTripsSection({ todayTrips, formatTripDate, getStatusBa
                                         Trip #{trip.trip_number} • {trip.requesting_party}
                                     </div>
                                 </div>
-                                <div className="flex flex-row items-start gap-4 md:flex-col">
+                                <div className="flex flex-row items-center gap-4 md:flex-col">
                                     <div className="flex items-center gap-2">
                                         <div className="text-sm">
                                             <p className="font-medium">{trip.driver_name}</p>
-                                            <p className="text-muted-foreground text-xs">{trip.vehicle_name}</p>
+                                            <p className="text-muted-foreground text-xs">{trip.vehicle.vehicle_name}</p>
                                         </div>
                                     </div>
                                     <div className="flex items-center text-sm">
                                         <Users className="mr-2 h-4 w-4" />
-                                        {trip.vehicle_capacity} capacity
+                                        {trip.vehicle.capacity} capacity
                                     </div>
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger asChild>
-                                            <Button variant="ghost" size="icon" className="h-8 w-8">
-                                                <MoreHorizontal className="h-4 w-4" />
-                                                <span className="sr-only">More options</span>
-                                            </Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="end">
-                                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                            <DropdownMenuItem onClick={() => viewTripDetails(trip.trip_id)}>View Details</DropdownMenuItem>
-                                            <DropdownMenuItem onClick={() => editTrip(trip.trip_id)}>Edit Trip</DropdownMenuItem>
-                                            <DropdownMenuSeparator />
-                                            <DropdownMenuItem>Cancel Trip</DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
+                                    <div className="flex flex-row gap-2">
+                                        <Button variant="outline" onClick={() => viewTripDetails(trip.trip_id)}>
+                                            View
+                                        </Button>
+                                        <Button variant="outline" onClick={() => cancelTrip(trip.trip_id)}>
+                                            Cancel
+                                        </Button>
+                                        {trip.status === 'pending' ||
+                                            trip.status === 'rejected' ||
+                                            (trip.status === 'cancelled' && (
+                                                <Button variant="destructive" onClick={() => deleteTrip(trip.trip_id)}>
+                                                    Delete
+                                                </Button>
+                                            ))}
+                                    </div>
                                 </div>
                             </div>
                         ))}
                     </div>
                 ) : (
-                    <div className="text-muted-foreground py-6 text-center">No trips scheduled for today</div>
+                    <div className="text-muted-foreground py-6 text-center">No trips data found</div>
                 )}
             </CardContent>
         </Card>

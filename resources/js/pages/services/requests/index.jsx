@@ -41,6 +41,8 @@ export default function RequestsIndex({ serviceRequests }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             <Head title="Repairs" />
+            {console.log(serviceRequests)}
+            {/*delete this*/}
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <DataTable
                     columns={RequestsColumn}

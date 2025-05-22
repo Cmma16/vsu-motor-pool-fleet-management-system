@@ -1,4 +1,4 @@
-import MaintenanceForm from '@/components/maintenance/maintenance-form';
+import MaintenanceEditForm from '@/components/maintenance/maintenance-edit-form';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 
 import { Head, useForm } from '@inertiajs/react';
@@ -23,21 +23,16 @@ const pageDetails = {
     description: 'Update the details of the maintenance request.',
 };
 
-export default function EditMaintenance({ maintenance, vehicles, odometerLogs, maintenancePlans, users, serviceRequests }) {
+export default function EditMaintenance({ maintenance, odometerLogs, vehicles }) {
     const { data, setData, put, processing, errors, reset } = useForm({
-        vehicle_id: maintenance.vehicle_id,
-        request_id: maintenance.request_id,
-        plan_id: maintenance.plan_id,
         date_in: maintenance.date_in,
         date_completed: maintenance.date_completed,
-        performed_by: maintenance.performed_by,
-        confirmed_by: maintenance.confirmed_by,
-        date_confirmed: maintenance.date_confirmed,
         maintenance_summary: maintenance.maintenance_summary,
         odometer_id: maintenance.odometer_id,
     });
 
     const editMaintenance = (e) => {
+        console.log(data);
         e.preventDefault();
 
         put(route('maintenance.update', maintenance.maintenance_id), {
@@ -55,6 +50,8 @@ export default function EditMaintenance({ maintenance, vehicles, odometerLogs, m
 
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
+            {/* delete this */}
+            {/* {console.log(maintenance)} */}
             <Head title="Maintenance" />
             <div className="mx-6 mb-3 space-y-6 rounded-lg bg-white">
                 <Card className="w-full">
@@ -63,18 +60,17 @@ export default function EditMaintenance({ maintenance, vehicles, odometerLogs, m
                         <CardDescription>Update the details of the maintenance record.</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <MaintenanceForm
+                        <MaintenanceEditForm
                             formData={data}
                             formType={'edit'}
                             setData={setData}
                             onSubmit={editMaintenance}
                             processing={processing}
                             errors={errors}
-                            vehicles={vehicles}
-                            users={users}
-                            serviceRequests={serviceRequests}
+                            presets={maintenance}
                             odometerLogs={odometerLogs}
-                            maintenancePlans={maintenancePlans}
+                            vehicles={vehicles}
+                            lockInputs={true}
                         />
                     </CardContent>
                 </Card>

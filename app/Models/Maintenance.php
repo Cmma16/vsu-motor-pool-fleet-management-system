@@ -14,9 +14,7 @@ class Maintenance extends Model
     protected $primaryKey = 'maintenance_id';
     protected $fillable = [
         'maintenance_id',
-        'plan_id',
         'request_id',
-        'vehicle_id',
         'date_completed',
         'date_in',
         'odometer_id',
@@ -26,19 +24,10 @@ class Maintenance extends Model
         'maintenance_summary',
     ];
 
-    public function plan()
-    {
-        return $this->belongsTo(MaintenancePlan::class, 'plan_id');
-    }
 
     public function serviceRequest()
     {
         return $this->belongsTo(ServiceRequest::class, 'request_id');
-    }
-
-    public function vehicle()
-    {
-        return $this->belongsTo(Vehicle::class, 'vehicle_id');
     }
 
     public function odometerReading()

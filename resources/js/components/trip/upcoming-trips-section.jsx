@@ -1,15 +1,7 @@
-import { CalendarIcon, Car, Clock, FileText, MapPin, MoreHorizontal } from 'lucide-react';
+import { CalendarIcon, Car, Clock, FileText, MapPin } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { format, parseISO } from 'date-fns';
 
 export function UpcomingTripsSection({ upcomingTrips, formatTripDate, getStatusBadge, editTrip, viewTripDetails }) {
@@ -51,34 +43,35 @@ export function UpcomingTripsSection({ upcomingTrips, formatTripDate, getStatusB
                                     <div className="flex items-center gap-2">
                                         <div className="text-sm">
                                             <p className="font-medium">{trip.driver_name}</p>
-                                            <p className="text-muted-foreground text-xs">{trip.vehicle_name} (vehicle type here)</p>
+                                            <p className="text-muted-foreground text-xs">{trip.vehicle.vehicle_name}</p>
                                         </div>
                                     </div>
                                     <div className="flex items-center text-sm">
                                         <Car className="mr-2 h-4 w-4" />
                                         {trip.plate_number}
                                     </div>
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger asChild>
-                                            <Button variant="ghost" size="icon" className="h-8 w-8">
-                                                <MoreHorizontal className="h-4 w-4" />
-                                                <span className="sr-only">More options</span>
-                                            </Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="end">
-                                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                            <DropdownMenuItem onClick={() => viewTripDetails(trip.trip_id)}>View Details</DropdownMenuItem>
-                                            <DropdownMenuItem onClick={() => editTrip(trip.trip_id)}>Edit Trip</DropdownMenuItem>
-                                            <DropdownMenuSeparator />
-                                            <DropdownMenuItem>Cancel Trip</DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
+
+                                    <div className="flex flex-row gap-2">
+                                        <Button variant="outline" onClick={() => viewTripDetails(trip.trip_id)}>
+                                            View
+                                        </Button>
+                                        <Button variant="outline" onClick={() => cancelTrip(trip.trip_id)}>
+                                            Cancel
+                                        </Button>
+                                        {trip.status === 'pending' ||
+                                            trip.status === 'rejected' ||
+                                            (trip.status === 'cancelled' && (
+                                                <Button variant="destructive" onClick={() => deleteTrip(trip.trip_id)}>
+                                                    Delete
+                                                </Button>
+                                            ))}
+                                    </div>
                                 </div>
                             </div>
                         ))}
                     </div>
                 ) : (
-                    <div className="text-muted-foreground py-6 text-center">No upcoming trips scheduled</div>
+                    <div className="text-muted-foreground py-6 text-center">No upcoming trips data found</div>
                 )}
             </CardContent>
         </Card>

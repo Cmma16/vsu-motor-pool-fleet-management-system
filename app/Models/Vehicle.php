@@ -32,13 +32,19 @@ class Vehicle extends Model
         'status',
     ];
 
-    public function maintenancePlans()
-    {
-        return $this->hasMany(MaintenancePlan::class, 'vehicle_id');
-    }
 
     public function odometerLogs()
     {
         return $this->hasMany(OdometerLog::class, 'vehicle_id');
+    }
+
+    public function serviceRequests()
+    {
+        return $this->hasMany(ServiceRequest::class, 'vehicle_id');
+    }
+
+    public function latestOdometerLog()
+    {
+        return $this->hasOne(OdometerLog::class, 'vehicle_id')->latest('created_at');
     }
 }

@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { TrashIcon } from 'lucide-react';
 const columnHelper = createColumnHelper();
 
-export const MaintenancePartColumn = (showActions, handleEdit, handleDelete) => [
+export const MaintenancePartColumn = (handleEdit, handleView, handleDelete) => [
     {
         id: 'select',
         enableSorting: false,
@@ -16,7 +16,6 @@ export const MaintenancePartColumn = (showActions, handleEdit, handleDelete) => 
     columnHelper.accessor('part_name', {
         header: ({ column }) => (
             <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-                {console.log(showActions)}
                 Part Name
                 <ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>
@@ -32,12 +31,12 @@ export const MaintenancePartColumn = (showActions, handleEdit, handleDelete) => 
         header: () => <div className="text-center">Actions</div>,
         cell: ({ row }) => {
             const maintenancePart = row.original;
-            if (!showActions) return null;
+            if (maintenancePart.confirmed_by) return null;
 
             return (
                 <div className="flex justify-center gap-2">
                     <MaintenancePartModal maintenance_id={maintenancePart.maintenance_id} maintenancePart={maintenancePart} formType="edit" />
-                    <Button variant="destructive" size="sm" onClick={() => handleDelete(maintenancePart.part_id)}>
+                    <Button variant="destructive" size="sm" onClick={() => handleDelete(maintenancePart.id)}>
                         <TrashIcon />
                         Delete
                     </Button>

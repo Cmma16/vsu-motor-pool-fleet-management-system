@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\UserVerificationController;
 use App\Http\Controllers\PersonnelController;
 use App\Http\Controllers\MaintenancePartsController;
 use App\Http\Controllers\RepairPartsController;
+use App\Http\Controllers\PassengerController;
 Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
@@ -44,10 +45,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('services/completed', ServiceAccomplishmentController::class);
     Route::resource('parts', PartController::class);
     Route::resource('plans', MaintenancePlanController::class);
+
     Route::resource('maintenance', MaintenanceController::class);
+    Route::patch('maintenance/{maintenance}/confirm', [MaintenanceController::class, 'confirm'])->name('maintenance.confirm');
+
     Route::resource('odometer', OdometerLogController::class);
     Route::resource('vehicles/trips', TripController::class);
+    Route::get('/trips/{trip}/assign', [TripController::class, 'assign'])->name('trips.assign');
+    Route::patch('trips/{trip}/status', [TripController::class, 'updateStatus'])->name('trips.updateStatus');
+    Route::post('/trips/check-availability', [TripController::class, 'checkAvailability'])->name('trips.check-availability');
     Route::resource('personnel', PersonnelController::class);
+    Route::resource('passengers', PassengerController::class);
+
+    Route::post('/passengers/{id}/assign-party-head', [PassengerController::class, 'assignPartyHead']);
+
 
     Route::post('maintenance-parts', [MaintenancePartsController::class, 'store'])->name('maintenance-parts.store');
     Route::put('maintenance-parts/{maintenancePart}', [MaintenancePartsController::class, 'update'])->name('maintenance-parts.update');
@@ -56,12 +67,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('repair-parts', [RepairPartsController::class, 'store'])->name('repair-parts.store');
     Route::put('repair-parts/{repairPart}', [RepairPartsController::class, 'update'])->name('repair-parts.update');
     Route::delete('repair-parts/{repairPart}', [RepairPartsController::class, 'destroy'])->name('repair-parts.destroy');
-    
+
     Route::middleware(['role:Admin'])->group(function () {
         Route::put('/personnel/{person}/role', [PersonnelController::class, 'updateRole'])->name('personnel.updateRole');
         Route::put('/personnel/{person}/verify', [PersonnelController::class, 'verifyPersonnel'])->name('personnel.verify');
         Route::put('/personnel/{person}/unverify', [PersonnelController::class, 'unverifyPersonnel'])->name('personnel.unverify');
     });
+
+    Route::get('/trips/check-availability', [TripController::class, 'checkAvailability'])->name('trips.check-availability');
 
 });
 

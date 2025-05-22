@@ -17,7 +17,7 @@ return new class extends Migration
             $table->date('scheduled_date');
             $table->integer('next_service_km');
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onDelete('set null');
-            $table->enum('status', ['scheduled', 'overdue', 'completed', 'cancelled']);
+            $table->enum('status', ['pending', 'scheduled', 'completed', 'cancelled']);
             $table->timestamps();
         });
     }

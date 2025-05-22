@@ -25,14 +25,19 @@ class StoreTripRequest extends FormRequest
             'trip_number' => ['required', 'integer'],
             'date_filed' => ['required', 'date'],
             'start_date' => ['required', 'date'],
-            'end_date' => ['required', 'date'],
+            'end_date' => ['required', 'date', 'after_or_equal:start_date'],
             'purpose' => ['required', 'string', 'max:255'],
             'destination' => ['required', 'string', 'max:255'],
             'departure_time' => ['required', 'date_format:H:i'],
             'requesting_party' => ['required', 'string', 'max:255'],
-            'vehicle_id' => ['required', 'integer', 'exists:vehicles,vehicle_id'],
-            'driver_id' => ['required', 'integer', 'exists:users,id'],
-            'status' => ['required', 'string', 'in:pending,approved,ongoing,completed,cancelled'],
+            // 'vehicle_id' => ['required', 'integer', 'exists:vehicles,vehicle_id'],
+            // 'driver_id' => ['required', 'integer', 'exists:users,id'],
+            //'status' => ['required', 'string', 'in:pending,approved,ongoing,completed,cancelled'],
+            'passengers' => 'array',
+            'passengers.*.name' => 'required|string|max:255',
+            'passengers.*.affiliation' => 'nullable|string|max:255',
+            'passengers.*.contact_number' => 'nullable|string|max:255',
+            'passengers.*.is_party_head' => 'required|boolean',
         ];
     }
 }

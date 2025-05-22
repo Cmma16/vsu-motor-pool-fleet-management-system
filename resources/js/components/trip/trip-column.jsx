@@ -1,8 +1,7 @@
-import { createColumnHelper } from '@tanstack/react-table';
-import { ArrowUpDown } from 'lucide-react';
-
-import { DataTableRowActions } from '@/components/data-table-row-actions';
 import { Button } from '@/components/ui/button';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { createColumnHelper } from '@tanstack/react-table';
+import { ArrowUpDown, MoreHorizontal, NotepadText, Pencil, TrashIcon } from 'lucide-react';
 
 const columnHelper = createColumnHelper();
 
@@ -56,7 +55,37 @@ export const TripColumn = (handleView, handleEdit, handleDelete) => [
         id: 'actions',
         cell: ({ row }) => {
             const trip = row.original;
-            return <DataTableRowActions row={trip} rowKey="trip_id" handleView={handleView} handleEdit={handleEdit} handleDelete={handleDelete} />;
+            return (
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className="h-8 w-8 p-0">
+                            <span className="sr-only">Open menu</span>
+                            <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuItem onClick={() => handleView(trip.trip_id)}>
+                            <NotepadText />
+                            View details
+                        </DropdownMenuItem>
+                        {trip.status === 'pending' ||
+                            (trip.status === 'rejected' && (
+                                <DropdownMenuItem onClick={() => handleEdit(trip.trip_id)}>
+                                    <Pencil /> Edit
+                                </DropdownMenuItem>
+                            ))}
+                        {trip.status === 'pending' ||
+                            trip.status === 'rejected' ||
+                            (trip.status === 'cancelled' && (
+                                <DropdownMenuItem onClick={() => handleDelete(trip.trip_id)}>
+                                    <TrashIcon />
+                                    Delete
+                                </DropdownMenuItem>
+                            ))}
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            );
         },
     },
 ];

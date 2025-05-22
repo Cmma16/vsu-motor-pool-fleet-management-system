@@ -4,27 +4,77 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-export default function RequestForm({ formData, formType, setData, onSubmit, processing, errors, vehicles }) {
+export default function RequestForm({ formData, formType, setData, onSubmit, processing, errors, vehicles, maintenancePlans }) {
     return (
         <form onSubmit={onSubmit} className="space-y-6">
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                {/* Vehicle */}
+                {console.log(formData)}
+                {/* Service Type */}
                 <div className="space-y-2">
-                    <Label htmlFor="vehicle_id">Vehicle</Label>
-                    <Select value={String(formData.vehicle_id)} onValueChange={(value) => setData('vehicle_id', Number(value))}>
-                        <SelectTrigger id="vehicle_id" tabIndex={1}>
-                            <SelectValue placeholder="Select vehicle" />
+                    <Label htmlFor="service_type">Service Type</Label>
+                    <Select value={formData.service_type} onValueChange={(value) => setData('service_type', value)}>
+                        <SelectTrigger id="service_type" tabIndex={4}>
+                            <SelectValue placeholder="Select service type" />
                         </SelectTrigger>
                         <SelectContent>
-                            {vehicles.map((vehicle) => (
-                                <SelectItem key={vehicle.vehicle_id} value={String(vehicle.vehicle_id)}>
-                                    {vehicle.vehicle_name}
-                                </SelectItem>
-                            ))}
+                            <SelectItem value="repair">Repair</SelectItem>
+                            <SelectItem value="maintenance">Maintenance</SelectItem>
                         </SelectContent>
                     </Select>
-                    <InputError message={errors.vehicle_id} />
+                    <InputError message={errors.service_type} />
                 </div>
+
+                {/* Maintenance Plan */}
+                {formData.service_type === 'maintenance' && (
+                    <div className="space-y-2">
+                        <Label htmlFor="plan_id">Maintenance Plan</Label>
+                        <Select
+                            value={formData.service_type === 'maintenance' ? String(formData.plan_id) : null}
+                            onValueChange={(value) => {
+                                const selectedPlan = maintenancePlans.find((plan) => String(plan.plan_id) === value);
+                                if (selectedPlan) {
+                                    setData({
+                                        ...formData,
+                                        plan_id: selectedPlan.plan_id,
+                                        vehicle_id: selectedPlan.vehicle_id, // <-- Set vehicle_id too
+                                    });
+                                }
+                            }}
+                        >
+                            <SelectTrigger id="plan_id" tabIndex={5}>
+                                <SelectValue placeholder="Select maintenance plan" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {maintenancePlans.map((plan) => (
+                                    <SelectItem key={plan.plan_id} value={String(plan.plan_id)}>
+                                        {plan.plan_name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                        <InputError message={errors.plan_id} />
+                    </div>
+                )}
+
+                {/* Vehicle */}
+                {formData.service_type !== 'maintenance' && (
+                    <div className="space-y-2">
+                        <Label htmlFor="vehicle_id">Vehicle</Label>
+                        <Select value={String(formData.vehicle_id)} onValueChange={(value) => setData('vehicle_id', Number(value))}>
+                            <SelectTrigger id="vehicle_id" tabIndex={1}>
+                                <SelectValue placeholder="Select vehicle" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {vehicles.map((vehicle) => (
+                                    <SelectItem key={vehicle.vehicle_id} value={String(vehicle.vehicle_id)}>
+                                        {vehicle.vehicle_name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                        <InputError message={errors.vehicle_id} />
+                    </div>
+                )}
 
                 {/* Date filed */}
                 <div className="space-y-2">
@@ -40,21 +90,6 @@ export default function RequestForm({ formData, formType, setData, onSubmit, pro
                         tabIndex={3}
                     />
                     <InputError message={errors.date_filed} />
-                </div>
-
-                {/* Service Type */}
-                <div className="space-y-2">
-                    <Label htmlFor="service_type">Service Type</Label>
-                    <Select value={formData.service_type} onValueChange={(value) => setData('service_type', value)}>
-                        <SelectTrigger id="service_type" tabIndex={4}>
-                            <SelectValue placeholder="Select service type" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="repair">Repair</SelectItem>
-                            <SelectItem value="maintenance">Maintenance</SelectItem>
-                        </SelectContent>
-                    </Select>
-                    <InputError message={errors.service_type} />
                 </div>
 
                 {/* Work Description */}

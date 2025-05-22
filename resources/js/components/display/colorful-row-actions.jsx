@@ -9,7 +9,7 @@ export function ColorfulRowActions({ row, rowKey = 'id', handleView, handleEdit,
 
     return (
         <div className="flex flex-row justify-center gap-2">
-            <Button variant="outline" onClick={() => handleView(rowId)}>
+            <Button className="bg-amber-400 hover:bg-amber-500" onClick={() => handleView(rowId)}>
                 <Eye />
             </Button>
             {user.role.name === 'Mechanic' && (

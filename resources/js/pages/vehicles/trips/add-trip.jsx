@@ -1,7 +1,10 @@
+import PassengerAddingForm from '@/components/passenger/passenger-adding-form';
 import TripForm from '@/components/trip/trip-form';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import { Head, useForm } from '@inertiajs/react';
+import { format } from 'date-fns';
+import React from 'react';
 
 const breadcrumbs = [
     { title: 'Trips', href: '/vehicles/trips' },
@@ -14,8 +17,10 @@ const pageDetails = {
 };
 
 export default function AddTrip({ vehicles, users }) {
+    const [stage, setStage] = React.useState(1);
+
     const { data, setData, post, processing, errors, reset } = useForm({
-        date_filed: '',
+        date_filed: format(new Date(), 'yyyy-MM-dd'),
         trip_number: '',
         start_date: '',
         end_date: '',
@@ -23,10 +28,17 @@ export default function AddTrip({ vehicles, users }) {
         destination: '',
         departure_time: '',
         requesting_party: '',
-        vehicle_id: '',
-        driver_id: '',
-        status: '',
+        passengers: [],
     });
+
+    const nextStage = (e) => {
+        e.preventDefault(); // prevent form from submitting
+        setStage((prev) => prev + 1);
+    };
+
+    const previousStage = () => {
+        setStage((prev) => prev - 1);
+    };
 
     const addTrip = (e) => {
         e.preventDefault();
@@ -43,19 +55,32 @@ export default function AddTrip({ vehicles, users }) {
             <div className="mx-6 mb-3 space-y-6 rounded-lg bg-white">
                 <Card>
                     <CardHeader>
-                        <CardTitle>Add New Trip</CardTitle>
+                        <CardTitle>{stage === 1 ? 'Trip Details' : 'Passenger Information'}</CardTitle>
+                        <CardDescription>
+                            {stage === 1 ? 'Provide the necessary information for the trip.' : 'Add all passengers who will be traveling'}
+                        </CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <TripForm
-                            formData={data}
-                            formType={'add'}
-                            setData={setData}
-                            onSubmit={addTrip}
-                            processing={processing}
-                            errors={errors}
-                            vehicles={vehicles}
-                            users={users}
-                        />
+                        {stage === 1 ? (
+                            <TripForm
+                                formData={data}
+                                setData={setData}
+                                onSubmit={nextStage}
+                                processing={processing}
+                                errors={errors}
+                                vehicles={vehicles}
+                                users={users}
+                                formType="create"
+                            />
+                        ) : (
+                            <PassengerAddingForm
+                                formData={data}
+                                setData={setData}
+                                onPreviousStep={previousStage}
+                                onSubmit={addTrip}
+                                isSubmitting={processing}
+                            />
+                        )}
                     </CardContent>
                 </Card>
             </div>

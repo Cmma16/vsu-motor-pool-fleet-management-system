@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ServiceRequest;
 use App\Models\User;
 use App\Models\Vehicle;
+use App\Models\MaintenancePlan;
 use Illuminate\Http\Request;
 use App\Http\Requests\ServiceRequests\StoreServiceRequestRequest;
 use App\Http\Requests\ServiceRequests\UpdateServiceRequestRequest;
@@ -45,6 +46,7 @@ class ServiceRequestController extends Controller
                     ? $serviceRequest->receivedBy->first_name . ' ' . $serviceRequest->receivedBy->last_name
                     : 'N/A',
                 'date_received' => $serviceRequest->date_received ?: 'N/A',
+                'plan_id' => $serviceRequest->plan_id,
                 'status' => $serviceRequest->status,
             ];
         });
@@ -62,10 +64,21 @@ class ServiceRequestController extends Controller
     public function create(Request $request)
     {   
         $vehicles = Vehicle::select('vehicle_id', 'vehicle_name')->get();
-        // $users = User::select('id', 'first_name', 'last_name')->get(); delete this
+        $maintenancePlans = MaintenancePlan::with('vehicle')
+            ->select('plan_id', 'vehicle_id', 'scheduled_date', 'next_service_km')
+            ->where('status', 'pending')
+            ->get()
+                ->map(function ($plan) {
+                return [
+                    'plan_id' => $plan->plan_id,
+                    'vehicle_id' => $plan->vehicle_id,
+                    'plan_name' => $plan->vehicle->vehicle_name . ' - ' . $plan->scheduled_date . ' - ' . $plan->next_service_km,
+                ];
+            });
+        // $users = User::select('id', 'first_name', 'last_name')->get(); delete this   
 
         return Inertia::render('services/requests/create-request', [
-            'workDescription' => $request->input('data.work_description'),
+            'maintenancePlans' => $maintenancePlans,
             'vehicles' => $vehicles,
             //'users' => $users, delete this
             

@@ -30,8 +30,8 @@ class UpdateTripRequest extends FormRequest
             'destination' => ['required', 'string', 'max:255'],
             'departure_time' => ['required', 'date_format:H:i'],
             'requesting_party' => ['required', 'string', 'max:255'],
-            'vehicle_id' => ['required', 'integer', 'exists:vehicles,vehicle_id'],
-            'driver_id' => ['required', 'integer', 'exists:users,id'],
+            'driver_id' => ['nullable', 'exists:users,id'],
+            'vehicle_id' => ['nullable', 'exists:vehicles,vehicle_id'],
         ];
     }
 }

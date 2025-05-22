@@ -35,6 +35,8 @@ export default function MaintenanceIndex({ maintenanceRecords }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             <Head title="Maintenance" />
+            {console.log(maintenanceRecords)}
+            {/*delete this*/}
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <DataTable
                     columns={MaintenanceColumn}

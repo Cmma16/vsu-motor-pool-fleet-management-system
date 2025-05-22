@@ -31,7 +31,6 @@ export default function RepairForm({
             setData('odometer_id', '');
         }
     }, [latestOdometer]);
-    console.log(latestOdometer, odometerLogs, formData);
 
     return (
         <form onSubmit={onSubmit} className="space-y-6">
@@ -72,18 +71,49 @@ export default function RepairForm({
                     <InputError message={errors.request_id} />
                 </div>
 
+                {/* Date In */}
                 <div className="space-y-2">
-                    <Label htmlFor="repair_summary">Summary</Label>
+                    <Label htmlFor="date_in">Date In</Label>
                     <Input
-                        id="repair_summary"
-                        name="repair_summary"
-                        placeholder="Description of the repair conducted"
-                        value={formData.repair_summary}
-                        onChange={(e) => setData('repair_summary', e.target.value)}
+                        id="date_in"
+                        name="date_in"
+                        type="date"
+                        value={formData.date_in}
+                        onChange={(e) => setData('date_in', e.target.value)}
+                        disabled={processing}
+                        tabIndex={3}
+                    />
+                    <InputError message={errors.date_in} />
+                </div>
+
+                {/* Date Completed */}
+                <div className="space-y-2">
+                    <Label htmlFor="date_completed">Date Completed</Label>
+                    <Input
+                        id="date_completed"
+                        name="date_completed"
+                        type="date"
+                        value={formData.date_completed}
+                        onChange={(e) => setData('date_completed', e.target.value)}
+                        disabled={processing}
+                        tabIndex={4}
+                    />
+                    <InputError message={errors.date_completed} />
+                </div>
+
+                {/* Summary */}
+                <div className="space-y-2">
+                    <Label htmlFor="maintenance_summary">Summary</Label>
+                    <Input
+                        id="maintenance_summary"
+                        name="maintenance_summary"
+                        placeholder="Description of the maintenance conducted"
+                        value={formData.maintenance_summary}
+                        onChange={(e) => setData('maintenance_summary', e.target.value)}
                         disabled={processing}
                         tabIndex={5}
                     />
-                    <InputError message={errors.repair_summary} />
+                    <InputError message={errors.maintenance_summary} />
                 </div>
 
                 {/* Odometer Reading */}

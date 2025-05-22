@@ -61,8 +61,8 @@ class MaintenancePartsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(MaintenanceParts $maintenanceParts)
+    public function destroy(MaintenanceParts $maintenancePart)
     {
-        $maintenanceParts->delete();
+        $maintenancePart->delete();
     }
 }
