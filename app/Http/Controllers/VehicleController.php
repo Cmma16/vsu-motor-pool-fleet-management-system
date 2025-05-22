@@ -8,7 +8,7 @@ use App\Http\Requests\Vehicle\StoreVehicleRequest;
 use App\Http\Requests\Vehicle\UpdateVehicleRequest;
 use App\Http\Controllers\Controller;
 use Inertia\Inertia;
-
+use App\Services\QRCodeService;
 class VehicleController extends Controller
 {
     /**
@@ -36,6 +36,13 @@ class VehicleController extends Controller
     {
         $vehicle = Vehicle::create($request->validated());
 
+        return redirect()->route('vehicles.show', $vehicle->vehicle_id);
+    }
+
+    public function generateQRCode(Vehicle $vehicle, QRCodeService $qrCodeService)
+    {
+        $qrCode = $qrCodeService->generateAndStore($vehicle->asset_tag);
+        $vehicle->update(['qr_code_path' => $qrCode]);
         return redirect()->route('vehicles.show', $vehicle->vehicle_id);
     }
 

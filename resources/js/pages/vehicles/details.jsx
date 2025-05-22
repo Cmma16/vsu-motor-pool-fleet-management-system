@@ -2,16 +2,17 @@ import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 
 import { Head, router } from '@inertiajs/react';
 
+import { QRCodeModal } from '@/components/display/qr-code-modal';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BasicInfoCard } from '@/components/vehicle/basic-info-card';
 import { OperationalDetailsCard } from '@/components/vehicle/operational-details-card';
 import { TechnicalDetailsCard } from '@/components/vehicle/technical-details-card';
-
 // import { Label } from '@/components/ui/label';
 // import { Link } from '@inertiajs/react';
 
 import { Button } from '@/components/ui/button';
-import { Calendar, Car, Clock, History, MapPin, PenTool, Settings, TriangleAlert, User } from 'lucide-react';
+import { usePage } from '@inertiajs/react';
+import { Calendar, Car, Clock, MapPin, PenTool, QrCode, Settings, TriangleAlert, User } from 'lucide-react';
 
 import AppLayout from '@/layouts/app-layout';
 // import { Button } from 'react-day-picker';
@@ -33,9 +34,21 @@ const pageDetails = {
 };
 
 export default function details({ vehicle, odometer_reading }) {
+    const user = usePage().props.auth.user;
+
+    const generateQRCode = () => {
+        router.get(route('vehicles.generateQRCode', vehicle.vehicle_id), {
+            onSuccess: () => {
+                console.log('QR Code generated successfully');
+            },
+            onError: () => {
+                console.log('Failed to generate QR Code');
+            },
+        });
+    };
+
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
-            {console.log(odometer_reading)}
             <Head title="Vehicle Details" />
             <div className="container mx-auto px-4 py-6 md:px-6">
                 <div className="mb-6 flex flex-col items-start justify-between md:flex-row md:items-center">
@@ -44,13 +57,18 @@ export default function details({ vehicle, odometer_reading }) {
                             <Car className="h-6 w-6" />
                             {vehicle.vehicle_name}
                             {/* <span className="ml-2">{getStatusBadge(vehicleData.status)}</span> */}
+                            {vehicle.qr_code_path && (user.role.name === 'Admin' || user.role.name === 'Staff') && (
+                                <QRCodeModal vehicle_name={vehicle.vehicle_name} qr_code_path={vehicle.qr_code_path} asset_tag={vehicle.asset_tag} />
+                            )}
                         </h1>
                     </div>
                     <div className="mt-4 flex gap-2 md:mt-0">
-                        <Button variant="outline" size="sm">
-                            <History className="mr-2 h-4 w-4" />
-                            Trip Log
-                        </Button>
+                        {!vehicle.qr_code_path && (user.role.name === 'Admin' || user.role.name === 'Staff') && (
+                            <Button variant="outline" size="sm" onClick={generateQRCode}>
+                                <QrCode className="mr-2 h-4 w-4" />
+                                Generate QR Code
+                            </Button>
+                        )}
                         <Button variant="outline" size="sm">
                             <PenTool className="mr-2 h-4 w-4" />
                             Schedule Service

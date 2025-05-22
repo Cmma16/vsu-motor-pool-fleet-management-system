@@ -30,6 +30,7 @@ class Vehicle extends Model
         // 'odometer_reading',
         'fuel_type',
         'status',
+        'qr_code_path',
     ];
 
 

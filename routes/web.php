@@ -34,6 +34,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('parts/index');
     })->name('parts.index');
     Route::resource('vehicles', VehicleController::class);
+    Route::get('vehicles/{vehicle}/qr-code', [VehicleController::class, 'generateQRCode'])->name('vehicles.generateQRCode');
     Route::resource('repairs', RepairsController::class);
 
     Route::resource('services/requests', ServiceRequestController::class);
