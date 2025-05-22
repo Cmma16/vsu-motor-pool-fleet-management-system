@@ -11,7 +11,7 @@ class QRCodeService
     public function generateAndStore($assetTag)
     {
         $encrypted = Crypt::encryptString($assetTag);
-        $qrImage = QrCode::format('png')->size(200)->generate($encrypted);
+        $qrImage = QrCode::format('png')->size(600)->generate($encrypted);
         $fileName = 'qr-codes/' . $assetTag . '.png';
 
         Storage::disk('public')->put($fileName, $qrImage);
