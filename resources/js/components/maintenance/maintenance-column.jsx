@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { router } from '@inertiajs/react';
 import { createColumnHelper } from '@tanstack/react-table';
 import { ArrowUpDown } from 'lucide-react';
+import { toast } from 'sonner';
 
 const columnHelper = createColumnHelper();
 
@@ -69,7 +70,18 @@ export const MaintenanceColumn = (handleView, handleEdit, handleDelete) => [
         cell: ({ row }) => {
             const maintenance = row.original;
             const handleConfirm = () => {
-                router.patch(`/maintenance/${maintenance.maintenance_id}/confirm`);
+                router.patch(`/maintenance/${maintenance.maintenance_id}/confirm`, {
+                    onSuccess: () => {
+                        toast.success('Record confirmed', {
+                            description: 'The maintenance record has been confirmed successfully',
+                        });
+                    },
+                    onError: () => {
+                        toast.error('Confirmation failed', {
+                            description: 'The maintenance record was not confirmed',
+                        });
+                    },
+                });
             };
 
             return (

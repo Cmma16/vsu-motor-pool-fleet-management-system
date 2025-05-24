@@ -1,8 +1,10 @@
 import { createColumnHelper } from '@tanstack/react-table';
 import { ArrowUpDown } from 'lucide-react';
 
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { router } from '@inertiajs/react';
+import { toast } from 'sonner';
 
 import { InspectionRowActions } from '@/components/inspection/inspection-row-actions';
 
@@ -86,8 +88,12 @@ export const InspectionsColumn = (handleView, handleEdit, handleDelete) => [
     }),
 
     columnHelper.accessor('confirmed_by', {
-        header: () => <div className="text-left">Confirmed by</div>,
-        cell: (info) => <div className="text-left">{info.getValue() || 'Unconfirmed'}</div>,
+        header: () => <div className="text-left">Confirmation</div>,
+        cell: (info) => (
+            <div className="text-left">
+                {info.getValue() ? <Badge variant="primary">Confirmed</Badge> : <Badge variant="secondary">Unconfirmed</Badge>}
+            </div>
+        ),
     }),
     {
         id: 'actions',
@@ -95,7 +101,27 @@ export const InspectionsColumn = (handleView, handleEdit, handleDelete) => [
         cell: ({ row }) => {
             const inspection = row.original;
             const confirmInspection = (id) => {
-                router.patch(`/services/request-inspections/${id}/confirm`);
+                router.patch(
+                    `/services/request-inspections/${id}/confirm`,
+                    {},
+                    {
+                        onSuccess: () => {
+                            toast.success('Inspection confirmed successfully', {
+                                description: 'You can now approve or reject the request',
+                                action: {
+                                    label: 'Go',
+                                    onClick: () => router.get(`/services/requests/${inspection.request_id}`),
+                                },
+                                duration: 6000,
+                            });
+                        },
+                        onError: (error) => {
+                            toast.error('Inspection confirmation failed', {
+                                description: error.message,
+                            });
+                        },
+                    },
+                );
             };
             return (
                 <InspectionRowActions

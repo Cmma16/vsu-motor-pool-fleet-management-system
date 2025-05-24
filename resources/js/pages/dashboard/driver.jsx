@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
-import { Head } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 import { AlertTriangle, Car, MapPin, Package } from 'lucide-react';
 
 const breadcrumbs = [
@@ -72,11 +72,11 @@ export default function Dashboard({
     ];
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
-            {console.log(activeVehicle, latestOdometerReading, nextMaintenance)}
             <Head title="Dashboard" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl px-6">
+                {console.log(activeVehicle, latestOdometerReading, nextMaintenance)}
                 <div className="flex items-center justify-between space-y-2">
-                    <h2 className="text-2xl">About Fleet</h2>
+                    <h2 className="text-2xl">Information Relevant to You</h2>
                 </div>
                 <div className="flex flex-col gap-4 p-4 md:gap-8">
                     <div className="grid gap-6">
@@ -108,7 +108,7 @@ export default function Dashboard({
                                                 <div className="flex flex-col gap-1">
                                                     <span className="text-sm font-medium">Odometer Reading</span>
                                                     <span className="flex items-center gap-1">
-                                                        {latestOdometerReading.reading}
+                                                        {latestOdometerReading?.reading}
                                                         <span className="text-muted-foreground text-xs">
                                                             due at: {nextMaintenance.next_service_km} km
                                                         </span>
@@ -129,11 +129,13 @@ export default function Dashboard({
                                 {activeVehicle && (
                                     <CardFooter>
                                         <div className="flex w-full gap-2">
-                                            <Button variant="outline" size="sm" className="flex-1">
+                                            <Button
+                                                onClick={() => router.get(route('vehicles.show', activeVehicle.vehicle_id))}
+                                                variant="outline"
+                                                size="sm"
+                                                className="flex-1"
+                                            >
                                                 View Vehicle
-                                            </Button>
-                                            <Button variant="outline" size="sm" className="flex-1">
-                                                Log Fuel
                                             </Button>
                                         </div>
                                     </CardFooter>
@@ -170,6 +172,10 @@ export default function Dashboard({
                                 </CardFooter>
                             </Card>
                         </div>
+                    </div>
+
+                    <div className="flex items-center justify-between space-y-2">
+                        <h2 className="text-2xl">About Fleet</h2>
                     </div>
                     <GeneralDashboard
                         totalVehicles={totalVehicles}

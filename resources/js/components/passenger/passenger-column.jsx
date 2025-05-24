@@ -59,7 +59,9 @@ export const PassengerColumn = (showActions, handleEdit, handleDelete) => [
     }),
     {
         id: 'actions',
-        header: () => <div className="text-center">Actions</div>,
+        header: (info) => {
+            return <div className="text-center">Actions</div>;
+        },
         cell: ({ row }) => {
             const passenger = row.original;
             const deletePassenger = (id, isPartyHead) => {

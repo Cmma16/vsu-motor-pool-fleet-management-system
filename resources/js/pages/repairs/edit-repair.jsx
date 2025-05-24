@@ -1,11 +1,9 @@
 import RepairForm from '@/components/repairs/repair-form';
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
-
-import { Head, useForm } from '@inertiajs/react';
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-
+import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
+import { Head, useForm } from '@inertiajs/react';
+import { toast } from 'sonner';
 
 const breadcrumbs = [
     {
@@ -43,10 +41,15 @@ export default function EditRepair({ repair, vehicles, users, serviceRequests, o
             // forceFormData: true, // Ensures file uploads and proper formatting
             preserveScroll: true,
             onSuccess: () => {
+                toast.success('Repair record updated', {
+                    description: 'Repair record updated successfully',
+                });
                 reset(); // Reset all fields after a successful submission
             },
             onError: (errors) => {
-                console.log(errors); // Log errors for debugging
+                toast.error('Failed to update repair record', {
+                    description: 'An error occurred while updating the repair record',
+                });
             },
         });
     };

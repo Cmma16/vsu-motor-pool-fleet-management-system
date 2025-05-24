@@ -9,7 +9,9 @@ use App\Models\MaintenancePlan;
 use Illuminate\Http\Request;
 use App\Http\Requests\ServiceRequests\StoreServiceRequestRequest;
 use App\Http\Requests\ServiceRequests\UpdateServiceRequestRequest;
+use App\Models\Notification;
 use Inertia\Inertia;
+use Carbon\Carbon;
 
 class ServiceRequestController extends Controller
 {
@@ -21,7 +23,7 @@ class ServiceRequestController extends Controller
         $user = auth()->user();
         $role = $user->role->name;
 
-        $query = ServiceRequest::with(['vehicle', 'requestedBy', 'receivedBy']);
+        $query = ServiceRequest::with(['vehicle', 'requestedBy', 'receivedBy'])->orderBy('created_at', 'desc');
 
         // Apply filtering based on role
         if ($role === 'Driver') {
@@ -90,10 +92,14 @@ class ServiceRequestController extends Controller
      */
     public function store(StoreServiceRequestRequest $request)
     {
-        $serviceRequest = $request->validated();
-        $serviceRequest['requested_by'] = auth()->id();
-        $serviceRequest['status'] = 'pending';
-        ServiceRequest::create($serviceRequest);
+        $validated = $request->validated();
+        $validated['requested_by'] = auth()->id();
+        $validated['status'] = 'pending';
+        $serviceRequest = ServiceRequest::create($validated);
+        if ($serviceRequest->service_type === 'maintenance') {
+            $maintenancePlan = MaintenancePlan::where('plan_id', $serviceRequest->plan_id)->first();
+            $maintenancePlan->update(['status' => 'scheduled']);
+        }
         return redirect()->route('requests.index');
     }
 
@@ -114,6 +120,7 @@ class ServiceRequestController extends Controller
                 'received_by' => trim(($serviceRequest->receivedBy->first_name ?? '') . ' ' . ($serviceRequest->receivedBy->middle_name ?? '') . ' ' . ($serviceRequest->receivedBy->last_name ?? '')) ?: 'N/A',
                 'date_received' => $serviceRequest->date_received ? $serviceRequest->date_received : 'N/A',
                 'status' => $serviceRequest->status,
+                'inspection_id' => $serviceRequest->serviceInspection->inspection_id ?? 'N/A',
             ],
         ]);
     }
@@ -125,11 +132,22 @@ class ServiceRequestController extends Controller
     {
         $serviceRequest = $request;
         $vehicles = Vehicle::select('vehicle_id', 'vehicle_name')->get();
+        $maintenancePlans = MaintenancePlan::with('vehicle')
+            ->select('plan_id', 'vehicle_id', 'scheduled_date', 'next_service_km')
+            ->get()
+                ->map(function ($plan) {
+                return [
+                    'plan_id' => $plan->plan_id,
+                    'vehicle_id' => $plan->vehicle_id,
+                    'plan_name' => $plan->vehicle->vehicle_name . ' - ' . $plan->scheduled_date . ' - ' . $plan->next_service_km,
+                ];
+            });
         $users = User::select('id', 'first_name', 'last_name')->get();
 
         return Inertia::render('services/requests/edit-request', [
             'serviceRequest' => [
                 'request_id' => $serviceRequest->request_id,
+                'plan_id' => $serviceRequest->plan_id ?? null,
                 'vehicle_id' => $serviceRequest->vehicle_id,
                 'requested_by' => $serviceRequest->requested_by,
                 'date_filed' => $serviceRequest->date_filed,
@@ -140,6 +158,7 @@ class ServiceRequestController extends Controller
                 'status' => $serviceRequest->status,
             ],
             'vehicles' => $vehicles,
+            'maintenancePlans' => $maintenancePlans,
             'users' => $users,
         ]);
     }
@@ -163,9 +182,21 @@ class ServiceRequestController extends Controller
             'status' => 'required|string|in:pending,received,inspected,approved,cancelled,conducted,completed',
         ]);
 
-        $serviceRequest->update(['status' => $updateRequest->status]);
+        $updateData = ['status' => $updateRequest->status];
+        
+        if ($updateRequest->status === 'received') {
+            $updateData['received_by'] = auth()->id();
+            $updateData['date_received'] = now()->setTimezone('Asia/Manila')->format('Y-m-d H:i:s');
+            
+            Notification::create([
+                'user_id' => $serviceRequest->requested_by,
+                'title' => "Service Request Received",
+                'message' => "Your {$serviceRequest->service_type} request for {$serviceRequest->vehicle->vehicle_name} has been received.",
+            ]);
+        }
 
-        return redirect()->route('requests.index');
+        $serviceRequest->update($updateData);
+
     }
 
     /**
@@ -175,6 +206,10 @@ class ServiceRequestController extends Controller
     {
         $serviceRequest = $request;
         $serviceRequest->delete();
+        if ($serviceRequest->service_type === 'maintenance') {
+            $maintenancePlan = MaintenancePlan::where('plan_id', $serviceRequest->plan_id)->first();
+            $maintenancePlan->update(['status' => 'pending']);
+        }
 
         return redirect()->route('requests.index');
     }

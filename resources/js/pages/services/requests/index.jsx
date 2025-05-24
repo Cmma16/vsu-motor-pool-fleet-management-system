@@ -1,6 +1,8 @@
 import { DataTable } from '@/components/data-table';
 import { RequestsColumn } from '@/components/request/request-column';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
+import { usePage } from '@inertiajs/react';
+import { toast } from 'sonner';
 
 import AppLayout from '@/layouts/app-layout';
 
@@ -19,10 +21,17 @@ const pageDetails = {
 };
 
 export default function RequestsIndex({ serviceRequests }) {
+    const user = usePage().props.auth.user;
+
     const deleteRequest = (id) => {
-        if (confirm('Are you sure?')) {
-            router.delete(route('requests.destroy', { id }));
-        }
+        router.delete(route('requests.destroy', { id }), {
+            onSuccess: () => {
+                toast.success('Service request deleted');
+            },
+            onError: () => {
+                toast.error('Service request deletion failed');
+            },
+        });
     };
 
     const veiwRequestDetails = (id) => {
@@ -34,9 +43,27 @@ export default function RequestsIndex({ serviceRequests }) {
     };
 
     const handleStatusUpdate = (id, status) => {
-        router.patch(route('requests.updateStatus', id), {
-            status: status,
-        });
+        router.patch(
+            route('requests.updateStatus', id),
+            {
+                status: status,
+            },
+            {
+                onSuccess: () => {
+                    toast.success(`Service request ${status}`, {
+                        description: 'Service request status updated successfully',
+                    });
+                },
+                onError: () => {
+                    toast.error('Service request status update failed', {
+                        description: 'Please try again',
+                    });
+                },
+                onFinish: () => {
+                    router.reload();
+                },
+            },
+        );
     };
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
@@ -47,7 +74,7 @@ export default function RequestsIndex({ serviceRequests }) {
                 <DataTable
                     columns={RequestsColumn}
                     data={serviceRequests}
-                    handleCreate={route('requests.create')}
+                    handleCreate={user.role.name === 'Driver' ? route('requests.create') : null}
                     handleView={veiwRequestDetails}
                     handleEdit={editRequest}
                     handleDelete={deleteRequest}

@@ -1,3 +1,4 @@
+import DestructiveDialog from '@/components/display/destructive-dialog';
 import { Button } from '@/components/ui/button';
 import { usePage } from '@inertiajs/react';
 
@@ -23,9 +24,12 @@ export function ColorfulRowActions({ row, rowKey = 'id', handleView, handleEdit,
                             <Button variant="outline" onClick={() => handleEdit(rowId)}>
                                 <Pencil />
                             </Button>
-                            <Button variant="destructive" onClick={() => handleDelete(rowId)}>
-                                <TrashIcon />
-                            </Button>
+                            <DestructiveDialog
+                                icon={TrashIcon}
+                                iconOnly
+                                description="This action cannot be undone. This will delete the record permanently."
+                                action={() => handleDelete(rowId)}
+                            />
                         </div>
                     )}
                 </div>

@@ -16,6 +16,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 import { DataTable } from '@/components/data-table';
 import { CurrentDayTripsSection } from '@/components/trip/current-day-trips-section';
@@ -196,6 +197,23 @@ export default function TripsIndex({ trips = [] }) {
         return startDate > new Date() && !isToday(startDate);
     });
 
+    const handleStatusUpdate = (id, status) => {
+        router.patch(
+            route('trips.updateStatus', id),
+            {
+                status: status,
+            },
+            {
+                onSuccess: () => {
+                    toast('Trip status updated successfully');
+                },
+                onError: () => {
+                    toast('Failed to update trip status');
+                },
+            },
+        );
+    };
+
     const selectedDateTrips = filteredTrips.filter((trip) => {
         const startDate = startOfDay(parseISO(trip.start_date));
         const endDate = endOfDay(parseISO(trip.end_date));
@@ -344,6 +362,7 @@ export default function TripsIndex({ trips = [] }) {
                                         getStatusBadge={getStatusBadge}
                                         editTrip={editTrip}
                                         viewTripDetails={viewTripDetails}
+                                        handleStatusUpdate={handleStatusUpdate}
                                     />
 
                                     {/* Upcoming Trips */}
@@ -391,7 +410,7 @@ export default function TripsIndex({ trips = [] }) {
                             <TabsContent value="table" className="space-y-4">
                                 <DataTable
                                     columns={TripColumn}
-                                    data={trips}
+                                    data={filteredTrips}
                                     handleView={viewTripDetails}
                                     handleEdit={editTrip}
                                     handleDelete={deleteTrip}

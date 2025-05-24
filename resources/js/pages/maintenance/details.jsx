@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/app-layout';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import React from 'react';
-
+import { toast } from 'sonner';
 // import { Button } from 'react-day-picker';
 
 const breadcrumbs = [
@@ -31,9 +31,18 @@ export default function details({ maintenance, maintenanceParts, parts }) {
     const [isEditDialogOpen, setIsEditDialogOpen] = React.useState(false);
 
     const deleteMaintenancePart = (id) => {
-        if (confirm('Are you sure?')) {
-            router.delete(route('maintenance-parts.destroy', { id }));
-        }
+        router.delete(route('maintenance-parts.destroy', { id }), {
+            onSuccess: () => {
+                toast.success('Deleted successfully', {
+                    description: 'The part usage record has been deleted successfully',
+                });
+            },
+            onError: () => {
+                toast.error('Failed to delete', {
+                    description: 'An error occurred while deleting the part usage record',
+                });
+            },
+        });
     };
 
     return (

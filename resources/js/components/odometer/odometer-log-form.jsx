@@ -7,35 +7,27 @@ export default function OdometerLogForm({ formData, setData, processing, errors,
     return (
         <div className="grid grid-cols-1 gap-6">
             {/* Vehicle */}
-            {disableVehicleSelect ? (
-                <div className="space-y-2">
-                    <Label>Vehicle</Label>
-                    <div className="rounded-md border border-gray-300 bg-gray-100 px-3 py-2 text-sm">
-                        {Array.isArray(vehicles)
-                            ? vehicles.find((v) => v.vehicle_id === formData.vehicle_id)?.vehicle_name
-                            : vehicles?.vehicle_id === formData.vehicle_id
-                              ? vehicles.vehicle_name
-                              : 'Vehicle not found'}
-                    </div>
-                </div>
-            ) : (
-                <div className="space-y-2">
-                    <Label htmlFor="vehicle_id">Vehicle</Label>
-                    <Select value={String(formData.vehicle_id)} onValueChange={(value) => setData('vehicle_id', Number(value))}>
-                        <SelectTrigger id="vehicle_id">
-                            <SelectValue placeholder="Select vehicle" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {vehicles.map((vehicle) => (
-                                <SelectItem key={vehicle.vehicle_id} value={String(vehicle.vehicle_id)}>
-                                    {vehicle.vehicle_name}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-                    <InputError message={errors.vehicle_id} />
-                </div>
-            )}
+
+            <div className="space-y-2">
+                <Label htmlFor="vehicle_id">Vehicle</Label>
+                <Select
+                    disabled={disableVehicleSelect}
+                    value={String(formData.vehicle_id)}
+                    onValueChange={(value) => setData('vehicle_id', Number(value))}
+                >
+                    <SelectTrigger id="vehicle_id" className="mt-2 disabled:border-gray-300 disabled:opacity-100">
+                        <SelectValue placeholder="Select vehicle" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {vehicles.map((vehicle) => (
+                            <SelectItem key={vehicle.vehicle_id} value={String(vehicle.vehicle_id)}>
+                                {vehicle.vehicle_name}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+                <InputError message={errors.vehicle_id} />
+            </div>
 
             {/* Reading */}
             <div className="space-y-2">

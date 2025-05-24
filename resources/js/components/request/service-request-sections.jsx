@@ -3,7 +3,54 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { format } from 'date-fns';
 
-export default function ServiceRequestSections({ requests, sectionTitle, sectionDescription }) {
+function getStatusBadge(status) {
+    switch (status) {
+        case 'pending':
+            return (
+                <Badge variant="outline" className="bg-gray-100">
+                    Pending
+                </Badge>
+            );
+        case 'assigned':
+            return (
+                <Badge variant="default" className="bg-green-500">
+                    Assigned
+                </Badge>
+            );
+        case 'received':
+            return (
+                <Badge variant="default" className="bg-blue-500">
+                    Received
+                </Badge>
+            );
+        case 'ongoing':
+            return (
+                <Badge variant="default" className="bg-yellow-500">
+                    Ongoing
+                </Badge>
+            );
+        case 'completed':
+            return (
+                <Badge variant="secondary" className="bg-gray-500">
+                    Completed
+                </Badge>
+            );
+        case 'cancelled':
+            return (
+                <Badge variant="destructive" className="bg-red-500">
+                    Cancelled
+                </Badge>
+            );
+        default:
+            return (
+                <Badge variant="outline" className="bg-gray-200">
+                    {status}
+                </Badge>
+            );
+    }
+}
+
+export default function ServiceRequestSections({ requests, sectionTitle, sectionDescription, handleViewDetails }) {
     const formatDate = (date) => {
         const formattedDateTime = format(new Date(date), 'MMMM dd, yyyy');
         return formattedDateTime;
@@ -28,9 +75,7 @@ export default function ServiceRequestSections({ requests, sectionTitle, section
                                     <div>
                                         <div className="flex items-center gap-2">
                                             <h3 className="font-semibold">{request.work_description}</h3>
-                                            <Badge key={`badge-${request.id}`} variant={request.status === 'pending' ? 'outline' : 'secondary'}>
-                                                {request.status}
-                                            </Badge>
+                                            {getStatusBadge(request.status)}
                                         </div>
                                         <div className="text-muted-foreground text-sm">{request.vehicle_name}</div>
                                     </div>
@@ -40,7 +85,7 @@ export default function ServiceRequestSections({ requests, sectionTitle, section
                                     </div>
                                 </div>
                                 <div className="mt-2 flex gap-2">
-                                    <Button variant="outline" size="sm">
+                                    <Button variant="outline" size="sm" onClick={() => handleViewDetails(request.request_id)}>
                                         View Details
                                     </Button>
                                 </div>

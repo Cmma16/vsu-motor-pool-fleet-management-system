@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-export default function RequestForm({ formData, formType, setData, onSubmit, processing, errors, vehicles, maintenancePlans }) {
+export default function RequestForm({ formData, formType, setData, onSubmit, processing, errors, vehicles, maintenancePlans, lockInputs }) {
     return (
         <form onSubmit={onSubmit} className="space-y-6">
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -12,7 +12,7 @@ export default function RequestForm({ formData, formType, setData, onSubmit, pro
                 {/* Service Type */}
                 <div className="space-y-2">
                     <Label htmlFor="service_type">Service Type</Label>
-                    <Select value={formData.service_type} onValueChange={(value) => setData('service_type', value)}>
+                    <Select disabled={lockInputs} value={formData.service_type} onValueChange={(value) => setData('service_type', value)}>
                         <SelectTrigger id="service_type" tabIndex={4}>
                             <SelectValue placeholder="Select service type" />
                         </SelectTrigger>
@@ -29,6 +29,7 @@ export default function RequestForm({ formData, formType, setData, onSubmit, pro
                     <div className="space-y-2">
                         <Label htmlFor="plan_id">Maintenance Plan</Label>
                         <Select
+                            disabled={lockInputs}
                             value={formData.service_type === 'maintenance' ? String(formData.plan_id) : null}
                             onValueChange={(value) => {
                                 const selectedPlan = maintenancePlans.find((plan) => String(plan.plan_id) === value);
@@ -82,7 +83,7 @@ export default function RequestForm({ formData, formType, setData, onSubmit, pro
                     <input
                         id="date_filed"
                         name="date_filed"
-                        type="datetime-local"
+                        type="date"
                         className="mb-2 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500"
                         value={formData.date_filed}
                         onChange={(e) => setData('date_filed', e.target.value)}

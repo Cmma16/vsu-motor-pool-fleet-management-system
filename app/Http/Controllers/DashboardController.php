@@ -19,7 +19,10 @@ class DashboardController extends Controller
     public function index()
     {
         $user = auth()->user();
-        if($user->role->name) {
+        if(!$user->role_id) {
+            return redirect()->route('login');
+        }
+        else {
             // Get data based on user role
             switch($user->role->name) {
             case 'Admin':
@@ -30,12 +33,7 @@ class DashboardController extends Controller
                 return $this->getMechanicDashboard();
             case 'Staff':
                 return $this->getStaffDashboard();
-            default:
-                return redirect()->route('login');
             }
-        }
-        else {
-            return redirect()->route('login');
         }
     }
 
@@ -84,8 +82,9 @@ class DashboardController extends Controller
     {
         $driver = auth()->user();
         $today = Carbon::now()->setTimezone('Asia/Manila')->format('Y-m-d');
-        $activeVehicle = Trip::where('driver_id', auth()->user()->id)
-                    ->where('status', 'approved')
+
+        $activeVehicle = Trip::where('driver_id', $driver->id)
+                    ->where('status', ['received'])
                     ->where('start_date', '<=', $today)
                     ->with('vehicle')
                     ->orderBy('start_date', 'desc')
@@ -96,33 +95,22 @@ class DashboardController extends Controller
                         ->first();
                 
                     $nextMaintenance = $activeVehicle->maintenancePlans()
-                        ->whereDate('scheduled_date', '>=', now())
+                        ->whereDate('scheduled_date', '>=', $today)
                         ->orderBy('scheduled_date')
                         ->first();
                 } else {
                     $latestOdometerReading = 0;
                     $nextMaintenance = 0;
                 }
-        
-        return Inertia::render('dashboard/driver', [
-            'vehicleStats' => [
-                'total' => Vehicle::count(),
-                'available' => Vehicle::where('status', 'available')->count(),
-                'inUse' => Vehicle::where('status', 'in use')->count(),
-                'underMaintenance' => Vehicle::where('status', 'under maintenance')->count(),
-                'retired' => Vehicle::where('status', 'retired')->count(),
-            ],
-            'maintenanceStats' => [
-                'dueToday' => MaintenancePlan::where('scheduled_date', now())->count(),
-                'dueSoon' => MaintenancePlan::where('scheduled_date', '>', now())->where('scheduled_date', '<=', now()->addDays(7))->count(),
-            ],
-            'serviceStats' => [
-                'pending' => ServiceRequest::where('status', 'pending')->count(),
-            ],
-            'tripStats' => [
-                'today' => Trip::whereDate('start_date', now())->count(),
-            ],
-            'personnelStats' => [
+
+            $upcomingTrips = Trip::where('driver_id', $driver->id)
+            ->where('status', 'approved')
+            ->where('start_date', '>=', $today)
+            ->orderBy('start_date')
+            ->get();
+
+            
+            $personnelStats = [
                 'total' => User::count(),
                 'driver' => User::whereHas('role', function ($query) {
                     $query->where('name', 'Driver');
@@ -135,16 +123,32 @@ class DashboardController extends Controller
                 'staff' => User::whereHas('role', function ($query) {
                     $query->where('name', 'Staff');
                 })->count(),
-            ], 
+            ]; 
+            $vehicleStats = [
+                'total' => Vehicle::count(),
+                'available' => Vehicle::where('status', 'available')->count(),
+                'inUse' => Vehicle::where('status', 'in use')->count(),
+                'underMaintenance' => Vehicle::where('status', 'under maintenance')->count(),
+                'retired' => Vehicle::where('status', 'retired')->count(),
+            ];
+        
+        return Inertia::render('dashboard/driver', [
+            'maintenanceStats' => [
+                'dueToday' => MaintenancePlan::where('scheduled_date', now())->count(),
+                'dueSoon' => MaintenancePlan::where('scheduled_date', '>', now())->where('scheduled_date', '<=', now()->addDays(7))->count(),
+            ],
+            'serviceStats' => [
+                'pending' => ServiceRequest::where('status', 'pending')->count(),
+            ],
+            'tripStats' => [
+                'today' => Trip::whereDate('start_date', now())->count(),
+            ],
             'activeVehicle' => $activeVehicle,
             'latestOdometerReading' => $latestOdometerReading,
             'nextMaintenance' => $nextMaintenance,
-            'upcomingTrips' => Trip::where('driver_id', auth()->user()->id)
-                ->where('status', 'approved')
-                ->where('start_date', '>=', $today)
-                ->orderBy('start_date')
-                ->get(),
-                
+            'upcomingTrips' => $upcomingTrips,
+            'personnelStats' => $personnelStats,
+            'vehicleStats' => $vehicleStats,
         ]);
     }
 

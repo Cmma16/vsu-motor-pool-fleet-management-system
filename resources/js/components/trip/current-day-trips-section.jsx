@@ -1,10 +1,20 @@
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { Clock, FileText, MapPin, Users } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { usePage } from '@inertiajs/react';
 
-export function CurrentDayTripsSection({ todayTrips, formatTripDate, getStatusBadge, editTrip, viewTripDetails }) {
+export function CurrentDayTripsSection({ todayTrips, formatTripDate, getStatusBadge, editTrip, viewTripDetails, handleStatusUpdate }) {
+    const user = usePage().props.auth.user;
+
+    const formatStatus = (string) => {
+        if (!string) {
+            return ''; // handle empty strings to avoid errors
+        }
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    };
+
     return (
         <Card>
             <CardHeader>
@@ -45,13 +55,30 @@ export function CurrentDayTripsSection({ todayTrips, formatTripDate, getStatusBa
                                         <Users className="mr-2 h-4 w-4" />
                                         {trip.vehicle.capacity} capacity
                                     </div>
+
+                                    <div className="flex items-center text-sm">
+                                        <p className="font-medium">
+                                            {formatStatus(trip.status)} @ {format(parseISO(trip.updated_at), "PPP 'at' p")}
+                                        </p>
+                                    </div>
+
                                     <div className="flex flex-row gap-2">
                                         <Button variant="outline" onClick={() => viewTripDetails(trip.trip_id)}>
                                             View
                                         </Button>
-                                        <Button variant="outline" onClick={() => cancelTrip(trip.trip_id)}>
-                                            Cancel
-                                        </Button>
+                                        {user.role.name !== 'Driver' && (
+                                            <Button variant="outline" onClick={() => handleStatusUpdate(trip.trip_id, 'cancelled')}>
+                                                Cancel
+                                            </Button>
+                                        )}
+
+                                        {user.role.name === 'Driver' && trip.status === 'assigned' && (
+                                            <Button onClick={() => handleStatusUpdate(trip.trip_id, 'ongoing')}>Start Trip</Button>
+                                        )}
+                                        {user.role.name === 'Driver' && trip.status === 'ongoing' && (
+                                            <Button onClick={() => handleStatusUpdate(trip.trip_id, 'completed')}>End Trip</Button>
+                                        )}
+
                                         {trip.status === 'pending' ||
                                             trip.status === 'rejected' ||
                                             (trip.status === 'cancelled' && (

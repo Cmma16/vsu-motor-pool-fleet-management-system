@@ -9,6 +9,8 @@ use App\Http\Requests\Vehicle\UpdateVehicleRequest;
 use App\Http\Controllers\Controller;
 use Inertia\Inertia;
 use App\Services\QRCodeService;
+use Illuminate\Http\Request;
+
 class VehicleController extends Controller
 {
     /**
@@ -44,6 +46,20 @@ class VehicleController extends Controller
         $qrCode = $qrCodeService->generateAndStore($vehicle->asset_tag);
         $vehicle->update(['qr_code_path' => $qrCode]);
         return redirect()->route('vehicles.show', $vehicle->vehicle_id);
+    }
+
+    public function scanQRCode(Request $request, QRCodeService $qrCodeService)
+    {
+        try {
+            $encrypted = $request->input('encrypted');
+            $assetTag = $qrCodeService->decrypt($encrypted);
+    
+            $vehicle = Vehicle::where('asset_tag', $assetTag)->firstOrFail();
+    
+            return redirect()->route('vehicles.show', $vehicle);
+        } catch (\Exception $e) {
+            return back()->withErrors(['qr' => $e->getMessage() . ' ']);
+        }
     }
 
     /**

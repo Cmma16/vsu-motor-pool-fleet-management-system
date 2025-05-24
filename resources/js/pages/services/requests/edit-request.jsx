@@ -6,6 +6,7 @@ import { Head, useForm } from '@inertiajs/react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 import AppLayout from '@/layouts/app-layout';
+import { toast } from 'sonner';
 
 const breadcrumbs = [
     {
@@ -23,9 +24,10 @@ const pageDetails = {
     description: 'Update the details of the service request.',
 };
 
-export default function EditRequest({ vehicles, users, serviceRequest }) {
+export default function EditRequest({ vehicles, users, serviceRequest, maintenancePlans }) {
     const { data, setData, put, processing, errors, reset } = useForm({
         vehicle_id: serviceRequest.vehicle_id,
+        plan_id: serviceRequest.plan_id,
         requested_by: serviceRequest.requested_by,
         date_filed: serviceRequest.date_filed,
         service_type: serviceRequest.service_type,
@@ -43,10 +45,13 @@ export default function EditRequest({ vehicles, users, serviceRequest }) {
             // forceFormData: true, // Ensures file uploads and proper formatting
             preserveScroll: true,
             onSuccess: () => {
+                toast.success('Service request updated');
                 reset(); // Reset all fields after a successful submission
             },
             onError: (errors) => {
-                console.log(errors); // Log errors for debugging
+                toast.error('Failed to update service request', {
+                    description: 'Something went wrong. Please try again.',
+                });
             },
         });
     };
@@ -69,7 +74,9 @@ export default function EditRequest({ vehicles, users, serviceRequest }) {
                             processing={processing}
                             errors={errors}
                             vehicles={vehicles}
+                            maintenancePlans={maintenancePlans}
                             users={users}
+                            lockInputs={true}
                         />
                     </CardContent>
                 </Card>

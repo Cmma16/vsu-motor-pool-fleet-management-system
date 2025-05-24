@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('vehicle_id')->constrained('vehicles', 'vehicle_id')->onDelete('cascade');
             $table->foreignId('plan_id')->nullable()->constrained('maintenance_plans', 'plan_id')->onDelete('cascade');
             $table->foreignId('requested_by')->nullable()->constrained('users', 'id')->onDelete('set null');
-            $table->dateTime('date_filed');
+            $table->date('date_filed');
             $table->enum ('service_type', ['maintenance', 'repair']);
             $table->string('work_description');
             $table->dateTime('date_received')->nullable(); 

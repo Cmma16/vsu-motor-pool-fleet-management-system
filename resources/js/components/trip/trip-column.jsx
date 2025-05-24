@@ -27,7 +27,7 @@ export const TripColumn = (handleView, handleEdit, handleDelete) => [
         header: () => <div className="text-left">Date filed</div>,
         cell: (info) => <div className="text-left">{info.getValue()}</div>,
     }),
-    columnHelper.accessor('vehicle_name', {
+    columnHelper.accessor('vehicle.vehicle_name', {
         header: ({ column }) => (
             <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
                 Vehicle

@@ -2,9 +2,18 @@ import { CalendarIcon, Car, Clock, FileText, MapPin } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { usePage } from '@inertiajs/react';
 import { format, parseISO } from 'date-fns';
 
 export function UpcomingTripsSection({ upcomingTrips, formatTripDate, getStatusBadge, editTrip, viewTripDetails }) {
+    const user = usePage().props.auth.user;
+
+    const formatStatus = (string) => {
+        if (!string) {
+            return ''; // handle empty strings to avoid errors
+        }
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    };
     return (
         <Card>
             <CardHeader>
@@ -51,13 +60,21 @@ export function UpcomingTripsSection({ upcomingTrips, formatTripDate, getStatusB
                                         {trip.plate_number}
                                     </div>
 
+                                    <div className="flex items-center text-sm">
+                                        <p className="font-medium">
+                                            {formatStatus(trip.status)} at {format(parseISO(trip.updated_at), 'PPP')}
+                                        </p>
+                                    </div>
+
                                     <div className="flex flex-row gap-2">
                                         <Button variant="outline" onClick={() => viewTripDetails(trip.trip_id)}>
                                             View
                                         </Button>
-                                        <Button variant="outline" onClick={() => cancelTrip(trip.trip_id)}>
-                                            Cancel
-                                        </Button>
+                                        {user.role.name !== 'Driver' && (
+                                            <Button variant="outline" onClick={() => cancelTrip(trip.trip_id)}>
+                                                Cancel
+                                            </Button>
+                                        )}
                                         {trip.status === 'pending' ||
                                             trip.status === 'rejected' ||
                                             (trip.status === 'cancelled' && (

@@ -17,8 +17,16 @@ class TripController extends Controller
      */
     public function index()
     {
-        $trips = Trip::with(['vehicle', 'driver'])
-            ->get()
+        $user = auth()->user();
+        
+        $query = Trip::with(['vehicle', 'driver']);
+        
+        // If user is a driver (role_id 3), only show their assigned trips
+        if ($user->role->name === 'Driver') {
+            $query->where('driver_id', $user->id);
+        }
+        
+        $trips = $query->get()
             ->map(function ($trip) {
                 return [
                     'trip_id' => $trip->trip_id,
@@ -34,6 +42,7 @@ class TripController extends Controller
                     'driver_name' => $trip->driver ? $trip->driver->first_name . ' ' . $trip->driver->last_name : '',
                     'status' => $trip->status,
                     "vehicle" => $trip->vehicle ?? "",
+                    "updated_at" => $trip->updated_at,
                 ];
             });
 

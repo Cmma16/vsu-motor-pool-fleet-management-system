@@ -1,6 +1,7 @@
 import MaintenanceForm from '@/components/maintenance/maintenance-form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Head, useForm } from '@inertiajs/react';
+import { toast } from 'sonner';
 
 import AppLayout from '@/layouts/app-layout';
 
@@ -39,8 +40,15 @@ export default function AddMaintenance({ maintenancePlans, vehicles, users, serv
 
         post(route('maintenance.store'), {
             data: submitData,
-            onSuccess: () => reset(),
-            onError: (errors) => console.log(errors),
+            onSuccess: () => {
+                toast.success('Maintenance recorded', {
+                    description: 'Maintenance record created successfully',
+                });
+                reset();
+            },
+            onError: (errors) => {
+                toast.error('Failed to create maintenance record');
+            },
         });
     };
 

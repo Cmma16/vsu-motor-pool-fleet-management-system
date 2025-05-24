@@ -32,6 +32,7 @@ export default function InspectionsIndex({ serviceInspections }) {
     const editInspection = (id) => {
         router.get(route('request-inspections.edit', { id }));
     };
+
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             {console.log(serviceInspections)}

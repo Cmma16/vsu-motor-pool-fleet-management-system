@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useForm } from '@inertiajs/react';
 import React from 'react';
+import { toast } from 'sonner';
 
 export function MaintenancePartModal({ maintenance_id, parts, formType = 'add', maintenancePart = null }) {
     const [open, setOpen] = React.useState(false);
@@ -25,12 +26,20 @@ export function MaintenancePartModal({ maintenance_id, parts, formType = 'add', 
         if (formType === 'edit') {
             console.log(data);
             put(route('maintenance-parts.update', maintenancePart.id), {
-                onSuccess: () => setOpen(false),
+                onSuccess: () => {
+                    toast.success('Part usage record updated successfully');
+                    setOpen(false);
+                    reset();
+                },
                 onError: (errors) => console.log(errors),
             });
         } else {
             post(route('maintenance-parts.store'), {
-                onSuccess: () => setOpen(false),
+                onSuccess: () => {
+                    toast.success('Part usage record added successfully');
+                    setOpen(false);
+                    reset();
+                },
                 onError: (errors) => console.log(errors),
             });
         }

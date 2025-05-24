@@ -1,9 +1,9 @@
+import { ColorfulRowActions } from '@/components/display/colorful-row-actions';
+import { Button } from '@/components/ui/button';
+import { router } from '@inertiajs/react';
 import { createColumnHelper } from '@tanstack/react-table';
 import { ArrowUpDown } from 'lucide-react';
-
-import { Button } from '@/components/ui/button';
-
-import { ColorfulRowActions } from '@/components/display/colorful-row-actions';
+import { toast } from 'sonner';
 
 const columnHelper = createColumnHelper();
 
@@ -55,13 +55,35 @@ export const RepairsColumn = (handleView, handleEdit, handleDelete) => [
         header: () => <div className="text-center">Actions</div>,
         cell: ({ row }) => {
             const repair = row.original;
+            const handleConfirm = () => {
+                // Merged maintenance and repairs into one table named maintenance(to be changed to service_logs)
+                //TODO: Change the route to /service_logs/${repair.repair_id}/confirm
+                router.patch(
+                    `/repairs/${repair.repair_id}/confirm`,
+                    {}, // empty data object since we're not sending any data
+                    {
+                        onSuccess: () => {
+                            toast.success('Record confirmed', {
+                                description: 'The repair record has been confirmed successfully',
+                            });
+                        },
+                        onError: () => {
+                            toast.error('Confirmation failed', {
+                                description: 'The repair record was not confirmed',
+                            });
+                        },
+                    },
+                );
+            };
+
             return (
                 <ColorfulRowActions
                     row={repair}
-                    rowKey="maintenance_id"
+                    rowKey="repair_id"
                     handleView={handleView}
                     handleEdit={handleEdit}
                     handleDelete={handleDelete}
+                    handleConfirm={handleConfirm}
                 />
             );
         },

@@ -1,9 +1,8 @@
 import MaintenanceEditForm from '@/components/maintenance/maintenance-edit-form';
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
-
-import { Head, useForm } from '@inertiajs/react';
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
+import { Head, useForm } from '@inertiajs/react';
+import { toast } from 'sonner';
 
 import AppLayout from '@/layouts/app-layout';
 
@@ -32,7 +31,6 @@ export default function EditMaintenance({ maintenance, odometerLogs, vehicles })
     });
 
     const editMaintenance = (e) => {
-        console.log(data);
         e.preventDefault();
 
         put(route('maintenance.update', maintenance.maintenance_id), {
@@ -41,9 +39,15 @@ export default function EditMaintenance({ maintenance, odometerLogs, vehicles })
             preserveScroll: true,
             onSuccess: () => {
                 reset(); // Reset all fields after a successful submission
+                toast.success('Maintenance record updated', {
+                    description: 'Maintenance record updated successfully',
+                });
             },
             onError: (errors) => {
                 console.log(errors); // Log errors for debugging
+                toast.error('Failed to update maintenance record', {
+                    description: 'An error occurred while updating the maintenance record',
+                });
             },
         });
     };

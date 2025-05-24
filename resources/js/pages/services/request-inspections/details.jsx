@@ -5,7 +5,7 @@ import { Head, Link, router } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import { usePage } from '@inertiajs/react';
-// import { Button } from 'react-day-picker';
+import { ArrowRight } from 'lucide-react';
 
 const breadcrumbs = [
     {
@@ -32,7 +32,7 @@ export default function InspectionDetails({ serviceInspection }) {
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             {console.log(serviceInspection)}
             <Head title="Inspection Details" />
-            <div className="mx-6 mb-3 space-y-6 rounded-lg bg-white">
+            <div className="mx-6 mb-3 space-y-6 rounded-lg">
                 <Card className="w-full">
                     <CardHeader>
                         <CardTitle>Request Inspection Information</CardTitle>
@@ -109,6 +109,13 @@ export default function InspectionDetails({ serviceInspection }) {
                         </div>
                     </CardContent>
                 </Card>
+                <Button
+                    variant="outline"
+                    className="self-end bg-white"
+                    onClick={() => router.get(route('requests.show', serviceInspection.request_id))}
+                >
+                    <ArrowRight /> Go to Service Request
+                </Button>
             </div>
         </AppLayout>
     );

@@ -5,7 +5,7 @@ import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
 
 import { Head, router } from '@inertiajs/react';
-
+import { toast } from 'sonner';
 const breadcrumbs = [
     {
         title: 'Maintenance',
@@ -20,9 +20,14 @@ const pageDetails = {
 
 export default function MaintenanceIndex({ maintenanceRecords }) {
     const deleteMaintenance = (id) => {
-        if (confirm('Are you sure?')) {
-            router.delete(route('maintenance.destroy', { id }));
-        }
+        router.delete(route('maintenance.destroy', { id }), {
+            onSuccess: () => {
+                toast.success('Maintenance record deleted successfully');
+            },
+            onError: () => {
+                toast.error('Failed to delete maintenance record');
+            },
+        });
     };
 
     const veiwMaintenanceDetails = (id) => {

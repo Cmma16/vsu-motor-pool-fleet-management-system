@@ -1,8 +1,8 @@
 import { DataTable } from '@/components/data-table';
 import { PlansColumn } from '@/components/plans/plans-column';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
-
 import AppLayout from '@/layouts/app-layout';
+import { usePage } from '@inertiajs/react';
 
 import { Head, router } from '@inertiajs/react';
 
@@ -19,6 +19,7 @@ const pageDetails = {
 };
 
 export default function PlansIndex({ maintenancePlans }) {
+    const user = usePage().props.auth.user;
     const deletePlan = (id) => {
         if (confirm('Are you sure?')) {
             router.delete(route('plans.destroy', { id }));
@@ -40,7 +41,7 @@ export default function PlansIndex({ maintenancePlans }) {
                 <DataTable
                     columns={PlansColumn}
                     data={maintenancePlans}
-                    handleCreate={route('plans.create')}
+                    handleCreate={user.role.name === 'Admin' || user.role.name === 'Staff' ? route('plans.create') : null}
                     handleView={veiwPlanDetails}
                     handleEdit={editPlan}
                     handleDelete={deletePlan}

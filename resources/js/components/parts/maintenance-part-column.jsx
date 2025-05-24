@@ -1,10 +1,9 @@
-import { createColumnHelper } from '@tanstack/react-table';
-import { ArrowUpDown } from 'lucide-react';
-
+import DestructiveDialog from '@/components/display/destructive-dialog';
 import { MaintenancePartModal } from '@/components/parts/maintenance-part-modal';
 import { Button } from '@/components/ui/button';
+import { createColumnHelper } from '@tanstack/react-table';
+import { ArrowUpDown, TrashIcon } from 'lucide-react';
 
-import { TrashIcon } from 'lucide-react';
 const columnHelper = createColumnHelper();
 
 export const MaintenancePartColumn = (handleEdit, handleView, handleDelete) => [
@@ -36,10 +35,12 @@ export const MaintenancePartColumn = (handleEdit, handleView, handleDelete) => [
             return (
                 <div className="flex justify-center gap-2">
                     <MaintenancePartModal maintenance_id={maintenancePart.maintenance_id} maintenancePart={maintenancePart} formType="edit" />
-                    <Button variant="destructive" size="sm" onClick={() => handleDelete(maintenancePart.id)}>
-                        <TrashIcon />
-                        Delete
-                    </Button>
+                    <DestructiveDialog
+                        icon={TrashIcon}
+                        iconOnly
+                        description="This action cannot be undone. This will delete the record permanently."
+                        action={() => handleDelete(maintenancePart.id)}
+                    />
                 </div>
             );
         },

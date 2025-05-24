@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('repair_parts', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('repair_id')->constrained('repairs', 'repair_id')->onDelete('cascade');
-            $table->foreignId('part_id')->constrained('parts', 'part_id')->onDelete('cascade');
-            $table->integer('quantity_used');
-            $table->timestamps();
-        });
+        // Schema::create('repair_parts', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->foreignId('repair_id')->constrained('repairs', 'repair_id')->onDelete('cascade');
+        //     $table->foreignId('part_id')->constrained('parts', 'part_id')->onDelete('cascade');
+        //     $table->integer('quantity_used');
+        //     $table->timestamps();
+        // });
     }
 
     /**

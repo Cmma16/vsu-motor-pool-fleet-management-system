@@ -1,11 +1,9 @@
 import RequestForm from '@/components/request/request-form';
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
-
-import { Head, useForm } from '@inertiajs/react';
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-
+import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
+import { Head, useForm } from '@inertiajs/react';
+import { toast } from 'sonner';
 
 const breadcrumbs = [
     { title: 'Service Requests', href: '/services/requests' },
@@ -39,8 +37,17 @@ export default function CreateRequest({ vehicles, maintenancePlans }) {
 
         post(route('requests.store'), {
             data,
-            onSuccess: () => reset(),
-            onError: (errors) => console.log(errors),
+            onSuccess: () => {
+                toast.success('Service request submitted', {
+                    description: `The ${data.service_type} request has been created successfully.`,
+                });
+                reset();
+            },
+            onError: (errors) => {
+                toast.error('Error', {
+                    description: 'An error occurred while creating the request.',
+                });
+            },
         });
     };
 

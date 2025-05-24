@@ -1,5 +1,6 @@
 import InputError from '@/components/input-error';
 import { OdometerLogModal } from '@/components/odometer/odometer-log-modal';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -37,9 +38,16 @@ export default function RepairForm({
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 {/* Vehicle */}
                 <div className="space-y-2">
-                    <Label htmlFor="vehicle_id">Vehicle</Label>
+                    <Label htmlFor="vehicle_id">
+                        Vehicle <span className="text-red-500">*</span>
+                        {lockInputs && (
+                            <Badge variant="outline" className="ml-2">
+                                Read only
+                            </Badge>
+                        )}
+                    </Label>
                     <Select disabled={lockInputs} value={String(formData.vehicle_id)} onValueChange={(value) => setData('vehicle_id', Number(value))}>
-                        <SelectTrigger id="vehicle_id" tabIndex={1}>
+                        <SelectTrigger className="mt-2 disabled:border-gray-300 disabled:opacity-100" id="vehicle_id" tabIndex={1}>
                             <SelectValue placeholder="Select vehicle" />
                         </SelectTrigger>
                         <SelectContent>
@@ -55,9 +63,16 @@ export default function RepairForm({
 
                 {/* Request Description */}
                 <div className="space-y-2">
-                    <Label htmlFor="request_id">Request Description</Label>
+                    <Label htmlFor="request_id">
+                        Request Description <span className="text-red-500">*</span>
+                        {lockInputs && (
+                            <Badge variant="outline" className="ml-2">
+                                Read only
+                            </Badge>
+                        )}
+                    </Label>
                     <Select disabled={lockInputs} value={String(formData.request_id)} onValueChange={(value) => setData('request_id', Number(value))}>
-                        <SelectTrigger id="request_id" tabIndex={2}>
+                        <SelectTrigger className="mt-2 disabled:border-gray-300 disabled:opacity-100" id="request_id" tabIndex={2}>
                             <SelectValue placeholder="Select service request" />
                         </SelectTrigger>
                         <SelectContent>
@@ -73,10 +88,13 @@ export default function RepairForm({
 
                 {/* Date In */}
                 <div className="space-y-2">
-                    <Label htmlFor="date_in">Date In</Label>
+                    <Label htmlFor="date_in">
+                        Date In <span className="text-red-500">*</span>
+                    </Label>
                     <Input
                         id="date_in"
                         name="date_in"
+                        className="mt-2"
                         type="date"
                         value={formData.date_in}
                         onChange={(e) => setData('date_in', e.target.value)}
@@ -88,10 +106,13 @@ export default function RepairForm({
 
                 {/* Date Completed */}
                 <div className="space-y-2">
-                    <Label htmlFor="date_completed">Date Completed</Label>
+                    <Label htmlFor="date_completed">
+                        Date Completed <span className="text-red-500">*</span>
+                    </Label>
                     <Input
                         id="date_completed"
                         name="date_completed"
+                        className="mt-2"
                         type="date"
                         value={formData.date_completed}
                         onChange={(e) => setData('date_completed', e.target.value)}
@@ -103,10 +124,13 @@ export default function RepairForm({
 
                 {/* Summary */}
                 <div className="space-y-2">
-                    <Label htmlFor="maintenance_summary">Summary</Label>
+                    <Label htmlFor="maintenance_summary">
+                        Summary <span className="text-red-500">*</span>
+                    </Label>
                     <Input
                         id="maintenance_summary"
                         name="maintenance_summary"
+                        className="mt-2"
                         placeholder="Description of the maintenance conducted"
                         value={formData.maintenance_summary}
                         onChange={(e) => setData('maintenance_summary', e.target.value)}
@@ -118,8 +142,15 @@ export default function RepairForm({
 
                 {/* Odometer Reading */}
                 <div className="space-y-2">
-                    <Label htmlFor="odometer_id">Odometer Reading</Label>
-                    <Input value={latestOdometer?.reading ?? ''} disabled placeholder="No odometer reading available" className="bg-gray-100" />
+                    <Label>Odometer Reading</Label>
+                    <Input
+                        value={latestOdometer?.reading ?? ''}
+                        disabled
+                        id="odometer_id"
+                        name="odometer_id"
+                        placeholder="No odometer reading available"
+                        className="mt-2 bg-gray-100 disabled:border-gray-300 disabled:opacity-100"
+                    />
                     {formData.vehicle_id && <OdometerLogModal vehicles={vehicles} formType={'add'} vehicle_id={formData.vehicle_id} />}
                     <InputError message={errors.odometer_id} />
                 </div>

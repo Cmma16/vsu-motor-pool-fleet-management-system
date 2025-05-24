@@ -2,6 +2,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Head, Link, router, usePage } from '@inertiajs/react';
+import { ArrowLeft } from 'lucide-react';
+import { toast } from 'sonner';
 
 import AppLayout from '@/layouts/app-layout';
 // import { Button } from 'react-day-picker';
@@ -23,9 +25,27 @@ const pageDetails = {
 };
 
 const handleStatusUpdate = (id, status) => {
-    router.patch(route('requests.updateStatus', id), {
-        status: status,
-    });
+    router.patch(
+        route('requests.updateStatus', id),
+        {
+            status: status,
+        },
+        {
+            onSuccess: () => {
+                toast.success(`Service request ${status}`, {
+                    description: 'Service request status updated successfully',
+                });
+            },
+            onError: (error) => {
+                toast.error('Service request status update failed', {
+                    description: 'Please try again',
+                });
+            },
+            onFinish: () => {
+                router.reload();
+            },
+        },
+    );
 };
 
 export default function RequestDetails({ serviceRequest }) {
@@ -33,7 +53,7 @@ export default function RequestDetails({ serviceRequest }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             <Head title="Repair Details" />
-            <div className="mx-6 mb-3 space-y-6 rounded-lg bg-white">
+            <div className="mx-6 mb-3 space-y-6 rounded-lg">
                 <Card className="w-full">
                     <CardHeader>
                         <CardTitle>Service Request Information</CardTitle>
@@ -104,6 +124,11 @@ export default function RequestDetails({ serviceRequest }) {
                         </div>
                     </CardContent>
                 </Card>
+                {serviceRequest.inspection_id !== 'N/A' && (
+                    <Button variant="outline" onClick={() => router.get(route('request-inspections.show', serviceRequest.inspection_id))}>
+                        <ArrowLeft /> View Inspection
+                    </Button>
+                )}
             </div>
         </AppLayout>
     );

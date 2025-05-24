@@ -16,6 +16,7 @@ use App\Http\Requests\Maintenance\UpdateMaintenanceRequest;
 use App\Http\Controllers\Controller;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
+use App\Models\Notification;
 class RepairsController extends Controller
 {
     /**
@@ -27,10 +28,11 @@ class RepairsController extends Controller
         ->whereHas('serviceRequest', function ($query) {
             $query->where('service_type', 'repair');
         })
+        ->orderBy('date_in', 'desc')
         ->get()
         ->map(function ($maintenance) {
             return [
-                'maintenance_id' => $maintenance->maintenance_id,
+                'repair_id' => $maintenance->maintenance_id,
                 'request_description' => $maintenance->serviceRequest->work_description ?? 'N/A', 
                 'vehicle_name' => $maintenance->serviceRequest->vehicle->vehicle_name ?? 'N/A',
                 'date_in' => $maintenance->date_in,
@@ -54,7 +56,7 @@ class RepairsController extends Controller
     public function create(Request $request)
     {
         $vehicles = Vehicle::select('vehicle_id', 'vehicle_name')->get();
-        $serviceRequests = ServiceRequest::select('request_id', 'work_description')->get();
+        $serviceRequests = ServiceRequest::select('request_id', 'work_description')->where('status', 'approved')->get();
         $odometerLogs = OdometerLog::select('odometer_id', 'vehicle_id', 'reading', 'created_at')->get();
 
 
@@ -86,7 +88,7 @@ class RepairsController extends Controller
      */
     public function show(Maintenance $repair)
     {
-        $repairParts = MaintenanceParts::with('part')->where('maintenance_id', $repair->maintenance_id)->get()
+        $repairParts = MaintenanceParts::with('part', 'maintenance')->where('maintenance_id', $repair->maintenance_id)->get()
             ->map(function ($repairPart) {
             return [
                 'id' => $repairPart->id,
@@ -94,6 +96,7 @@ class RepairsController extends Controller
                 'part_id' => $repairPart->part_id,
                 'part_name' => $repairPart->part->part_name,
                 'quantity_used' => $repairPart->quantity_used,
+                'confirmed_by' => $repairPart->maintenance->confirmed_by,
             ];
         });
 
@@ -143,6 +146,20 @@ class RepairsController extends Controller
         ]);
     }
 
+    
+    public function confirm(Maintenance $repair)
+    {
+        $repair->update(['confirmed_by' => auth()->id(), 'date_confirmed' => now()->format('Y-m-d')]);
+        
+        Notification::create([
+            'user_id' => $repair->performed_by,
+            'title' => "Repair Record Confirmed",
+            'message' => "Your repair record for {$repair->serviceRequest->vehicle->vehicle_name} has been confirmed.",
+        ]);
+
+        return redirect()->route('repairs.index')->with('success', 'Repair record confirmed successfully.');
+    }
+
     /**
      * Update the specified resource in storage.
      */
@@ -159,6 +176,7 @@ class RepairsController extends Controller
     public function destroy(Maintenance $repair)
     {
         $repair->delete();
+        $repair->serviceRequest->update(['status' => 'approved']);
 
         return redirect()->route('repairs.index');
     }

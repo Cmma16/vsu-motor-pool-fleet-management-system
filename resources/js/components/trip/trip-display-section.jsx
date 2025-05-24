@@ -1,9 +1,8 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { format, isToday, isTomorrow, parseISO } from 'date-fns';
-import { CalendarIcon, Car, Clock, FileText, MapPin, MoreHorizontal } from 'lucide-react';
+import { CalendarIcon, Car, Clock, FileText, MapPin } from 'lucide-react';
 
 function getStatusBadge(status) {
     switch (status) {
@@ -59,7 +58,7 @@ function formatTripDate(date, time) {
     }
 }
 
-export default function TripDisplaySection({ trips, sectionTitle, sectionDescription }) {
+export default function TripDisplaySection({ trips, sectionTitle, sectionDescription, handleViewDetails }) {
     return (
         <Card className="flex-1">
             <CardHeader>
@@ -105,21 +104,11 @@ export default function TripDisplaySection({ trips, sectionTitle, sectionDescrip
                                         <Car className="mr-2 h-4 w-4" />
                                         {trip.plate_number}
                                     </div>
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger asChild>
-                                            <Button variant="ghost" size="icon" className="h-8 w-8">
-                                                <MoreHorizontal className="h-4 w-4" />
-                                                <span className="sr-only">More options</span>
-                                            </Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="end">
-                                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                            {/* <DropdownMenuItem onClick={() => viewTripDetails(trip.trip_id)}>View Details</DropdownMenuItem>
-                                            <DropdownMenuItem onClick={() => editTrip(trip.trip_id)}>Edit Trip</DropdownMenuItem>
-                                            <DropdownMenuSeparator /> */}
-                                            <DropdownMenuItem>Cancel Trip</DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
+                                    <div>
+                                        <Button variant="outline" onClick={() => handleViewDetails(trip.trip_id)}>
+                                            View Details
+                                        </Button>
+                                    </div>
                                 </div>
                             </div>
                         ))}

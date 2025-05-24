@@ -16,8 +16,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\UserVerificationController;
 use App\Http\Controllers\PersonnelController;
 use App\Http\Controllers\MaintenancePartsController;
-use App\Http\Controllers\RepairPartsController;
 use App\Http\Controllers\PassengerController;
+use App\Http\Controllers\NotificationController;
+
 Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
@@ -34,9 +35,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('parts/index');
     })->name('parts.index');
     Route::resource('vehicles', VehicleController::class);
-    Route::get('vehicles/{vehicle}/qr-code', [VehicleController::class, 'generateQRCode'])->name('vehicles.generateQRCode');
-    Route::resource('repairs', RepairsController::class);
+    Route::get('/vehicles/{vehicle}/qr-code', [VehicleController::class, 'generateQRCode'])->name('vehicles.generate');
+    Route::post('/vehicles/scan-qr', [VehicleController::class, 'scanQRCode'])->name('vehicles.scan-qr');
 
+    Route::resource('repairs', RepairsController::class);
+    Route::patch('repairs/{repair}/confirm', [RepairsController::class, 'confirm'])->name('repairs.confirm');
     Route::resource('services/requests', ServiceRequestController::class);
     Route::patch('services/requests/{request}/status', [ServiceRequestController::class, 'updateStatus'])->name('requests.updateStatus');
 
@@ -60,14 +63,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('/passengers/{id}/assign-party-head', [PassengerController::class, 'assignPartyHead']);
 
+    Route::get('/notifications', [NotificationController::class, 'index']);
+    Route::put('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
 
     Route::post('maintenance-parts', [MaintenancePartsController::class, 'store'])->name('maintenance-parts.store');
     Route::put('maintenance-parts/{maintenancePart}', [MaintenancePartsController::class, 'update'])->name('maintenance-parts.update');
     Route::delete('maintenance-parts/{maintenancePart}', [MaintenancePartsController::class, 'destroy'])->name('maintenance-parts.destroy');
-
-    Route::post('repair-parts', [RepairPartsController::class, 'store'])->name('repair-parts.store');
-    Route::put('repair-parts/{repairPart}', [RepairPartsController::class, 'update'])->name('repair-parts.update');
-    Route::delete('repair-parts/{repairPart}', [RepairPartsController::class, 'destroy'])->name('repair-parts.destroy');
 
     Route::middleware(['role:Admin'])->group(function () {
         Route::put('/personnel/{person}/role', [PersonnelController::class, 'updateRole'])->name('personnel.updateRole');

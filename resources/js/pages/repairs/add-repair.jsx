@@ -1,11 +1,9 @@
 import RepairForm from '@/components/repairs/repair-form';
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
-
-import { Head, useForm } from '@inertiajs/react';
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-
+import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
+import { Head, useForm } from '@inertiajs/react';
+import { toast } from 'sonner';
 
 const breadcrumbs = [
     { title: 'Repairs', href: '/repairs' },
@@ -31,8 +29,17 @@ export default function AddRepair({ vehicles, users, serviceRequests, odometerLo
         e.preventDefault();
         post(route('repairs.store'), {
             data,
-            onSuccess: () => reset(),
-            onError: (errors) => console.log(errors),
+            onSuccess: () => {
+                toast.success('Repair Recorded', {
+                    description: 'Repair record created successfully.',
+                });
+                reset();
+            },
+            onError: (errors) => {
+                toast.error('Error', {
+                    description: 'An error occurred while creating the repair record.',
+                });
+            },
         });
     };
 

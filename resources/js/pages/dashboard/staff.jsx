@@ -2,7 +2,7 @@ import GeneralDashboard from '@/components/dashboard/general-dashboard';
 import ServiceRequestSections from '@/components/request/service-request-sections';
 import TripDisplaySection from '@/components/trip/trip-display-section';
 import AppLayout from '@/layouts/app-layout';
-import { Head } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 import { AlertTriangle, Car, MapPin, Package } from 'lucide-react';
 
 const breadcrumbs = [
@@ -57,6 +57,15 @@ export default function Dashboard({ vehicleStats, maintenanceStats, tripStats, s
         { label: 'Mechanics', quantity: personnelStats.mechanic || 0, fill: 'yellow' },
         { label: 'Staff', quantity: personnelStats.staff || 0, fill: 'orange' },
     ];
+
+    const handleViewDetails = (requestId) => {
+        router.get(route('requests.show', requestId));
+    };
+
+    const handleViewTripDetails = (tripId) => {
+        router.get(route('trips.show', tripId));
+    };
+
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             <Head title="Dashboard" />
@@ -71,11 +80,13 @@ export default function Dashboard({ vehicleStats, maintenanceStats, tripStats, s
                             requests={pendingRequests}
                             sectionTitle=" Service Requests"
                             sectionDescription="Service requests that needs your attention"
+                            handleViewDetails={handleViewDetails}
                         />
                         <TripDisplaySection
                             trips={pendingTrips}
                             sectionTitle="Pending Trips Requests"
                             sectionDescription="Trips that are pending and have not been assigned."
+                            handleViewDetails={handleViewTripDetails}
                         />
                     </div>
                     <GeneralDashboard

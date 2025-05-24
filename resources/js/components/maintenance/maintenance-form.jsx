@@ -1,5 +1,6 @@
 import InputError from '@/components/input-error';
 import { OdometerLogModal } from '@/components/odometer/odometer-log-modal';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -19,7 +20,6 @@ export default function MaintenanceForm({
     maintenancePlans,
     lockInputs,
 }) {
-    console.log('Recalculating latestOdometer...', { formData, odometerLogs });
     const latestOdometer = React.useMemo(() => {
         const vehicleId = Number(formData.vehicle_id);
         return odometerLogs.filter((log) => log.vehicle_id === vehicleId).sort((a, b) => new Date(b.created_at) - new Date(a.created_at))[0];
@@ -32,16 +32,21 @@ export default function MaintenanceForm({
             setData('odometer_id', '');
         }
     }, [latestOdometer]);
-    console.log(latestOdometer);
 
     return (
         <form onSubmit={onSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                {/* Vehicle */}
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div className="space-y-2">
-                    <Label htmlFor="vehicle_id">Vehicle</Label>
+                    <Label htmlFor="vehicle_id">
+                        Vehicle <span className="text-red-500">*</span>
+                        {lockInputs && (
+                            <Badge variant="outline" className="ml-2">
+                                Read only
+                            </Badge>
+                        )}
+                    </Label>
                     <Select disabled={lockInputs} value={String(formData.vehicle_id)} onValueChange={(value) => setData('vehicle_id', Number(value))}>
-                        <SelectTrigger id="vehicle_id" tabIndex={1}>
+                        <SelectTrigger id="vehicle_id" tabIndex={1} className="mt-2 disabled:opacity-100">
                             <SelectValue placeholder="Select vehicle" />
                         </SelectTrigger>
                         <SelectContent>
@@ -56,9 +61,16 @@ export default function MaintenanceForm({
                 </div>
                 {/* Request Description */}
                 <div className="space-y-2">
-                    <Label htmlFor="request_id">Request Description</Label>
+                    <Label htmlFor="request_id">
+                        Request Description <span className="text-red-500">*</span>
+                        {lockInputs && (
+                            <Badge variant="outline" className="ml-2">
+                                Read only
+                            </Badge>
+                        )}
+                    </Label>
                     <Select disabled={lockInputs} value={String(formData.request_id)} onValueChange={(value) => setData('request_id', Number(value))}>
-                        <SelectTrigger id="request_id" tabIndex={2}>
+                        <SelectTrigger id="request_id" tabIndex={2} className="mt-2 disabled:opacity-100">
                             <SelectValue placeholder="Select service request" />
                         </SelectTrigger>
                         <SelectContent>
@@ -74,9 +86,16 @@ export default function MaintenanceForm({
 
                 {/* Maintenance Plan */}
                 <div className="space-y-2">
-                    <Label htmlFor="plan_id">Maintenance Plan</Label>
+                    <Label htmlFor="plan_id">
+                        Maintenance Plan <span className="text-red-500">*</span>
+                        {lockInputs && (
+                            <Badge variant="outline" className="ml-2">
+                                Read only
+                            </Badge>
+                        )}
+                    </Label>
                     <Select disabled={lockInputs} value={String(formData.plan_id)} onValueChange={(value) => setData('plan_id', Number(value))}>
-                        <SelectTrigger id="plan_id" tabIndex={1}>
+                        <SelectTrigger id="plan_id" tabIndex={1} className="mt-2 disabled:opacity-100">
                             <SelectValue placeholder="Select maintenance plan" />
                         </SelectTrigger>
                         <SelectContent>
@@ -92,7 +111,9 @@ export default function MaintenanceForm({
 
                 {/* Date In */}
                 <div className="space-y-2">
-                    <Label htmlFor="date_in">Date In</Label>
+                    <Label htmlFor="date_in">
+                        Date In <span className="text-red-500">*</span>
+                    </Label>
                     <Input
                         id="date_in"
                         type="date"
@@ -100,13 +121,16 @@ export default function MaintenanceForm({
                         onChange={(e) => setData('date_in', e.target.value)}
                         disabled={processing}
                         tabIndex={4}
+                        className="mt-2"
                     />
                     <InputError message={errors.date_in} />
                 </div>
 
                 {/* Date Completed */}
                 <div className="space-y-2">
-                    <Label htmlFor="date_completed">Date Completed</Label>
+                    <Label htmlFor="date_completed">
+                        Date Completed <span className="text-red-500">*</span>
+                    </Label>
                     <Input
                         id="date_completed"
                         type="date"
@@ -114,13 +138,16 @@ export default function MaintenanceForm({
                         onChange={(e) => setData('date_completed', e.target.value)}
                         disabled={processing}
                         tabIndex={5}
+                        className="mt-2"
                     />
                     <InputError message={errors.date_completed} />
                 </div>
 
                 {/* Maintenance Summary */}
                 <div className="space-y-2">
-                    <Label htmlFor="maintenance_summary">Summary</Label>
+                    <Label htmlFor="maintenance_summary">
+                        Summary <span className="text-red-500">*</span>
+                    </Label>
                     <Input
                         id="maintenance_summary"
                         name="maintenance_summary"
@@ -128,15 +155,24 @@ export default function MaintenanceForm({
                         value={formData.maintenance_summary}
                         onChange={(e) => setData('maintenance_summary', e.target.value)}
                         disabled={processing}
-                        tabIndex={5}
+                        tabIndex={6}
+                        className="mt-2"
                     />
                     <InputError message={errors.maintenance_summary} />
                 </div>
 
                 {/* Odometer Reading */}
                 <div className="space-y-2">
-                    <Label htmlFor="odometer_id">Odometer Reading</Label>
-                    <Input value={latestOdometer?.reading ?? ''} disabled placeholder="No odometer reading available" className="bg-gray-100" />
+                    <Label htmlFor="odometer_id">
+                        Odometer Reading <span className="text-red-500">*</span>
+                    </Label>
+                    <Input
+                        className="mt-2"
+                        value={latestOdometer?.reading ?? ''}
+                        disabled
+                        placeholder="No odometer reading available"
+                        className="bg-gray-100"
+                    />
                     {formData.vehicle_id && <OdometerLogModal vehicles={vehicles} formType={'add'} vehicle_id={formData.vehicle_id} />}
                     <InputError message={errors.odometer_id} />
                 </div>

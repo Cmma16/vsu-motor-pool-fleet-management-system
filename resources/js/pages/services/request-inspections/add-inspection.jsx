@@ -1,5 +1,6 @@
 import InspectionForm from '@/components/inspection/inspection-form';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
+import { toast } from 'sonner';
 
 import { Head, useForm } from '@inertiajs/react';
 
@@ -33,8 +34,17 @@ export default function CreateInspection({ serviceRequests, users, requestId }) 
         e.preventDefault();
         post(route('request-inspections.store'), {
             data,
-            onSuccess: () => reset(),
-            onError: (errors) => console.log(errors),
+            onSuccess: () => {
+                reset();
+                toast.success('Request inspected', {
+                    description: 'Request inspection record created successfully',
+                });
+            },
+            onError: (errors) => {
+                toast.error(errors.message, {
+                    description: 'Please try again',
+                });
+            },
         });
     };
 

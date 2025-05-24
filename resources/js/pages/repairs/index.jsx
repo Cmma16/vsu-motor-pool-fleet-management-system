@@ -1,10 +1,9 @@
 import { DataTable } from '@/components/data-table';
 import { RepairsColumn } from '@/components/repairs/repairs-column';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
-
 import AppLayout from '@/layouts/app-layout';
-
 import { Head, router } from '@inertiajs/react';
+import { toast } from 'sonner';
 
 const breadcrumbs = [
     {
@@ -20,9 +19,15 @@ const pageDetails = {
 
 export default function RepairsIndex({ repairs }) {
     const deleteRepair = (id) => {
-        if (confirm('Are you sure?')) {
-            router.delete(route('repairs.destroy', { id }));
-        }
+        router.delete(route('repairs.destroy', { id }), {
+            preserveScroll: true,
+            onSuccess: () => {
+                toast.success('Repair deleted successfully');
+            },
+            onError: () => {
+                toast.error('Failed to delete repair');
+            },
+        });
     };
 
     const veiwRepairDetails = (id) => {

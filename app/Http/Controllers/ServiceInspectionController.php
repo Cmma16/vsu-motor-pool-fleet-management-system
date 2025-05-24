@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ServiceInspections\StoreServiceInspectionRequest;
 use App\Http\Requests\ServiceInspections\UpdateServiceInspectionRequest;
 use Inertia\Inertia;
+use App\Models\Notification;
 
 class ServiceInspectionController extends Controller
 {
@@ -18,10 +19,12 @@ class ServiceInspectionController extends Controller
     public function index()
     {
         $serviceInspections = ServiceInspection::with(['serviceRequest', 'conductedBy', 'confirmedBy'])
+            ->orderBy('started_at', 'desc')
             ->get()
             ->map(function ($serviceInspection) {
                 return [
                     'inspection_id' => $serviceInspection->inspection_id,
+                    'request_id' => $serviceInspection->request_id,
                     'request_description' => $serviceInspection->serviceRequest->work_description ?? 'N/A',
                     'started_at' => $serviceInspection->started_at,
                     'completed_at' => $serviceInspection->completed_at,
@@ -64,8 +67,14 @@ class ServiceInspectionController extends Controller
     public function confirmInspection(ServiceInspection $request_inspection)
     {
         $request_inspection->update(['confirmed_by' => auth()->id()]);
+            
+            Notification::create([
+                'user_id' => $request_inspection->conducted_by,
+                'title' => "Inspection confirmed",
+                'message' => "Your inspection for {$request_inspection->serviceRequest->work_description} has been confirmed.",
+            ]);
 
-        return redirect()->route('requests.show', $request_inspection->request_id);
+        return redirect()->route('request-inspections.index');
     }
 
     /**
@@ -100,6 +109,7 @@ class ServiceInspectionController extends Controller
                 'estimated_duration' => $serviceInspection->estimated_duration,
                 'conducted_by' => trim(($serviceInspection->conductedBy->first_name ?? '') . ' ' . ($serviceInspection->conductedBy->middle_name ?? '') . ' ' . ($serviceInspection->conductedBy->last_name ?? '')) ?: 'N/A',
                 'confirmed_by' => trim(($serviceInspection->confirmedBy->first_name ?? '') . ' ' . ($serviceInspection->confirmedBy->middle_name ?? '') . ' ' . ($serviceInspection->confirmedBy->last_name ?? '')) ?: '',
+                'request_id' => $serviceInspection->request_id,
             ],
         ]);
     }

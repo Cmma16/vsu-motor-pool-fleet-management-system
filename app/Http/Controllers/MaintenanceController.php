@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\Maintenance\StoreMaintenanceRequest;
 use App\Http\Requests\Maintenance\UpdateMaintenanceRequest;
 use Inertia\Inertia;
+use Carbon\Carbon;
 
 class MaintenanceController extends Controller
 {
@@ -26,11 +27,12 @@ class MaintenanceController extends Controller
             ->whereHas('serviceRequest', function ($query) {
                 $query->where('service_type', 'maintenance');
             })
+            ->orderBy('created_at', 'desc')
             ->get()
             ->map(function ($maintenance) {
                 return [
                     'maintenance_id' => $maintenance->maintenance_id,
-                    'maintenance_plan' => $maintenance->serviceRequest->maintenancePlan->scheduled_date . ' - ' . $maintenance->serviceRequest->maintenancePlan->next_service_km . 'km' ?? 'N/A',
+                    'maintenance_plan' => Carbon::parse($maintenance->serviceRequest->maintenancePlan->scheduled_date)->format('M d, Y') . ' - ' . $maintenance->serviceRequest->maintenancePlan->next_service_km . 'km' ?? 'N/A',
                     'request_description' => $maintenance->serviceRequest->work_description ?? 'N/A', 
                     'vehicle_name' => $maintenance->serviceRequest->maintenancePlan->vehicle->vehicle_name ?? 'N/A',
                     'date_in' => $maintenance->date_in,
@@ -55,14 +57,14 @@ class MaintenanceController extends Controller
     {
         $maintenancePlans = MaintenancePlan::with('vehicle')
             ->select('plan_id', 'vehicle_id', 'scheduled_date', 'next_service_km')
-            ->where('status', 'pending')
+            ->where('status', 'scheduled')
             ->get()
                 ->map(function ($plan) {
                 return [
                     'plan_id' => $plan->plan_id,
                     'vehicle_id' => $plan->vehicle_id,
                     'vehicle_name' => $plan->vehicle->vehicle_name,
-                    'scheduled_date' => $plan->scheduled_date,
+                    'scheduled_date' => Carbon::parse($plan->scheduled_date)->format('M d, Y'),
                     'next_service_km' => $plan->next_service_km,
                 ];
             });
@@ -183,6 +185,8 @@ class MaintenanceController extends Controller
     public function destroy(Maintenance $maintenance)
     {
         $maintenance->delete();
+        $maintenance->serviceRequest->update(['status' => 'approved']);
+
         return redirect()->route('maintenance.index')->with('success', 'Maintenance record deleted successfully.');
     }
 }

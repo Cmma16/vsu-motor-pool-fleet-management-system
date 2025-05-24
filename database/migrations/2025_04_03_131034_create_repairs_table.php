@@ -11,21 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('repairs', function (Blueprint $table) {
-            $table->id('repair_id');
-            $table->foreignId('vehicle_id')->constrained('vehicles', 'vehicle_id')->onDelete('set null');
-            $table->foreignId('request_id')->nullable()->constrained('service_requests', 'request_id')->onDelete('set null');
-            $table->foreignId('performed_by')->nullable()->constrained('users', 'id')->onDelete('set null');
-            $table->foreignId('confirmed_by')->nullable()->constrained('users', 'id')->onDelete('set null');
-            $table->string('repair_summary', 255);
-            $table->foreignId('odometer_id')->nullable()->constrained('odometer_logs', 'odometer_id')->onDelete('set null');
-            $table->timestamps();
+        // Schema::create('repairs', function (Blueprint $table) {
+        //     $table->id('repair_id');
+        //     $table->foreignId('vehicle_id')->constrained('vehicles', 'vehicle_id')->onDelete('set null');
+        //     $table->foreignId('request_id')->nullable()->constrained('service_requests', 'request_id')->onDelete('set null');
+        //     $table->foreignId('performed_by')->nullable()->constrained('users', 'id')->onDelete('set null');
+        //     $table->foreignId('confirmed_by')->nullable()->constrained('users', 'id')->onDelete('set null');
+        //     $table->string('repair_summary', 255);
+        //     $table->foreignId('odometer_id')->nullable()->constrained('odometer_logs', 'odometer_id')->onDelete('set null');
+        //     $table->timestamps();
 
             // Foreign key constraints
             // $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles')->onDelete('cascade');
             // $table->foreign('assigned_personnel')->references('id')->on('users')->onDelete('set null');
             // $table->foreign('requested_by')->references('id')->on('users')->onDelete('cascade');
-        });
+        // });
     }
 
     /**

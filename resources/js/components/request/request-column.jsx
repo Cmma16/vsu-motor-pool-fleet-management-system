@@ -2,8 +2,10 @@ import { router, usePage } from '@inertiajs/react';
 import { createColumnHelper } from '@tanstack/react-table';
 import { ArrowUpDown, Pencil, Printer, ScanSearch, Trash, Wrench } from 'lucide-react';
 
+import DestructiveDialog from '@/components/display/destructive-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 function getStatusBadge(status) {
     switch (status) {
@@ -58,6 +60,22 @@ function getStatusBadge(status) {
     }
 }
 
+function serviceTypeBadge(serviceType) {
+    switch (serviceType) {
+        case 'repair':
+            return (
+                <Badge variant="default" className="bg-green-500">
+                    Repair
+                </Badge>
+            );
+        case 'maintenance':
+            return (
+                <Badge variant="default" className="bg-yellow-500">
+                    Maintenance
+                </Badge>
+            );
+    }
+}
 const columnHelper = createColumnHelper();
 
 export const RequestsColumn = (handleView, handleEdit, handleDelete, handleStatusUpdate) => [
@@ -92,7 +110,7 @@ export const RequestsColumn = (handleView, handleEdit, handleDelete, handleStatu
     }),
     columnHelper.accessor('service_type', {
         header: () => <div className="text-left">Service type</div>,
-        cell: (info) => <div className="text-left">{info.getValue()}</div>,
+        cell: (info) => <div className="text-left">{serviceTypeBadge(info.getValue())}</div>,
     }),
     columnHelper.accessor('work_description', {
         header: () => <div className="text-left">Requested work description</div>,
@@ -124,9 +142,12 @@ export const RequestsColumn = (handleView, handleEdit, handleDelete, handleStatu
                                     <Button className="bg-yellow-300 text-black hover:bg-yellow-400" onClick={() => handleEdit(request.request_id)}>
                                         <Pencil />
                                     </Button>
-                                    <Button className="bg-red-700 hover:bg-red-600" onClick={() => handleDelete(request.request_id)}>
-                                        <Trash />
-                                    </Button>
+                                    <DestructiveDialog
+                                        icon={Trash}
+                                        iconOnly
+                                        description="This action cannot be undone. This will permanently delete your request."
+                                        action={() => handleDelete(request.request_id)}
+                                    />
                                 </div>
                             )}
                             {request.status === 'received' && (
@@ -143,12 +164,24 @@ export const RequestsColumn = (handleView, handleEdit, handleDelete, handleStatu
                             {request.status === 'received' && (
                                 <div className="flex justify-center gap-2">
                                     {/* Inspect button */}
-                                    <Button
-                                        className="bg-yellow-300 text-black hover:bg-yellow-400"
-                                        onClick={() => router.get(route('request-inspections.create', { data: { requestId: request.request_id } }))}
-                                    >
-                                        <ScanSearch />
-                                    </Button>
+
+                                    <TooltipProvider>
+                                        <Tooltip>
+                                            <TooltipTrigger asChild>
+                                                <Button
+                                                    className="bg-yellow-300 text-black hover:bg-yellow-400"
+                                                    onClick={() =>
+                                                        router.get(route('request-inspections.create', { data: { requestId: request.request_id } }))
+                                                    }
+                                                >
+                                                    <ScanSearch />
+                                                </Button>
+                                            </TooltipTrigger>
+                                            <TooltipContent>
+                                                <p>Inspect request</p>
+                                            </TooltipContent>
+                                        </Tooltip>
+                                    </TooltipProvider>
                                 </div>
                             )}
                             {request.status === 'approved' && (

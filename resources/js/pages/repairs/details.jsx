@@ -1,9 +1,10 @@
 import { DisplayTable } from '@/components/display-table';
-import { RepairPartModal } from '@/components/parts/repair-part-modal';
-import { RepairPartsColumn } from '@/components/parts/repair-parts-column';
+import { MaintenancePartColumn } from '@/components/parts/maintenance-part-column';
+import { MaintenancePartModal } from '@/components/parts/maintenance-part-modal';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
+import { toast } from 'sonner';
 
 import AppLayout from '@/layouts/app-layout';
 // import { Button } from 'react-day-picker';
@@ -26,9 +27,18 @@ const pageDetails = {
 
 export default function details({ repair, parts, repairParts }) {
     const deleteRepairPart = (id) => {
-        if (confirm('Are you sure?')) {
-            router.delete(route('repair-part.destroy', { id }));
-        }
+        router.delete(route('maintenance-parts.destroy', { id }), {
+            onSuccess: () => {
+                toast.success('Deleted successfully', {
+                    description: 'The part usage record has been deleted successfully',
+                });
+            },
+            onError: () => {
+                toast.error('Delete failed', {
+                    description: 'The part usage record was not deleted',
+                });
+            },
+        });
     };
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
@@ -94,12 +104,12 @@ export default function details({ repair, parts, repairParts }) {
                         <CardTitle>Parts Used</CardTitle>
                         <CardDescription className="flex justify-between">
                             Parts used during the repair.
-                            {!repair.confirmed_by && <RepairPartModal repair_id={repair.repair_id} parts={parts} formType="create" />}
+                            {!repair.confirmed_by && <MaintenancePartModal maintenance_id={repair.repair_id} parts={parts} formType="create" />}
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
                         <DisplayTable
-                            columns={RepairPartsColumn}
+                            columns={MaintenancePartColumn}
                             data={repairParts}
                             parts={parts}
                             handleDelete={deleteRepairPart}

@@ -10,7 +10,7 @@ export default function UsedPartForm({ formData, setData, processing, errors, pa
             <div className="space-y-2">
                 <Label htmlFor="part_id">Part</Label>
                 <Select disabled={disablePartSelect} value={String(formData.part_id)} onValueChange={(value) => setData('part_id', Number(value))}>
-                    <SelectTrigger id="part_id">
+                    <SelectTrigger id="part_id" className="disabled:border-gray-300 disabled:opacity-100">
                         <SelectValue placeholder="Select part" />
                     </SelectTrigger>
                     <SelectContent>

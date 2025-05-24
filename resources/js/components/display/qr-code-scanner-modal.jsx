@@ -1,19 +1,58 @@
 import QRCodeScanner from '@/components/display/qr-code-scanner';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { router } from '@inertiajs/react';
 import { QrCode } from 'lucide-react';
 import React from 'react';
 
 export function QRCodeScannerModal() {
     const [open, setOpen] = React.useState(false);
-    const handleScanSuccess = (decodedText) => {
-        alert(`QR Code Scanned: ${decodedText}`);
-        // Here you can parse the decrypted text or navigate somewhere
+    const [isLoading, setIsLoading] = React.useState(false);
+
+    const onNewScanResult = async (decodedText, decodedResult) => {
+        {
+            console.log({
+                title: 'Scanning QR Code',
+                description: 'Scanning QR Code',
+                decodedText: decodedText,
+                decodedResult: decodedResult,
+            });
+        }
+        setIsLoading(true);
+        router.post(
+            route('vehicles.scan-qr'),
+            {
+                encrypted: decodedText,
+            },
+            {
+                onSuccess: () => {
+                    setOpen(false);
+                },
+                onError: (error) => {
+                    console.log({
+                        title: 'Scan Failed',
+                        description: 'Failed to scan QR code. Please try again.',
+                        error: error,
+                    });
+                    setOpen(false);
+                },
+            },
+        );
     };
 
     const handleScanFailure = (error) => {
+        const now = Date.now();
+
+        // Ignore repeated errors within 3 seconds
+        if (now - lastErrorTime < 3000) return;
+
+        // Ignore harmless "NotFoundException" (no QR in frame)
+        if (error?.name === 'NotFoundException') return;
+
         console.warn('Scan failed:', error);
+        lastErrorTime = now;
     };
+
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
@@ -33,7 +72,19 @@ export function QRCodeScannerModal() {
                     <DialogDescription>Scan the QR Code to retrieve the vehicle information.</DialogDescription>
                 </DialogHeader>
                 <div className="flex justify-center gap-4 py-4">
-                    <QRCodeScanner onScanSuccess={handleScanSuccess} />
+                    {isLoading ? (
+                        <div className="flex items-center justify-center p-4">
+                            <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-[#006600]"></div>
+                        </div>
+                    ) : (
+                        <QRCodeScanner
+                            fps={10}
+                            qrbox={250}
+                            disableFlip={false}
+                            qrCodeSuccessCallback={onNewScanResult}
+                            qrCodeErrorCallback={handleScanFailure}
+                        />
+                    )}
                 </div>
                 <DialogFooter className="flex justify-center">
                     <Button onClick={() => setOpen(false)}>Close</Button>
