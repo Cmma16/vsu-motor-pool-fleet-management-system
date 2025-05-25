@@ -31,7 +31,7 @@ const mainNavItems = [
         title: 'Trips',
         href: '/vehicles/trips',
         icon: MapPinIcon,
-        allowedRoles: ['Admin', 'Driver', 'Mechanic', 'Staff'],
+        allowedRoles: ['Admin', 'Driver', 'Staff'],
     },
     {
         title: 'Repairs & Maintenance',

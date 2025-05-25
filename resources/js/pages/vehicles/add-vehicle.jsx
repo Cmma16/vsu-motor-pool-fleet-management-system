@@ -3,7 +3,7 @@ import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import VehicleForm from '@/components/vehicle/vehicle-form';
 import AppLayout from '@/layouts/app-layout';
 import { Head, useForm } from '@inertiajs/react';
-
+import { toast } from 'sonner';
 const breadcrumbs = [
     { title: 'Vehicles', href: '/vehicles' },
     { title: 'Add new vehicle', href: '/vehicles/create' },
@@ -36,8 +36,14 @@ export default function AddVehicle() {
         e.preventDefault();
         post(route('vehicles.store'), {
             data,
-            onSuccess: () => reset(),
-            onError: (errors) => console.log(errors),
+            onSuccess: () => {
+                reset();
+                toast.success('Vehicle added successfully');
+            },
+            onError: (errors) => {
+                toast.error('Failed to add vehicle');
+                console.log(errors);
+            },
         });
     };
 

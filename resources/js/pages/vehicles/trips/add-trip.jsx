@@ -5,6 +5,7 @@ import AppLayout from '@/layouts/app-layout';
 import { Head, useForm } from '@inertiajs/react';
 import { format } from 'date-fns';
 import React from 'react';
+import { toast } from 'sonner';
 
 const breadcrumbs = [
     { title: 'Trips', href: '/vehicles/trips' },
@@ -42,11 +43,20 @@ export default function AddTrip({ vehicles, users }) {
 
     const addTrip = (e) => {
         e.preventDefault();
-        post(route('trips.store'), {
-            data,
-            onSuccess: () => reset(),
-            onError: (errors) => console.log(errors),
-        });
+        post(
+            route('trips.store'),
+            { data },
+            {
+                onSuccess: () => {
+                    toast.success('Trip added successfully');
+                    reset();
+                },
+                onError: (errors) => {
+                    toast.error('Failed to add trip');
+                    console.log(errors);
+                },
+            },
+        );
     };
 
     return (

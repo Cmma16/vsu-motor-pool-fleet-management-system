@@ -72,6 +72,22 @@ export default function Dashboard({
         const formattedDateTime = format(new Date(date), 'MMMM dd, yyyy');
         return formattedDateTime;
     };
+
+    const print = () => {
+        console.log('Printing');
+        var element = document.getElementById('element-to-print');
+        var opt = {
+            margin: 1,
+            filename: 'myfile.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+        };
+
+        // New Promise-based usage:
+        html2pdf(element);
+    };
+
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             {console.log(uninspectedRequests, approvedRequests)}

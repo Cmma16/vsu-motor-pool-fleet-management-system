@@ -15,7 +15,7 @@ export default function DestructiveDialog({ title, description, action, icon: Ic
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button variant="destructive" size={iconOnly ? 'icon' : 'default'}>
+                <Button variant="destructive" size={iconOnly ? 'sm' : 'default'}>
                     {iconOnly ? Icon && <Icon className="h-4 w-4" /> : title}
                 </Button>
             </AlertDialogTrigger>

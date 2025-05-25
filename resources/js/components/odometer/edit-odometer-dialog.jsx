@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useForm } from '@inertiajs/react';
 import { useEffect } from 'react';
+import { toast } from 'sonner';
 
 export function EditOdometerDialog({ isOpen, onOpenChange, editingLog, vehicles }) {
     const { data, setData, put, processing, errors, reset } = useForm({
@@ -28,13 +29,13 @@ export function EditOdometerDialog({ isOpen, onOpenChange, editingLog, vehicles 
             onSuccess: () => {
                 onOpenChange(false);
                 reset();
+                toast.success('Odometer reading updated successfully');
             },
         });
     };
 
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
-            {console.log(editingLog)}
             <DialogContent className="sm:max-w-[500px]">
                 <DialogHeader>
                     <DialogTitle>Edit Odometer Reading</DialogTitle>

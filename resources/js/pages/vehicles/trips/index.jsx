@@ -24,17 +24,14 @@ import { SelectedDayTripsSection } from '@/components/trip/selected-day-trips-se
 import { TripColumn } from '@/components/trip/trip-column';
 import { TripSummaryCard } from '@/components/trip/trip-summary-card';
 import { UpcomingTripsSection } from '@/components/trip/upcoming-trips-section';
+import { usePage } from '@inertiajs/react';
+
 const breadcrumbs = [
     {
         title: 'Trips',
         href: '/trips',
     },
 ];
-
-const pageDetails = {
-    title: 'Vehicle Trips',
-    description: 'Monitor and manage all fleet trips',
-};
 
 const getUniqueVehicles = (trips) => {
     const vehicleMap = new Map();
@@ -125,7 +122,20 @@ const viewTripDetails = (id) => {
 };
 
 const deleteTrip = (id) => {
-    router.delete(route('trips.destroy', { id }));
+    router.delete(
+        route(
+            'trips.destroy',
+            { id },
+            {
+                onSuccess: () => {
+                    toast.success('Trip deleted successfully');
+                },
+                onError: () => {
+                    toast.error('Failed to delete trip');
+                },
+            },
+        ),
+    );
 };
 
 export default function TripsIndex({ trips = [] }) {
@@ -136,6 +146,25 @@ export default function TripsIndex({ trips = [] }) {
     const [selectedVehicles, setSelectedVehicles] = useState([]);
     const [filteredTrips, setFilteredTrips] = useState(trips);
     const [uniqueVehicles, setUniqueVehicles] = useState([]);
+
+    useEffect(() => {
+        const savedSearch = localStorage.getItem('searchText');
+        if (savedSearch) {
+            setSearchQuery(savedSearch);
+        }
+    }, []);
+
+    // ✅ Save search to localStorage when it changes
+    useEffect(() => {
+        localStorage.setItem('searchText', searchQuery);
+    }, [searchQuery]);
+
+    const user = usePage().props.auth.user;
+
+    const pageDetails = {
+        title: 'Vehicle Trips',
+        description: user.role.name === 'Driver' ? 'Showing trips relevant to you.' : 'Monitor and manage all fleet trips',
+    };
 
     // Initialize unique vehicles
     useEffect(() => {
@@ -223,9 +252,19 @@ export default function TripsIndex({ trips = [] }) {
         return isWithinInterval(selectedDate, { start: startDate, end: endDate });
     });
 
+    const startTrip = (id) => {
+        console.log(id);
+        router.get(route('trip-logs.create', { id }));
+    };
+
+    const endTrip = (id) => {
+        router.get(route('trip-logs.end', { id }));
+    };
+
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             <Head title="Vehicles" />
+            {console.log(trips)}
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <div className="container mx-auto py-6">
                     <div className="mb-6 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
@@ -283,10 +322,17 @@ export default function TripsIndex({ trips = [] }) {
                                     </div>
                                 </DialogContent>
                             </Dialog>
-                            <Button variant="default" size="default" className="flex items-center" onClick={() => router.get(route('trips.create'))}>
-                                <Car className="mr-2 h-4 w-4" />
-                                New Trip
-                            </Button>
+                            {user.role.name !== 'Driver' && (
+                                <Button
+                                    variant="default"
+                                    size="default"
+                                    className="flex items-center"
+                                    onClick={() => router.get(route('trips.create'))}
+                                >
+                                    <Car className="mr-2 h-4 w-4" />
+                                    New Trip
+                                </Button>
+                            )}
                         </div>
                     </div>
 
@@ -314,7 +360,7 @@ export default function TripsIndex({ trips = [] }) {
                                 <div className="flex items-center gap-2">
                                     <Input
                                         type="text"
-                                        placeholder="Search trips..."
+                                        placeholder="Search trip/driver/vehicle..."
                                         className="w-[200px] md:w-[300px]"
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
@@ -363,6 +409,8 @@ export default function TripsIndex({ trips = [] }) {
                                         editTrip={editTrip}
                                         viewTripDetails={viewTripDetails}
                                         handleStatusUpdate={handleStatusUpdate}
+                                        startTrip={startTrip}
+                                        endTrip={endTrip}
                                     />
 
                                     {/* Upcoming Trips */}
@@ -372,6 +420,7 @@ export default function TripsIndex({ trips = [] }) {
                                         getStatusBadge={getStatusBadge}
                                         editTrip={editTrip}
                                         viewTripDetails={viewTripDetails}
+                                        handleStatusUpdate={handleStatusUpdate}
                                     />
                                 </div>
                             </TabsContent>
@@ -403,6 +452,7 @@ export default function TripsIndex({ trips = [] }) {
                                         getStatusBadge={getStatusBadge}
                                         editTrip={editTrip}
                                         viewTripDetails={viewTripDetails}
+                                        handleStatusUpdate={handleStatusUpdate}
                                     />
                                 </div>
                             </TabsContent>

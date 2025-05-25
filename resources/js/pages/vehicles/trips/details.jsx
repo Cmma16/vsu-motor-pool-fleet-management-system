@@ -1,12 +1,13 @@
 import { DisplayTable } from '@/components/display-table';
-import { PassengerColumn } from '@/components/passenger/passenger-column';
-import { PassengerModal } from '@/components/passenger/passenger-modal';
+import { PassengerViewOnlyColumn } from '@/components/passenger/passenger-view-only-column';
+import TripLogDetails from '@/components/trip/trip-log-details';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/app-layout';
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import { format, parse } from 'date-fns';
+import { ArrowLeft, FileText } from 'lucide-react';
 
 // import { Button } from 'react-day-picker';
 
@@ -38,11 +39,33 @@ function setAsPartyHead(passengerId) {
 export default function TripDetails({ trip }) {
     // Format the departure time to 12-hour format
     const formattedTime = trip.departure_time ? format(parse(trip.departure_time, 'HH:mm', new Date()), 'h:mm a') : '';
+    const user = usePage().props.auth.user;
 
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             <Head title="Trip Details" />
             <div className="mx-6 mb-3 space-y-6 rounded-lg">
+                <div className="flex justify-between">
+                    <Button variant="outline" className="bg-white" onClick={() => router.get(route('trips.index'))}>
+                        <ArrowLeft /> Trip List
+                    </Button>
+                    {user.role.name === 'Driver' && trip.status === 'assigned' && (
+                        <Button variant="default" onClick={() => router.get(route('trip-logs.create', trip.trip_id))}>
+                            <FileText className="mr-2 h-4 w-4" />
+                            Start Trip
+                        </Button>
+                    )}
+                    {user.role.name === 'Driver' && trip.status === 'ongoing' && (
+                        <Button
+                            className="border-2 border-[#006600] bg-white text-black hover:bg-[#005500] hover:text-white"
+                            onClick={() => router.get(route('trip-logs.end', trip.trip_id))}
+                        >
+                            <FileText className="mr-2 h-4 w-4" />
+                            End Trip
+                        </Button>
+                    )}
+                </div>
+                {console.log(trip)}
                 <Card className="flex-1">
                     <CardHeader>
                         <CardTitle>Trip Information</CardTitle>
@@ -91,10 +114,10 @@ export default function TripDetails({ trip }) {
                                     <p className="text-muted-foreground">{trip.purpose}</p>
                                 </div>
                                 {/* Vehicle */}
-                                {trip.vehicle_name && (
+                                {trip.vehicle?.name && (
                                     <div className="flex flex-col space-y-2">
                                         <p className="font-medium">Vehicle</p>
-                                        <p className="text-muted-foreground">{trip.vehicle_name}</p>
+                                        <p className="text-muted-foreground">{trip.vehicle.name}</p>
                                     </div>
                                 )}
                                 {/* Driver */}
@@ -136,14 +159,11 @@ export default function TripDetails({ trip }) {
                 <Card>
                     <CardHeader>
                         <CardTitle>Passengers</CardTitle>
-                        <CardDescription className="flex justify-between">
-                            List of passengers of the trip.
-                            {trip.status === 'pending' && <PassengerModal trip_id={trip.trip_id} formType="add" />}
-                        </CardDescription>
+                        <CardDescription className="flex justify-between">List of passengers of the trip.</CardDescription>
                     </CardHeader>
                     <CardContent>
                         <DisplayTable
-                            columns={PassengerColumn}
+                            columns={PassengerViewOnlyColumn}
                             data={trip.passengers}
                             handleEdit={setAsPartyHead}
                             handleView={undefined}
@@ -151,6 +171,9 @@ export default function TripDetails({ trip }) {
                         />
                     </CardContent>
                 </Card>
+                {trip.trip_log_id && (
+                    <TripLogDetails pre_trip={trip.pre_trip} post_trip={trip.post_trip} trip_log_id={trip.trip_log_id} trip_status={trip.status} />
+                )}
             </div>
         </AppLayout>
     );

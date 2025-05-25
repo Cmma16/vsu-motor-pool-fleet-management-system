@@ -11,8 +11,8 @@ const breadcrumbs = [
 ];
 
 const pageDetails = {
-    title: 'Create Service Requests',
-    description: 'Record the details of a vehicle repair.',
+    title: 'New Service Requests',
+    description: 'Complete the form below to add a new service request.',
 };
 
 export default function CreateRequest({ vehicles, maintenancePlans }) {
@@ -54,11 +54,11 @@ export default function CreateRequest({ vehicles, maintenancePlans }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             <Head title="Repairs" />
-            <div className="mx-6 mb-3 space-y-6 rounded-lg bg-white">
+            <div className="mx-auto my-8 mb-3 w-full max-w-xl space-y-6 rounded-lg bg-white">
                 <Card className="w-full">
                     <CardHeader>
-                        <CardTitle>Repair Information</CardTitle>
-                        <CardDescription>Enter the details of the repair.</CardDescription>
+                        <CardTitle>Service Request Information</CardTitle>
+                        <CardDescription>Enter the details of the service required.</CardDescription>
                     </CardHeader>
                     <CardContent>
                         <RequestForm

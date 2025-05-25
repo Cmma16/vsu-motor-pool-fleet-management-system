@@ -1,8 +1,10 @@
+import DestructiveDialog from '@/components/display/destructive-dialog';
 import { PassengerModal } from '@/components/passenger/passenger-modal';
 import { Button } from '@/components/ui/button';
 import { router } from '@inertiajs/react';
 import { createColumnHelper } from '@tanstack/react-table';
 import { ArrowUpDown, Crown, X } from 'lucide-react';
+import { toast } from 'sonner';
 
 const columnHelper = createColumnHelper();
 
@@ -66,12 +68,18 @@ export const PassengerColumn = (showActions, handleEdit, handleDelete) => [
             const passenger = row.original;
             const deletePassenger = (id, isPartyHead) => {
                 if (isPartyHead) {
-                    alert('This passenger is the party head. Please assign another passenger as party head before deleting.');
+                    toast.warning('This passenger is the party head. Please assign another passenger as party head before deleting.');
                     return;
                 }
-                if (confirm('Are you sure?')) {
-                    router.delete(route('passengers.destroy', { id }));
-                }
+                router.delete(route('passengers.destroy', { id }), {
+                    preserveScroll: true,
+                    onSuccess: () => {
+                        toast.success('Passenger deleted successfully');
+                    },
+                    onError: () => {
+                        toast.error('Failed to delete passenger');
+                    },
+                });
             };
 
             // Only show actions if trip status is pending
@@ -82,9 +90,12 @@ export const PassengerColumn = (showActions, handleEdit, handleDelete) => [
                     <div className="gap-2">
                         <div className="flex flex-row gap-2">
                             <PassengerModal trip_id={passenger.trip_id} formType="edit" passenger={passenger} />
-                            <Button size="sm" variant="destructive" onClick={() => deletePassenger(passenger.id, passenger.is_party_head)}>
-                                <X />
-                            </Button>
+                            <DestructiveDialog
+                                icon={X}
+                                iconOnly
+                                description="This action cannot be undone."
+                                action={() => deletePassenger(passenger.id, passenger.is_party_head)}
+                            />
                         </div>
                     </div>
                 </div>

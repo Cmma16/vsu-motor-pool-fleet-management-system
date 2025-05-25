@@ -70,19 +70,21 @@ export default function RequestsIndex({ serviceRequests }) {
             <Head title="Repairs" />
             {console.log(serviceRequests)}
             {/*delete this*/}
-            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-                <DataTable
-                    columns={RequestsColumn}
-                    data={serviceRequests}
-                    handleCreate={user.role.name === 'Driver' ? route('requests.create') : null}
-                    handleView={veiwRequestDetails}
-                    handleEdit={editRequest}
-                    handleDelete={deleteRequest}
-                    handleStatusUpdate={handleStatusUpdate}
-                    filterColumn={'vehicle_name'}
-                    placeholder={'Search vehicle name'}
-                />
-                <div className="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border md:min-h-min">
+            <div className="flex h-full w-full max-w-full flex-1 flex-col gap-2 rounded-xl p-2 sm:gap-4 sm:p-4">
+                <div className="w-full max-w-full overflow-x-auto rounded-lg">
+                    <DataTable
+                        columns={RequestsColumn}
+                        data={serviceRequests}
+                        handleCreate={user.role.name === 'Driver' ? route('requests.create') : null}
+                        handleView={veiwRequestDetails}
+                        handleEdit={editRequest}
+                        handleDelete={deleteRequest}
+                        handleStatusUpdate={handleStatusUpdate}
+                        filterColumn={'vehicle_name'}
+                        placeholder={'Search vehicle name'}
+                    />
+                </div>
+                <div className="border-sidebar-border/70 dark:border-sidebar-border relative mt-2 min-h-[100vh] w-full max-w-full flex-1 overflow-hidden rounded-xl border md:min-h-min">
                     <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
                 </div>
             </div>

@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Loader2, Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 export default function PassengerAddingForm({ formData, setData, onPreviousStep, onSubmit, isSubmitting }) {
     const [currentPassenger, setCurrentPassenger] = useState({
@@ -27,6 +28,7 @@ export default function PassengerAddingForm({ formData, setData, onPreviousStep,
         // Add the new passenger
         updatedPassengers.push(currentPassenger);
         setData('passengers', updatedPassengers);
+        toast.success('Passenger added successfully');
 
         // Reset current passenger form
         setCurrentPassenger({
@@ -40,6 +42,7 @@ export default function PassengerAddingForm({ formData, setData, onPreviousStep,
     const handleRemovePassenger = (index) => {
         const updatedPassengers = formData.passengers.filter((_, i) => i !== index);
         setData('passengers', updatedPassengers);
+        toast.success('Passenger removed successfully');
     };
 
     const handlePartyHeadChange = (index) => {
@@ -50,6 +53,7 @@ export default function PassengerAddingForm({ formData, setData, onPreviousStep,
             is_party_head: i === index ? !passenger.is_party_head : false,
         }));
         setData('passengers', updatedPassengers);
+        toast.success('Party head changed successfully');
     };
 
     return (

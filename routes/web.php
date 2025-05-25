@@ -12,6 +12,7 @@ use App\Http\Controllers\MaintenancePlanController;
 use App\Http\Controllers\MaintenanceController;
 use App\Http\Controllers\OdometerLogController;
 use App\Http\Controllers\TripController;
+use App\Http\Controllers\TripLogController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\UserVerificationController;
 use App\Http\Controllers\PersonnelController;
@@ -58,6 +59,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/trips/{trip}/assign', [TripController::class, 'assign'])->name('trips.assign');
     Route::patch('trips/{trip}/status', [TripController::class, 'updateStatus'])->name('trips.updateStatus');
     Route::post('/trips/check-availability', [TripController::class, 'checkAvailability'])->name('trips.check-availability');
+    
+    //not working
+    Route::get('/trips/{trip}/pdf', [TripController::class, 'downloadPDF'])->name('trips.download-pdf');
+    
+    // Trip Log routes
+    Route::get('/trips/{trip}/logs/create', [TripLogController::class, 'create'])->name('trip-logs.create');
+    Route::get('/trips/{trip}/logs/end', [TripLogController::class, 'endTrip'])->name('trip-logs.end');
+    Route::post('/trip-logs/{tripLog}/complete', [TripLogController::class, 'completeTrip'])->name('trip-logs.complete');
+    Route::put('/trip-logs/{tripLog}', [TripLogController::class, 'update'])->name('trip-logs.update');
+    Route::resource('trip-logs', TripLogController::class)->except(['create']);
+    
     Route::resource('personnel', PersonnelController::class);
     Route::resource('passengers', PassengerController::class);
 

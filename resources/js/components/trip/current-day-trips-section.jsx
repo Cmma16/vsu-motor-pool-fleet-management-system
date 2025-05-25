@@ -5,7 +5,16 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { usePage } from '@inertiajs/react';
 
-export function CurrentDayTripsSection({ todayTrips, formatTripDate, getStatusBadge, editTrip, viewTripDetails, handleStatusUpdate }) {
+export function CurrentDayTripsSection({
+    todayTrips,
+    formatTripDate,
+    getStatusBadge,
+    editTrip,
+    viewTripDetails,
+    handleStatusUpdate,
+    startTrip,
+    endTrip,
+}) {
     const user = usePage().props.auth.user;
 
     const formatStatus = (string) => {
@@ -73,10 +82,10 @@ export function CurrentDayTripsSection({ todayTrips, formatTripDate, getStatusBa
                                         )}
 
                                         {user.role.name === 'Driver' && trip.status === 'assigned' && (
-                                            <Button onClick={() => handleStatusUpdate(trip.trip_id, 'ongoing')}>Start Trip</Button>
+                                            <Button onClick={() => startTrip(trip.trip_id)}>Start Trip</Button>
                                         )}
                                         {user.role.name === 'Driver' && trip.status === 'ongoing' && (
-                                            <Button onClick={() => handleStatusUpdate(trip.trip_id, 'completed')}>End Trip</Button>
+                                            <Button onClick={() => endTrip(trip.trip_id)}>End Trip</Button>
                                         )}
 
                                         {trip.status === 'pending' ||

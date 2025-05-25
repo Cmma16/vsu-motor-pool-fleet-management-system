@@ -33,7 +33,7 @@ class PassengerController extends Controller
     {
         $passenger = Passenger::create($request->validated());
 
-        return redirect()->route('trips.show', $request->trip_id)->with('success', 'Passenger added successfully');
+        return redirect()->route('trips.edit', $request->trip_id)->with('success', 'Passenger added successfully');
     }
 
     /**

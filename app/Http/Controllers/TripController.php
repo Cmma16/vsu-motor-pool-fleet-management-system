@@ -10,6 +10,10 @@ use App\Http\Requests\Trip\UpdateTripRequest;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\Notification;
+use Carbon\Carbon;
+
 class TripController extends Controller
 {
     /**
@@ -111,7 +115,9 @@ class TripController extends Controller
                 'destination' => $trip->destination,
                 'departure_time' => $trip->departure_time,
                 'requesting_party' => $trip->requesting_party,
-                'vehicle_name' => $trip->vehicle ? $trip->vehicle->vehicle_name : '',
+                'vehicle' => $trip->vehicle ? [
+                    'name' => $trip->vehicle->vehicle_name,
+                ] : null,
                 'driver_name' => $trip->driver ? $trip->driver->first_name . ' ' . $trip->driver->last_name : '',
                 'status' => $trip->status,
                 'passengers' => $trip->passengers->map(function ($passenger) use ($trip) {
@@ -125,6 +131,21 @@ class TripController extends Controller
                         'trip_status' => $trip->status,
                     ];
                 }),
+                'trip_log_id' => $trip->tripLog?->trip_log_id,
+                'pre_trip' => $trip->tripLog ? [
+                    'received_at' => $trip->tripLog->received_at,
+                    'pre_trip_condition' => $trip->tripLog->pre_trip_condition,
+                    'fuel_lubricant_issued_at' => $trip->tripLog->fuel_lubricant_issued_at,
+                    'departure_time' => $trip->tripLog->departure_time_actual,
+                    'odometer_out' => $trip->tripLog->odometerOut?->reading ?? null,
+                ] : null,
+                'post_trip' => $trip->tripLog ? [
+                    'date_returned' => $trip->tripLog->date_returned ?? null,
+                    'post_trip_condition' => $trip->tripLog->post_trip_condition ?? null,
+                    'fuel_lubricant_balanced_at' => $trip->tripLog->fuel_lubricant_balanced_at ?? null,
+                    'arrival_time' => $trip->tripLog->arrival_time ?? null,
+                    'odometer_in' => $trip->tripLog->odometerIn->reading ?? null,
+                ] : null,
             ],
         ]);
     }
@@ -140,7 +161,7 @@ class TripController extends Controller
                         ->where('end_date', '>=', $trip->end_date);
                 });
         })
-        ->whereIn('status', ['assigned', 'dispatched', 'approved', 'ongoing', 'pending'])
+        ->whereIn('status', ['assigned', 'dispatched', 'approved', 'ongoing'])
         ->where('trip_id', '!=', $trip->trip_id) // Exclude current trip
         ->pluck('vehicle_id');
 
@@ -152,7 +173,7 @@ class TripController extends Controller
                         ->where('end_date', '>=', $trip->end_date);
                 });
         })
-        ->whereIn('status', ['assigned', 'dispatched', 'approved', 'ongoing', 'pending'])
+        ->whereIn('status', ['assigned', 'dispatched', 'approved', 'ongoing'])
         ->where('trip_id', '!=', $trip->trip_id) // Exclude current trip
         ->pluck('driver_id');
 
@@ -187,6 +208,16 @@ class TripController extends Controller
         ]);
     }
 
+    //currently not working
+    public function downloadPDF(Trip $trip) 
+    {
+        $trip = Trip::with(['vehicle', 'driver', 'passengers'])->find($trip->trip_id);
+
+        $pdf = Pdf::loadView('pdf.trip-ticket', compact('trip'))
+            ->setPaper('a4', "portrait");
+        return $pdf->stream('trip-ticket-' . $trip->trip_number . '.pdf');
+    }
+
     public function updateStatus(Request $request, Trip $trip)
     {
         $request->validate([
@@ -209,9 +240,31 @@ class TripController extends Controller
         return Inertia::render('vehicles/trips/edit-trip', [
             'vehicles' => $vehicles,
             'users' => $users,
-            'available_vehicles' => $vehicles,
-            'available_drivers' => $users,
-            'trip' => $trip,
+            'trip' => [
+                'trip_id' => $trip->trip_id,
+                'trip_number' => $trip->trip_number,
+                'date_filed' => $trip->date_filed,
+                'start_date' => $trip->start_date,
+                'end_date' => $trip->end_date,
+                'purpose' => $trip->purpose,
+                'destination' => $trip->destination,
+                'departure_time' => $trip->departure_time,
+                'requesting_party' => $trip->requesting_party,
+                'vehicle_name' => $trip->vehicle ? $trip->vehicle->vehicle_name : '',
+                'driver_name' => $trip->driver ? $trip->driver->first_name . ' ' . $trip->driver->last_name : '',
+                'status' => $trip->status,
+                'passengers' => $trip->passengers->map(function ($passenger) use ($trip) {
+                    return [
+                        'id' => $passenger->id,
+                        'name' => $passenger->name,
+                        'affiliation' => $passenger->affiliation,
+                        'contact_number' => $passenger->contact_number,
+                        'is_party_head' => $passenger->is_party_head,
+                        'trip_id' => $passenger->trip_id,
+                        'trip_status' => $trip->status,
+                    ];
+                }),
+            ],
         ]);
     }
 
@@ -225,6 +278,11 @@ class TripController extends Controller
         // If vehicle and driver are being assigned, update status to 'assigned'
         if (isset($validatedData['vehicle_id']) && isset($validatedData['driver_id'])) {
             $validatedData['status'] = 'assigned';
+            Notification::create([
+                'user_id' => $validatedData['driver_id'],
+                'title' => 'Trip Assigned',
+                'message' => 'You have been assigned to a trip to ' . $trip->destination . ' on ' . Carbon::parse($trip->start_date)->format('M d, Y'),
+            ]);
         }
 
         // Use DB transaction to ensure data consistency
@@ -246,56 +304,4 @@ class TripController extends Controller
         return redirect()->route('trips.index');
     }
 
-    /**
-     * Check vehicle and driver availability for a given date range
-     */
-    public function checkAvailability(Request $request)
-    {
-        $request->validate([
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
-        ]);
-
-        $startDate = $request->start_date;
-        $endDate = $request->end_date;
-        
-        // Get all vehicles that have trips in the given date range
-        $unavailableVehicles = Trip::where(function ($query) use ($startDate, $endDate) {
-            $query->whereBetween('start_date', [$startDate, $endDate])
-                ->orWhereBetween('end_date', [$startDate, $endDate])
-                ->orWhere(function ($q) use ($startDate, $endDate) {
-                    $q->where('start_date', '<=', $startDate)
-                        ->where('end_date', '>=', $endDate);
-                });
-        })
-        ->whereIn('status', ['assigned', 'dispatched', 'approved', 'ongoing', 'pending'])
-        ->pluck('vehicle_id');
-
-        // Get all drivers that have trips in the given date range
-        $unavailableDrivers = Trip::where(function ($query) use ($startDate, $endDate) {
-            $query->whereBetween('start_date', [$startDate, $endDate])
-                ->orWhereBetween('end_date', [$startDate, $endDate])
-                ->orWhere(function ($q) use ($startDate, $endDate) {
-                    $q->where('start_date', '<=', $startDate)
-                        ->where('end_date', '>=', $endDate);
-                });
-        })
-        ->whereIn('status', ['assigned', 'dispatched', 'approved', 'ongoing', 'pending'])
-        ->pluck('driver_id');
-
-        // Get available vehicles and drivers
-        $availableVehicles = Vehicle::whereNotIn('vehicle_id', $unavailableVehicles)
-            ->select('vehicle_id', 'vehicle_name')
-            ->get();
-
-        $availableDrivers = User::where('role_id', 3)
-            ->whereNotIn('id', $unavailableDrivers)
-            ->select('id', 'first_name', 'last_name')
-            ->get();
-
-        return response()->json([
-            'available_vehicles' => $availableVehicles,
-            'available_drivers' => $availableDrivers,
-        ]);
-    }
 }

@@ -43,4 +43,9 @@ class Trip extends Model
     {
         return $this->hasMany(Passenger::class, 'trip_id');
     }
+
+    public function tripLog()
+    {
+        return $this->hasOne(TripLog::class, 'trip_id');
+    }
 }

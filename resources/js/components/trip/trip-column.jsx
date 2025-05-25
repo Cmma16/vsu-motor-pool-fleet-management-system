@@ -11,18 +11,28 @@ export const TripColumn = (handleView, handleEdit, handleDelete) => [
         enableSorting: false,
         enableHiding: false,
     },
-    columnHelper.accessor('destination', {
-        header: () => <div className="text-left">Destination</div>,
-        cell: (info) => <div className="text-left">{info.getValue()}</div>,
-    }),
-    columnHelper.accessor('purpose', {
-        header: () => <div className="text-left">Purpose</div>,
-        cell: (info) => <div className="text-left">{info.getValue()}</div>,
-    }),
     columnHelper.accessor('trip_number', {
         header: () => <div className="text-left">Trip number</div>,
         cell: (info) => <div className="text-left">{info.getValue()}</div>,
     }),
+    columnHelper.accessor('destination', {
+        header: () => <div className="text-left">Destination</div>,
+        cell: (info) => <div className="text-left">{info.getValue()}</div>,
+    }),
+    columnHelper.accessor(
+        (row) => {
+            if (row.start_date === row.end_date) {
+                return row.start_date;
+            } else {
+                return `${row.start_date} - ${row.end_date}`;
+            }
+        },
+        {
+            id: 'trip_dates',
+            header: () => <div className="text-left">Trip Dates</div>,
+            cell: (info) => <div className="text-left">{info.getValue()}</div>,
+        },
+    ),
     columnHelper.accessor('date_filed', {
         header: () => <div className="text-left">Date filed</div>,
         cell: (info) => <div className="text-left">{info.getValue()}</div>,

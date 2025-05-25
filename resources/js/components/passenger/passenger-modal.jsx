@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { useForm } from '@inertiajs/react';
 import { Loader2 } from 'lucide-react';
 import React from 'react';
+import { toast } from 'sonner';
 
 export function PassengerModal({ trip_id, formType = 'add', passenger = null }) {
     const [open, setOpen] = React.useState(false);
@@ -28,13 +29,25 @@ export function PassengerModal({ trip_id, formType = 'add', passenger = null }) 
         console.log(data);
         if (formType === 'edit') {
             put(route('passengers.update', passenger.id), {
-                onSuccess: () => setOpen(false),
-                onError: (errors) => console.log(errors),
+                onSuccess: () => {
+                    setOpen(false);
+                    toast.success('Passenger updated successfully');
+                },
+                onError: (errors) => {
+                    toast.error('Failed to update passenger');
+                    console.log(errors);
+                },
             });
         } else {
             post(route('passengers.store'), {
-                onSuccess: () => setOpen(false),
-                onError: (errors) => console.log(errors),
+                onSuccess: () => {
+                    setOpen(false);
+                    toast.success('Passenger added successfully');
+                },
+                onError: (errors) => {
+                    toast.error('Failed to add passenger');
+                    console.log(errors);
+                },
             });
         }
     };

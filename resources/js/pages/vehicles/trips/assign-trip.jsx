@@ -1,4 +1,4 @@
-import { Badge } from '@/components/ui/badge';
+import TripInfoCard from '@/components/trip/trip-info-card';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
@@ -6,9 +6,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/app-layout';
 import { Head, router, useForm } from '@inertiajs/react';
-import { format, parse } from 'date-fns';
-import { Loader2 } from 'lucide-react';
+import { ArrowLeft, Loader2 } from 'lucide-react';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 // import { Button } from 'react-day-picker';
 
@@ -28,18 +28,7 @@ const pageDetails = {
     description: 'Assign a driver and vehicle to the trip.',
 };
 
-function setAsPartyHead(passengerId) {
-    router.post(`/passengers/${passengerId}/assign-party-head`, {
-        preserveScroll: true,
-        onSuccess: () => {
-            console.log('Party head updated');
-        },
-    });
-}
-
 export default function AssignTrip({ trip, availableVehicles, availableDrivers }) {
-    // Format the departure time to 12-hour format
-    const formattedTime = trip.departure_time ? format(parse(trip.departure_time, 'HH:mm', new Date()), 'h:mm a') : '';
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isAssigning, setIsAssigning] = useState(false);
     const [error, setError] = useState(null);
@@ -68,77 +57,44 @@ export default function AssignTrip({ trip, availableVehicles, availableDrivers }
             // forceFormData: true, // Ensures file uploads and proper formatting
             preserveScroll: true,
             onSuccess: () => {
+                toast.success('Trip assigned successfully');
                 reset(); // Reset all fields after a successful submission
                 setIsSubmitting(false);
             },
             onError: (errors) => {
+                toast.error('Failed to assign trip');
                 console.log(errors); // Log errors for debugging
                 setIsSubmitting(false);
             },
         });
     };
 
+    const handleStatusUpdate = (id, status) => {
+        router.patch(
+            route('trips.updateStatus', id),
+            {
+                status: status,
+            },
+            {
+                preserveScroll: true,
+                onSuccess: () => {
+                    toast('Trip status updated successfully');
+                },
+                onError: () => {
+                    toast('Failed to update trip status');
+                },
+            },
+        );
+    };
+
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             <Head title="Assign Trip" />
+            <Button variant="outline" className="mx-4 self-start bg-white" onClick={() => router.get(route('trips.show', trip.trip_id))}>
+                <ArrowLeft /> Trip Details
+            </Button>
             <div className="mb-8 grid gap-6 p-4 md:grid-cols-2">
-                <Card className="p-4">
-                    <CardHeader>
-                        <CardTitle>Trip Information</CardTitle>
-                        <CardDescription className="flex justify-between gap-2">
-                            General overview of the trip.
-                            <Badge variant="outline" className="text-sm">
-                                Trip Number: {trip.trip_number}
-                            </Badge>
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="space-y-2">
-                            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-                                {/* Start Date */}
-                                <div className="flex flex-col space-y-2">
-                                    <p className="font-medium">Scheduled Date</p>
-                                    {trip.start_date !== trip.end_date ? (
-                                        <p className="text-muted-foreground">{`${format(new Date(trip.start_date), 'MMMM d, yyyy')} - ${format(new Date(trip.end_date), 'MMMM d, yyyy')}`}</p>
-                                    ) : (
-                                        <p className="text-muted-foreground">{format(new Date(trip.start_date), 'MMMM d, yyyy')}</p>
-                                    )}
-                                </div>
-                                {/* Departure Time */}
-                                <div className="flex flex-col space-y-2">
-                                    <p className="font-medium">Departure Time</p>
-                                    <p className="text-muted-foreground">{formattedTime}</p>
-                                </div>
-                                {/* Destination */}
-                                <div className="flex flex-col space-y-2">
-                                    <p className="font-medium">Destination</p>
-                                    <p className="text-muted-foreground">{trip.destination}</p>
-                                </div>
-                                {/* Requesting Party */}
-                                <div className="flex flex-col space-y-2">
-                                    <p className="font-medium">Requesting Party</p>
-                                    <p className="text-muted-foreground">{trip.requesting_party}</p>
-                                </div>
-                                {/* Passenger Count */}
-                                <div className="flex flex-col space-y-2">
-                                    <p className="font-medium">Passengers ({trip.passenger_count})</p>
-                                    <ul className="list-disc pl-5">
-                                        {trip.passengers.map((passenger) => (
-                                            <li key={passenger.id} className="text-muted-foreground">
-                                                {passenger.name}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                                {/* Purpose */}
-                                <div className="flex flex-col space-y-2">
-                                    <p className="font-medium">Purpose</p>
-                                    <p className="text-muted-foreground">{trip.purpose}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
+                <TripInfoCard trip={trip} />
                 <Card className="flex-1">
                     <CardHeader>
                         <CardTitle>Assignment</CardTitle>
@@ -196,19 +152,21 @@ export default function AssignTrip({ trip, availableVehicles, availableDrivers }
                                 'Confirm Assignment'
                             )}
                         </Button>
-                        {!availableDrivers.length ||
-                            (!availableVehicles.length && (
-                                <Button className="w-full" variant="destructive" disabled={isSubmitting}>
-                                    {isSubmitting ? (
-                                        <>
-                                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                            Rejecting...
-                                        </>
-                                    ) : (
-                                        'Reject Trip'
-                                    )}
-                                </Button>
-                            ))}
+                        <Button
+                            className="w-full"
+                            variant="destructive"
+                            onClick={() => handleStatusUpdate(trip.trip_id, 'rejected')}
+                            disabled={isSubmitting}
+                        >
+                            {isSubmitting ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Rejecting...
+                                </>
+                            ) : (
+                                'Reject Trip'
+                            )}
+                        </Button>
                     </CardFooter>
                 </Card>
                 {error && <p className="text-red-500">{error}</p>}

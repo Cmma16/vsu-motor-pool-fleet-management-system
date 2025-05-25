@@ -24,7 +24,9 @@ export default function TripForm({ formData, setData, onSubmit, processing, erro
                 </div> */}
                 {/* Trip Number */}
                 <div className="space-y-2">
-                    <Label htmlFor="trip_number">Trip Number</Label>
+                    <Label htmlFor="trip_number">
+                        Trip Number <span className="text-red-500">*</span>
+                    </Label>
                     <Input
                         id="trip_number"
                         name="trip_number"
@@ -38,7 +40,9 @@ export default function TripForm({ formData, setData, onSubmit, processing, erro
                 </div>
                 {/* Destination */}
                 <div className="space-y-2">
-                    <Label htmlFor="destination">Destination</Label>
+                    <Label htmlFor="destination">
+                        Destination <span className="text-red-500">*</span>
+                    </Label>
                     <Input
                         id="destination"
                         name="destination"
@@ -52,7 +56,9 @@ export default function TripForm({ formData, setData, onSubmit, processing, erro
                 </div>
                 {/* Start Date */}
                 <div className="space-y-2">
-                    <Label htmlFor="start_date">Start Date</Label>
+                    <Label htmlFor="start_date">
+                        Start Date <span className="text-red-500">*</span>
+                    </Label>
                     <input
                         id="start_date"
                         name="start_date"
@@ -67,7 +73,9 @@ export default function TripForm({ formData, setData, onSubmit, processing, erro
                 </div>
                 {/* End Date */}
                 <div className="space-y-2">
-                    <Label htmlFor="end_date">End Date</Label>
+                    <Label htmlFor="end_date">
+                        End Date <span className="text-red-500">*</span>
+                    </Label>
                     <input
                         id="end_date"
                         name="end_date"
@@ -82,7 +90,9 @@ export default function TripForm({ formData, setData, onSubmit, processing, erro
                 </div>
                 {/* Departure Time */}
                 <div className="space-y-2">
-                    <Label htmlFor="departure_time">Departure Time</Label>
+                    <Label htmlFor="departure_time">
+                        Departure Time <span className="text-red-500">*</span>
+                    </Label>
                     <input
                         id="departure_time"
                         name="departure_time"
@@ -98,7 +108,9 @@ export default function TripForm({ formData, setData, onSubmit, processing, erro
 
                 {/* Requesting Party */}
                 <div className="space-y-2">
-                    <Label htmlFor="requesting_party">Requesting Party</Label>
+                    <Label htmlFor="requesting_party">
+                        Requesting Party <span className="text-red-500">*</span>
+                    </Label>
                     <Input
                         id="requesting_party"
                         name="requesting_party"
@@ -113,7 +125,9 @@ export default function TripForm({ formData, setData, onSubmit, processing, erro
 
                 {/* Purpose */}
                 <div className="space-y-2">
-                    <Label htmlFor="purpose">Purpose</Label>
+                    <Label htmlFor="purpose">
+                        Purpose <span className="text-red-500">*</span>
+                    </Label>
                     <Textarea
                         id="purpose"
                         name="purpose"

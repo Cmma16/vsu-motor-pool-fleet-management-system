@@ -1,14 +1,13 @@
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 
 export default function RequestForm({ formData, formType, setData, onSubmit, processing, errors, vehicles, maintenancePlans, lockInputs }) {
     return (
-        <form onSubmit={onSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                {console.log(formData)}
+        <form onSubmit={onSubmit} className="w-full space-y-8">
+            <div className="grid grid-cols-1 gap-6">
                 {/* Service Type */}
                 <div className="space-y-2">
                     <Label htmlFor="service_type">Service Type</Label>
@@ -96,14 +95,15 @@ export default function RequestForm({ formData, formType, setData, onSubmit, pro
                 {/* Work Description */}
                 <div className="space-y-2">
                     <Label htmlFor="work_description">Work Description</Label>
-                    <Input
+                    <Textarea
                         id="work_description"
                         name="work_description"
-                        placeholder="Description of work to be done"
+                        placeholder="Provide a detailed description of the work to be done..."
                         value={formData.work_description}
                         onChange={(e) => setData('work_description', e.target.value)}
                         disabled={processing}
                         tabIndex={5}
+                        className="min-h-[120px] resize-y"
                     />
                     <InputError message={errors.work_description} />
                 </div>
@@ -158,7 +158,7 @@ export default function RequestForm({ formData, formType, setData, onSubmit, pro
                     <InputError message={errors.status} />
                 </div> */}
             </div>
-            <Button disabled={processing} className="w-1/3">
+            <Button disabled={processing} className="w-full p-6">
                 {formType === 'edit' ? 'Save Changes' : 'Submit Request'}
             </Button>
         </form>

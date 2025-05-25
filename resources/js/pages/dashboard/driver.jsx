@@ -29,7 +29,7 @@ export default function Dashboard({
     upcomingTrips,
     latestOdometerReading,
     nextMaintenance,
-    notifications,
+    myRequests,
 }) {
     const totalVehicles = {
         title: 'Total Vehicles',
@@ -110,13 +110,13 @@ export default function Dashboard({
                                                     <span className="flex items-center gap-1">
                                                         {latestOdometerReading?.reading}
                                                         <span className="text-muted-foreground text-xs">
-                                                            due at: {nextMaintenance.next_service_km} km
+                                                            due at: {nextMaintenance?.next_service_km || 'N/A'} km
                                                         </span>
                                                     </span>
                                                 </div>
                                                 <div className="flex flex-col gap-1">
                                                     <span className="text-sm font-medium">Next Maintenance</span>
-                                                    <span>{nextMaintenance.scheduled_date}</span>
+                                                    <span>{nextMaintenance?.scheduled_date || 'N/A'}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -143,31 +143,30 @@ export default function Dashboard({
                             </Card>
                             <Card className="flex-1">
                                 <CardHeader className="pb-2">
-                                    <CardTitle className="text-lg">Notifications</CardTitle>
+                                    <CardTitle className="text-lg">My Requests</CardTitle>
+                                    <CardDescription>Recent service requests you have submitted</CardDescription>
                                 </CardHeader>
                                 <CardContent>
                                     <div className="grid gap-3">
-                                        {notifications ? (
-                                            notifications.map((notification) => (
-                                                <div
-                                                    key={notification.id}
-                                                    className={`rounded-lg border p-3 ${notification.read ? '' : 'bg-muted/50'}`}
-                                                >
+                                        {console.log(myRequests)}
+                                        {myRequests ? (
+                                            myRequests.map((request) => (
+                                                <div key={request.request_id} className="rounded-lg border p-3">
                                                     <div className="flex justify-between">
-                                                        <h4 className="font-medium">{notification.title}</h4>
-                                                        <span className="text-muted-foreground text-xs">{notification.time}</span>
+                                                        <h4 className="font-medium">{request.vehicle?.vehicle_name}</h4>
+                                                        <span className="text-muted-foreground text-xs">{request.date_filed.split(' ')[0]}</span>
                                                     </div>
-                                                    <p className="mt-1 text-sm">{notification.message}</p>
+                                                    <p className="mt-1 text-sm">{request.work_description}</p>
                                                 </div>
                                             ))
                                         ) : (
-                                            <p className="text-muted-foreground text-sm">No new notifications</p>
+                                            <p className="text-muted-foreground text-sm">No requests to show</p>
                                         )}
                                     </div>
                                 </CardContent>
                                 <CardFooter>
-                                    <Button variant="ghost" size="sm" className="w-full">
-                                        View All Notifications
+                                    <Button variant="ghost" size="sm" className="w-full" onClick={() => router.get(route('requests.index'))}>
+                                        View All Requests
                                     </Button>
                                 </CardFooter>
                             </Card>

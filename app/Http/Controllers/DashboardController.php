@@ -84,11 +84,19 @@ class DashboardController extends Controller
         $today = Carbon::now()->setTimezone('Asia/Manila')->format('Y-m-d');
 
         $activeVehicle = Trip::where('driver_id', $driver->id)
-                    ->where('status', ['received'])
-                    ->where('start_date', '<=', $today)
-                    ->with('vehicle')
-                    ->orderBy('start_date', 'desc')
-                    ->first()?->vehicle;
+            ->whereIn('status', ['assigned', 'ongoing'])
+            ->where('start_date', '<=', $today)
+            ->where('end_date', '>=', $today)  // Trip hasn't ended yet
+            ->with(['vehicle' => function ($query) {
+                $query->with('latestOdometerLog');  // Eager load the latest odometer reading
+            }])
+            ->orderByRaw('CASE 
+                WHEN status = "ongoing" THEN 1 
+                WHEN status = "assigned" THEN 2 
+                ELSE 3 
+            END')  // Prioritize 'ongoing' over 'assigned'
+            ->orderBy('start_date', 'desc')  // Then sort by start date
+            ->first()?->vehicle;
                 if ($activeVehicle) {
                     $latestOdometerReading = $activeVehicle->odometerLogs()
                         ->latest('logged_at')
@@ -131,6 +139,7 @@ class DashboardController extends Controller
                 'underMaintenance' => Vehicle::where('status', 'under maintenance')->count(),
                 'retired' => Vehicle::where('status', 'retired')->count(),
             ];
+            $myRequests = ServiceRequest::with('vehicle')->where('requested_by', $driver->id)->orderBy('date_filed', 'desc')->limit(2)->get();
         
         return Inertia::render('dashboard/driver', [
             'maintenanceStats' => [
@@ -149,6 +158,7 @@ class DashboardController extends Controller
             'upcomingTrips' => $upcomingTrips,
             'personnelStats' => $personnelStats,
             'vehicleStats' => $vehicleStats,
+            'myRequests' => $myRequests,
         ]);
     }
 
