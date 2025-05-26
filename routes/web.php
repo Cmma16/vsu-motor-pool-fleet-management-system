@@ -38,6 +38,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('vehicles', VehicleController::class);
     Route::get('/vehicles/{vehicle}/qr-code', [VehicleController::class, 'generateQRCode'])->name('vehicles.generate');
     Route::post('/vehicles/scan-qr', [VehicleController::class, 'scanQRCode'])->name('vehicles.scan-qr');
+    Route::post('/vehicles/{vehicle}/update-photo', [VehicleController::class, 'updatePhoto'])->name('vehicles.updatePhoto');
 
     Route::resource('repairs', RepairsController::class);
     Route::patch('repairs/{repair}/confirm', [RepairsController::class, 'confirm'])->name('repairs.confirm');

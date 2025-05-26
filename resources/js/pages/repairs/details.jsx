@@ -1,9 +1,10 @@
 import { DisplayTable } from '@/components/display-table';
 import { MaintenancePartColumn } from '@/components/parts/maintenance-part-column';
 import { MaintenancePartModal } from '@/components/parts/maintenance-part-modal';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import { toast } from 'sonner';
 
 import AppLayout from '@/layouts/app-layout';
@@ -26,6 +27,29 @@ const pageDetails = {
 };
 
 export default function details({ repair, parts, repairParts }) {
+    const user = usePage().props.auth.user;
+
+    const confirmRepair = () => {
+        router.patch(
+            route(
+                'repairs.confirm',
+                { maintenance_id: repair.repair_id },
+                {
+                    onSuccess: () => {
+                        toast.success('Repair confirmed successfully', {
+                            description: 'The repair has been confirmed successfully',
+                        });
+                    },
+                    onError: () => {
+                        toast.error('Repair confirmation failed', {
+                            description: 'The repair was not confirmed',
+                        });
+                    },
+                },
+            ),
+        );
+    };
+
     const deleteRepairPart = (id) => {
         router.delete(route('maintenance-parts.destroy', { id }), {
             onSuccess: () => {
@@ -47,7 +71,10 @@ export default function details({ repair, parts, repairParts }) {
                 <Card className="w-full">
                     <CardHeader>
                         <CardTitle>Repair Information</CardTitle>
-                        <CardDescription>General overview of the repair.</CardDescription>
+                        <CardDescription className="flex justify-between">
+                            General overview of the repair.
+                            {user.role.name === 'Staff' && !repair.confirmed_by && <Button onClick={confirmRepair}>Confirm Record</Button>}
+                        </CardDescription>
                     </CardHeader>
                     <CardContent>
                         <div className="space-y-6">
@@ -87,7 +114,7 @@ export default function details({ repair, parts, repairParts }) {
                                     <span>{repair.odometer_reading}</span>
                                 </div>
 
-                                {!repair.confirmed_by && (
+                                {user.role.name === 'Mechanic' && !repair.confirmed_by && (
                                     <Link
                                         href={`${repair.repair_id}/edit`}
                                         className="col-span-2 w-1/3 rounded-md bg-[#006600] px-3 py-2 text-center text-white hover:bg-[#005500]"
@@ -104,7 +131,9 @@ export default function details({ repair, parts, repairParts }) {
                         <CardTitle>Parts Used</CardTitle>
                         <CardDescription className="flex justify-between">
                             Parts used during the repair.
-                            {!repair.confirmed_by && <MaintenancePartModal maintenance_id={repair.repair_id} parts={parts} formType="create" />}
+                            {user.role.name === 'Mechanic' && !repair.confirmed_by && (
+                                <MaintenancePartModal maintenance_id={repair.repair_id} parts={parts} formType="create" />
+                            )}
                         </CardDescription>
                     </CardHeader>
                     <CardContent>

@@ -84,7 +84,7 @@ export default function Dashboard({ vehicleStats, maintenanceStats, tripStats, s
                         />
                         <TripDisplaySection
                             trips={pendingTrips}
-                            sectionTitle="Pending Trips Requests"
+                            sectionTitle="Pending Trip Requests"
                             sectionDescription="Trips that are pending and have not been assigned."
                             handleViewDetails={handleViewTripDetails}
                         />

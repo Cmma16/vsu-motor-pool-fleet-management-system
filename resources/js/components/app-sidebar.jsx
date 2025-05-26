@@ -2,7 +2,18 @@ import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { Link } from '@inertiajs/react';
-import { ChartColumnBig, Gauge, HandHelpingIcon, LayoutGrid, LucidePuzzle, MapPinIcon, TruckIcon, Users, WrenchIcon } from 'lucide-react';
+import {
+    ChartColumnBig,
+    Gauge,
+    HandHelpingIcon,
+    LayoutGrid,
+    LucidePuzzle,
+    MapPinIcon,
+    Stethoscope,
+    TruckIcon,
+    Users,
+    WrenchIcon,
+} from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems = [
@@ -11,15 +22,29 @@ const mainNavItems = [
         href: '/dashboard',
         icon: LayoutGrid,
     },
+    { title: 'My Requests', href: '/services/requests?status=my-requests', icon: HandHelpingIcon, allowedRoles: ['Driver'] },
     {
-        title: 'Services',
+        title: 'Services Requests',
         href: '/services',
         icon: HandHelpingIcon,
+        allowedRoles: ['Admin', 'Mechanic', 'Staff'],
         children: [
-            { title: 'Requests', href: '/services/requests' },
-            { title: 'Inspection', href: '/services/request-inspections', allowedRoles: ['Admin', 'Mechanic', 'Staff'] },
-            { title: 'Completed', href: '/services/completed', allowedRoles: ['Admin', 'Mechanic', 'Staff'] },
+            { title: 'All Requests', href: '/services/requests', allowedRoles: ['Admin', 'Mechanic', 'Staff'] },
+            { title: 'Pending', href: '/services/requests?status=pending', allowedRoles: ['Admin', 'Staff'] },
+            { title: 'Received', href: '/services/requests?status=received', allowedRoles: ['Mechanic'] },
+            { title: 'Inspected', href: '/services/requests?status=inspected', allowedRoles: ['Admin', 'Staff'] },
+            { title: 'Approved', href: '/services/requests?status=approved', allowedRoles: ['Mechanic'] },
+            { title: 'Conducted', href: '/services/requests?status=conducted', allowedRoles: ['Staff'] },
+            { title: 'Completed', href: '/services/requests?status=completed', allowedRoles: ['Admin', 'Mechanic', 'Staff'] },
+            { title: 'Cancelled', href: '/services/requests?status=cancelled', allowedRoles: ['Admin', 'Mechanic', 'Staff'] },
+            // { title: 'Completed', href: '/services/completed', allowedRoles: ['Admin', 'Mechanic', 'Staff'] },
         ],
+    },
+    {
+        title: 'Service Request Inspection',
+        href: '/services/request-inspections',
+        icon: Stethoscope,
+        allowedRoles: ['Admin', 'Mechanic', 'Staff'],
     },
     {
         title: 'Vehicles',
@@ -60,6 +85,7 @@ const mainNavItems = [
         title: 'Odometer Logs',
         href: '/odometer',
         icon: Gauge,
+        allowedRoles: ['Admin', 'Staff'],
     },
     {
         title: 'Reports',

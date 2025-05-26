@@ -108,9 +108,10 @@ export default function VehicleForm({ formData, formType, setData, onSubmit, pro
                         <SelectContent>
                             <SelectItem value="sedan">Sedan</SelectItem>
                             <SelectItem value="truck">Truck</SelectItem>
-                            <SelectItem value="motorcycle">Motorcycle</SelectItem>
                             <SelectItem value="bus">Bus</SelectItem>
-                            <SelectItem value="other">Other</SelectItem>
+                            <SelectItem value="van">Van</SelectItem>
+                            <SelectItem value="pickup">Pickup</SelectItem>
+                            <SelectItem value="suv">SUV</SelectItem>
                         </SelectContent>
                     </Select>
                     <InputError message={errors.vehicle_type} />
@@ -203,22 +204,30 @@ export default function VehicleForm({ formData, formType, setData, onSubmit, pro
                     <InputError message={errors.fuel_type} />
                 </div>
 
-                {/* Status */}
-                <div className="space-y-2">
-                    <Label htmlFor="status">Status</Label>
-                    <Select value={formData.status} onValueChange={(value) => setData('status', value)}>
-                        <SelectTrigger id="status" tabIndex={12}>
-                            <SelectValue placeholder="Select status" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="available">Available</SelectItem>
-                            <SelectItem value="in use">In Use</SelectItem>
-                            <SelectItem value="under maintenance">Under Maintenance</SelectItem>
-                            <SelectItem value="retired">Retired</SelectItem>
-                        </SelectContent>
-                    </Select>
-                    <InputError message={errors.status} />
-                </div>
+                {/* Odometer Reading */}
+                {formType !== 'edit' && (
+                    <div className="space-y-2">
+                        <Label htmlFor="odometer_reading">Odometer Reading</Label>
+                        <Input
+                            id="odometer_reading"
+                            value={formData.odometer_reading}
+                            onChange={(e) => setData('odometer_reading', e.target.value)}
+                            disabled={processing}
+                            placeholder="Odometer Reading"
+                            tabIndex={13}
+                        />
+                        <InputError message={errors.odometer_reading} />
+                    </div>
+                )}
+
+                {/* Vehicle Image */}
+                {formType !== 'edit' && (
+                    <div className="space-y-2">
+                        <Label htmlFor="image"> 'Vehicle Image'</Label>
+                        <Input id="image" type="file" onChange={(e) => setData('image', e.target.files[0])} disabled={processing} tabIndex={14} />
+                        <InputError message={errors.image} />
+                    </div>
+                )}
             </div>
             <Button disabled={processing} className="w-1/3">
                 {formType === 'edit' ? 'Save Changes' : 'Add Vehicle'}

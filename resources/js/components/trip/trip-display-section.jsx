@@ -1,6 +1,7 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { router } from '@inertiajs/react';
 import { format, isToday, isTomorrow, parseISO } from 'date-fns';
 import { CalendarIcon, Car, Clock, FileText, MapPin } from 'lucide-react';
 
@@ -65,7 +66,7 @@ export default function TripDisplaySection({ trips, sectionTitle, sectionDescrip
                 <CardTitle>{sectionTitle}</CardTitle>
                 <CardDescription>{sectionDescription}</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="max-h-96 overflow-y-auto">
                 {trips.length > 0 ? (
                     <div className="grid gap-4">
                         {trips.map((trip) => (
@@ -117,6 +118,13 @@ export default function TripDisplaySection({ trips, sectionTitle, sectionDescrip
                     <div className="text-muted-foreground py-6 text-center">No upcoming trips data found</div>
                 )}
             </CardContent>
+            <CardFooter className="flex items-center justify-center">
+                {trips.length > 4 && (
+                    <Button variant="ghost" className="w-full cursor-pointer hover:bg-gray-200" onClick={() => router.get('/vehicles/trips')}>
+                        View All
+                    </Button>
+                )}
+            </CardFooter>
         </Card>
     );
 }

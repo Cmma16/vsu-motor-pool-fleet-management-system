@@ -20,15 +20,14 @@ return new class extends Migration
             $table->string('model');
             $table->integer('engine_number');
             $table->integer('chassis_number');
-            $table->enum('vehicle_type', ['sedan', 'truck', 'motorcycle', 'bus', 'other']);
+            $table->enum('vehicle_type', ['sedan', 'truck', 'bus', 'van', 'pickup', 'suv']);
             $table->integer('capacity');
             $table->string('location');
             $table->year('year_acquired');
             $table->enum('category', ['light vehicle', 'heavy vehicle']);
             $table->string('plate_number', 25);
-            // $table->integer('odometer_reading');
             $table->enum('fuel_type', ['gasoline', 'diesel']);
-            $table->enum('status', ['available', 'in use', 'under maintenance', 'retired']);
+            $table->enum('status', ['available', 'in use', 'under maintenance', 'out of service']); //changed from retired to out of service
             $table->timestamps();
         });
     }

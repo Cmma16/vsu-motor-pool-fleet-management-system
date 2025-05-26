@@ -25,10 +25,13 @@ export default function AddVehicle() {
         vehicle_type: '',
         capacity: '',
         location: '',
-        year_acquired: new Date().getFullYear().toString(),
-        category: 'light vehicle',
+        year_acquired: '',
+        category: '',
         plate_number: '',
-        fuel_type: 'gasoline',
+        fuel_type: '',
+        odometer_reading: '',
+        img: null,
+
         status: 'available',
     });
 
@@ -36,6 +39,7 @@ export default function AddVehicle() {
         e.preventDefault();
         post(route('vehicles.store'), {
             data,
+            forceFormData: true,
             onSuccess: () => {
                 reset();
                 toast.success('Vehicle added successfully');

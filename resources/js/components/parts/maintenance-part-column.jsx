@@ -1,6 +1,7 @@
 import DestructiveDialog from '@/components/display/destructive-dialog';
 import { MaintenancePartModal } from '@/components/parts/maintenance-part-modal';
 import { Button } from '@/components/ui/button';
+import { usePage } from '@inertiajs/react';
 import { createColumnHelper } from '@tanstack/react-table';
 import { ArrowUpDown, TrashIcon } from 'lucide-react';
 
@@ -30,7 +31,10 @@ export const MaintenancePartColumn = (handleEdit, handleView, handleDelete) => [
         header: () => <div className="text-center">Actions</div>,
         cell: ({ row }) => {
             const maintenancePart = row.original;
+            const user = usePage().props.auth.user;
+
             if (maintenancePart.confirmed_by) return null;
+            if (user.role.name !== 'Mechanic') return null;
 
             return (
                 <div className="flex justify-center gap-2">

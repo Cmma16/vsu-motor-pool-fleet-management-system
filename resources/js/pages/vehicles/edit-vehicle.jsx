@@ -1,7 +1,7 @@
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import VehicleForm from '@/components/vehicle/vehicle-form';
-
 import { Head, useForm } from '@inertiajs/react';
+import { toast } from 'sonner';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -39,20 +39,20 @@ export default function EditVehicle({ vehicle }) {
         plate_number: vehicle.plate_number,
         fuel_type: vehicle.fuel_type,
         status: vehicle.status,
+        image: null,
+        image_path: vehicle.image_path,
     });
 
     const editVehicle = (e) => {
         e.preventDefault();
-
         put(route('vehicles.update', vehicle.vehicle_id), {
-            // data, // Sends all form data
-            // forceFormData: true, // Ensures file uploads and proper formatting
+            //forceFormData: true,
             preserveScroll: true,
             onSuccess: () => {
-                reset(); // Reset all fields after a successful submission
+                toast.success('Vehicle updated successfully');
             },
             onError: (errors) => {
-                console.log(errors); // Log errors for debugging
+                toast.error('Failed to update vehicle');
             },
         });
     };

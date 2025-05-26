@@ -2,7 +2,7 @@ import DestructiveDialog from '@/components/display/destructive-dialog';
 import { Button } from '@/components/ui/button';
 import { usePage } from '@inertiajs/react';
 
-import { Check, Eye, Pencil, Printer, TrashIcon } from 'lucide-react';
+import { Check, Eye, Pencil, TrashIcon } from 'lucide-react';
 
 export function ColorfulRowActions({ row, rowKey = 'id', handleView, handleEdit, handleDelete, handleConfirm }) {
     const rowId = row[rowKey];
@@ -15,11 +15,7 @@ export function ColorfulRowActions({ row, rowKey = 'id', handleView, handleEdit,
             </Button>
             {user.role.name === 'Mechanic' && (
                 <div className="gap-2">
-                    {row.confirmed_by ? (
-                        <Button variant="outline" onClick={() => handlePrint(rowId)}>
-                            <Printer />
-                        </Button>
-                    ) : (
+                    {!row.confirmed_by && (
                         <div className="flex flex-row gap-2">
                             <Button variant="outline" onClick={() => handleEdit(rowId)}>
                                 <Pencil />

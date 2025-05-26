@@ -1,11 +1,11 @@
 import { DisplayTable } from '@/components/display-table';
 import { MaintenancePartColumn } from '@/components/parts/maintenance-part-column';
 import { MaintenancePartModal } from '@/components/parts/maintenance-part-modal';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/app-layout';
 import { Head, Link, router, usePage } from '@inertiajs/react';
-import React from 'react';
 import { toast } from 'sonner';
 // import { Button } from 'react-day-picker';
 
@@ -28,7 +28,26 @@ const pageDetails = {
 export default function details({ maintenance, maintenanceParts, parts }) {
     const user = usePage().props.auth.user;
 
-    const [isEditDialogOpen, setIsEditDialogOpen] = React.useState(false);
+    const confirmMaintenance = () => {
+        router.patch(
+            route(
+                'maintenance.confirm',
+                { maintenance_id: maintenance.maintenance_id },
+                {
+                    onSuccess: () => {
+                        toast.success('Maintenance confirmed successfully', {
+                            description: 'The maintenance has been confirmed successfully',
+                        });
+                    },
+                    onError: () => {
+                        toast.error('Maintenance confirmation failed', {
+                            description: 'The maintenance was not confirmed',
+                        });
+                    },
+                },
+            ),
+        );
+    };
 
     const deleteMaintenancePart = (id) => {
         router.delete(route('maintenance-parts.destroy', { id }), {
@@ -52,7 +71,10 @@ export default function details({ maintenance, maintenanceParts, parts }) {
                 <Card className="w-full">
                     <CardHeader>
                         <CardTitle>Maintenance Information</CardTitle>
-                        <CardDescription>General overview of the maintenance.</CardDescription>
+                        <CardDescription className="flex justify-between">
+                            General overview of the maintenance.
+                            {user.role.name === 'Staff' && !maintenance.confirmed_by && <Button onClick={confirmMaintenance}>Confirm Record</Button>}
+                        </CardDescription>
                     </CardHeader>
                     <CardContent>
                         <div className="space-y-6">
@@ -95,7 +117,7 @@ export default function details({ maintenance, maintenanceParts, parts }) {
                                 {/* Confirmed By */}
                                 <div className="flex flex-col space-y-2">
                                     <Label htmlFor="confirmed_by">Confirmed By</Label>
-                                    <span>{maintenance.confirmed_by ?? 'N/A'}</span>
+                                    <span>{maintenance.confirmed_by ?? 'Not yet confirmed'}</span>
                                 </div>
 
                                 {/* Summary */}
@@ -127,7 +149,7 @@ export default function details({ maintenance, maintenanceParts, parts }) {
                         <CardTitle>Parts Used</CardTitle>
                         <CardDescription className="flex justify-between">
                             Parts used during the maintenance.
-                            {!maintenance.confirmed_by && (
+                            {user.role.name === 'Mechanic' && !maintenance.confirmed_by && (
                                 <MaintenancePartModal maintenance_id={maintenance.maintenance_id} parts={parts} formType="create" />
                             )}
                         </CardDescription>

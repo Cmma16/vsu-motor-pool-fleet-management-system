@@ -1,6 +1,7 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { router } from '@inertiajs/react';
 import { format } from 'date-fns';
 
 function getStatusBadge(status) {
@@ -61,7 +62,7 @@ export default function ServiceRequestSections({ requests, sectionTitle, section
                 <CardTitle>{sectionTitle}</CardTitle>
                 <CardDescription>{sectionDescription}</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="max-h-96 overflow-y-auto">
                 <div className="grid gap-4">
                     {requests.length === 0 ? (
                         <div className="text-muted-foreground flex flex-col items-center justify-center py-8">
@@ -94,6 +95,13 @@ export default function ServiceRequestSections({ requests, sectionTitle, section
                     )}
                 </div>
             </CardContent>
+            <CardFooter className="flex items-center justify-center">
+                {requests.length > 4 && (
+                    <Button variant="ghost" className="w-full cursor-pointer hover:bg-gray-200" onClick={() => router.get('/services/requests')}>
+                        View All
+                    </Button>
+                )}
+            </CardFooter>
         </Card>
     );
 }

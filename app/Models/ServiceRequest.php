@@ -14,6 +14,11 @@ class ServiceRequest extends Model
 
     protected $primaryKey = 'request_id';
 
+    protected $casts = [
+        'date_filed' => 'datetime',
+        'date_received' => 'datetime',
+    ];
+
     protected $fillable = [
         'request_id',
         'vehicle_id',

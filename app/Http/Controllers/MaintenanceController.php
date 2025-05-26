@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\OdometerLog;
 use App\Models\MaintenanceParts;
 use App\Models\Part;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use App\Http\Requests\Maintenance\StoreMaintenanceRequest;
 use App\Http\Requests\Maintenance\UpdateMaintenanceRequest;
@@ -162,7 +163,14 @@ class MaintenanceController extends Controller
 
     public function confirm(Maintenance $maintenance)
     {
-        $maintenance->update(['confirmed_by' => auth()->id(), 'date_confirmed' => now()->format('Y-m-d')]);
+        $maintenance->update(['confirmed_by' => auth()->id(), 'date_confirmed' => now()->timezone('Asia/Manila')->format('Y-m-d')]);
+        $maintenance->serviceRequest->update(['status' => 'completed']);
+        $maintenance->serviceRequest->vehicle->update(['status' => 'available']);
+        Notification::create([
+            'user_id' => $repair->performed_by,
+            'title' => "Repair Record Confirmed",
+            'message' => "Your repair record for {$repair->serviceRequest->vehicle->vehicle_name} has been confirmed.",
+        ]);
 
         return redirect()->route('maintenance.index')->with('success', 'Maintenance record confirmed successfully.');
     }

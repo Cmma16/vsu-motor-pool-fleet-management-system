@@ -149,8 +149,9 @@ class RepairsController extends Controller
     
     public function confirm(Maintenance $repair)
     {
-        $repair->update(['confirmed_by' => auth()->id(), 'date_confirmed' => now()->format('Y-m-d')]);
-        
+        $repair->update(['confirmed_by' => auth()->id(), 'date_confirmed' => now()->timezone('Asia/Manila')->format('Y-m-d')]);
+        $repair->serviceRequest->update(['status' => 'completed']);
+        $repair->serviceRequest->vehicle->update(['status' => 'available']);
         Notification::create([
             'user_id' => $repair->performed_by,
             'title' => "Repair Record Confirmed",

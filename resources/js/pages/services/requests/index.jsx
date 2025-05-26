@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import AppLayout from '@/layouts/app-layout';
 
 import { Head, router } from '@inertiajs/react';
-
+import { InfoIcon, Wrench } from 'lucide-react';
 const breadcrumbs = [
     {
         title: 'Service Requests',
@@ -68,6 +68,21 @@ export default function RequestsIndex({ serviceRequests }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             <Head title="Repairs" />
+            {/* Important Information Section */}
+            <div className="mx-4">
+                <h2 className="mb-2 text-lg font-semibold">Important Information</h2>
+                <div className="mb-2 flex items-start gap-2 rounded-md bg-blue-50 p-4 text-blue-800">
+                    <Wrench className="mt-0.5 h-5 w-5 text-blue-400" />
+                    <span>
+                        Repair/maintenance process: A request must be received by the Manager before it can be inspected by the Mechanic. Once
+                        approved, the Mechanic can start conducting the repair/maintenance.
+                    </span>
+                </div>
+                <div className="flex items-start gap-2 rounded-md bg-green-50 p-4 text-green-800">
+                    <InfoIcon className="mt-0.5 h-5 w-5 text-green-400" />
+                    <span>Requestors can only edit their own pending requests. Only the Managers and Admin can approve requests.</span>
+                </div>
+            </div>
             {console.log(serviceRequests)}
             {/*delete this*/}
             <div className="flex h-full w-full max-w-full flex-1 flex-col gap-2 rounded-xl p-2 sm:gap-4 sm:p-4">

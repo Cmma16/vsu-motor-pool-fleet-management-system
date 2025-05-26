@@ -4,19 +4,16 @@ import { Head, router } from '@inertiajs/react';
 import React from 'react';
 
 import { QRCodeModal } from '@/components/display/qr-code-modal';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BasicInfoCard } from '@/components/vehicle/basic-info-card';
 import { OperationalDetailsCard } from '@/components/vehicle/operational-details-card';
 import { TechnicalDetailsCard } from '@/components/vehicle/technical-details-card';
-// import { Label } from '@/components/ui/label';
-// import { Link } from '@inertiajs/react';
-
-import { Button } from '@/components/ui/button';
 import { usePage } from '@inertiajs/react';
-import { Calendar, Car, Clock, Loader2, MapPin, PenTool, QrCode, Settings, TriangleAlert, User } from 'lucide-react';
+import { Calendar, Car, Clock, Image, Loader2, PenTool, QrCode, Settings } from 'lucide-react';
 
+import { UpdateVehiclePhoto } from '@/components/vehicle/update-vehicle-photo';
 import AppLayout from '@/layouts/app-layout';
-// import { Button } from 'react-day-picker';
 
 const breadcrumbs = [
     {
@@ -34,7 +31,7 @@ const pageDetails = {
     description: 'Comprehensive information about the vehicle, including specifications and status.',
 };
 
-export default function details({ vehicle, odometer_reading }) {
+export default function details({ vehicle, odometer_reading, nextMaintenance, latestMaintenance, latestRepair }) {
     const user = usePage().props.auth.user;
     const [isLoading, setIsLoading] = React.useState(false);
 
@@ -75,58 +72,51 @@ export default function details({ vehicle, odometer_reading }) {
                                 Generate QR Code
                             </Button>
                         )}
-                        <Button variant="outline" size="sm">
-                            <PenTool className="mr-2 h-4 w-4" />
-                            Schedule Service
-                        </Button>
-                        <Button onClick={() => router.get(`${vehicle.vehicle_id}/edit`)} size="sm">
-                            <Settings className="mr-2 h-4 w-4" />
-                            Edit vehicle
-                        </Button>
+                        {user.role.name === 'Driver' && (
+                            <Button variant="outline" size="sm" onClick={() => router.get(route('service-requests.create'))}>
+                                <PenTool className="mr-2 h-4 w-4" />
+                                Request Service
+                            </Button>
+                        )}
+                        {user.role.name === 'Admin' ||
+                            (user.role.name === 'Staff' && (
+                                <Button onClick={() => router.get(`${vehicle.vehicle_id}/edit`)} size="sm">
+                                    <Settings className="mr-2 h-4 w-4" />
+                                    Edit vehicle
+                                </Button>
+                            ))}
+                        {user.role.name === 'Admin' ||
+                            (user.role.name === 'Staff' && <UpdateVehiclePhoto vehicleId={vehicle.vehicle_id} currentPhoto={vehicle.image_path} />)}
                     </div>
                 </div>
 
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
                     {/* Left column - Basic info and details */}
-                    <BasicInfoCard vehicle={vehicle} />
-                    <TechnicalDetailsCard vehicle={vehicle} />
-                    <OperationalDetailsCard vehicle={vehicle} odometer_reading={odometer_reading} />
                     <Card>
-                        <CardHeader className="pb-3">
-                            <CardTitle className="text-base">Current Assignment</CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                            <div className="flex items-center">
-                                <User className="text-muted-foreground mr-2 h-5 w-5" />
-                                <div>
-                                    <p className="text-muted-foreground text-sm">Driver</p>
-                                    <p className="font-medium">Carlos Miguel Advincula</p>
-                                </div>
-                            </div>
-                            <div className="flex items-center">
-                                <MapPin className="text-muted-foreground mr-2 h-5 w-5" />
-                                <div>
-                                    <p className="text-muted-foreground text-sm">Destination</p>
-                                    <p className="font-medium">VSU Tolosa Campus</p>
-                                </div>
-                            </div>
-                            <div className="flex items-center">
-                                <TriangleAlert className="text-muted-foreground mr-2 h-5 w-5" />
-                                <div>
-                                    <p className="text-muted-foreground text-sm">Status</p>
-                                    <p className="font-medium">Ongoing</p>
+                        <CardContent className="h-full">
+                            <div className="bg-muted relative aspect-video h-full w-full overflow-hidden rounded-lg">
+                                <div className="flex h-full items-center justify-center">
+                                    {vehicle.image_path ? (
+                                        <img src={`/storage/${vehicle.image_path}`} alt="Vehicle Image" className="h-full w-full object-cover" />
+                                    ) : (
+                                        <div className="text-muted-foreground flex flex-col items-center gap-2 bg-red-500">
+                                            <Image className="h-12 w-12" />
+                                            <p className="text-sm">Vehicle Image</p>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </CardContent>
                     </Card>
+                    <BasicInfoCard vehicle={vehicle} />
+                    <TechnicalDetailsCard vehicle={vehicle} />
+                    <OperationalDetailsCard vehicle={vehicle} odometer_reading={odometer_reading} />
+
                     <div className="space-y-6 md:col-span-2">
                         <Card>
                             <CardHeader>
                                 <div className="flex items-center justify-between">
                                     <CardTitle>Maintenance Status</CardTitle>
-                                    <Button variant="outline" size="sm">
-                                        View Full History
-                                    </Button>
                                 </div>
                             </CardHeader>
                             <CardContent>
@@ -139,39 +129,51 @@ export default function details({ vehicle, odometer_reading }) {
                                         )} */}
                                         <div>
                                             <p className="font-medium">Next Scheduled Maintenance</p>
-                                            <div className="mt-1 flex items-center gap-2">
-                                                <Calendar className="text-muted-foreground h-4 w-4" />
-                                                <p className={`text-sm`}>2025-05-02 (Due Soon)</p>
-                                            </div>
+                                            {nextMaintenance ? (
+                                                <div className="mt-1 flex items-center gap-2">
+                                                    <Calendar className="text-muted-foreground h-4 w-4" />
+                                                    <p className={`text-sm`}>{nextMaintenance.scheduled_date} (Due Soon)</p>
+                                                </div>
+                                            ) : (
+                                                <p className="text-muted-foreground text-sm">No upcoming maintenance</p>
+                                            )}
                                         </div>
                                     </div>
                                     <div className="flex items-start gap-4">
                                         <Clock className="text-muted-foreground mt-0.5 h-5 w-5" />
                                         <div>
-                                            <p className="font-medium">Last Service</p>
-                                            <div className="mt-1 flex items-center gap-2">
-                                                <Calendar className="text-muted-foreground h-4 w-4" />
-                                                <p className="text-muted-foreground text-sm">2024-12-28</p>
-                                            </div>
+                                            <p className="font-medium">Recent Maintenance</p>
+                                            {latestMaintenance ? (
+                                                <div className="mt-1 flex items-center gap-2">
+                                                    <Calendar className="text-muted-foreground h-4 w-4" />
+                                                    <p className="text-muted-foreground text-sm">{latestMaintenance.date_received}</p>
+                                                </div>
+                                            ) : (
+                                                <p className="text-muted-foreground text-sm">No maintenance records found</p>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
 
                                 <div className="mt-6">
-                                    <h4 className="mb-3 font-medium">Recent Maintenance</h4>
+                                    <h4 className="mb-3 font-medium">Recent Repairs</h4>
                                     <div className="space-y-4">
-                                        <div key={1} className="flex justify-between border-b pb-3">
-                                            <div>
-                                                <p className="font-medium">Maintenance</p>
-                                                <p className="text-muted-foreground text-sm">2024-12-28</p>
-                                                <p className="mt-1 text-sm">Oil change, filter replacement, brake inspection</p>
+                                        {latestRepair ? (
+                                            <div key={1} className="flex justify-between border-b pb-3">
+                                                <div>
+                                                    <p className="font-medium">Maintenance</p>
+                                                    <p className="text-muted-foreground text-sm">2024-12-28</p>
+                                                    <p className="mt-1 text-sm">Oil change, filter replacement, brake inspection</p>
+                                                </div>
+                                                <div className="text-right">
+                                                    <Button variant="ghost" size="sm" className="mt-1 h-7">
+                                                        Details
+                                                    </Button>
+                                                </div>
                                             </div>
-                                            <div className="text-right">
-                                                <Button variant="ghost" size="sm" className="mt-1 h-7">
-                                                    Details
-                                                </Button>
-                                            </div>
-                                        </div>
+                                        ) : (
+                                            <p className="text-muted-foreground text-sm">No repair records found</p>
+                                        )}
                                     </div>
                                 </div>
                             </CardContent>

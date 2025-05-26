@@ -19,6 +19,17 @@ export default defineConfig({
         react(),
         tailwindcss(),
     ],
+    // For hosting on local network
+    // server: {
+    //     host: '192.168.137.1',
+    //     port: 5173,
+    //     https: {
+    //         key: fs.readFileSync('certs/192.168.137.1-key.pem'),
+    //         cert: fs.readFileSync('certs/192.168.137.1.pem'),
+    //     },
+    //     strictPort: true,
+    //     cors: true, // enable CORS if needed
+    // },
     esbuild: {
         jsx: 'automatic',
     },

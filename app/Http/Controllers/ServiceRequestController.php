@@ -18,20 +18,24 @@ class ServiceRequestController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $user = auth()->user();
-        $role = $user->role->name;
+        $statusFilter = $request->get('status'); // Ex: 'pending', 'approved', 'my-requests'
 
-        $query = ServiceRequest::with(['vehicle', 'requestedBy', 'receivedBy'])->orderBy('created_at', 'desc');
+        $query = ServiceRequest::with(['vehicle', 'requestedBy', 'receivedBy'])
+            ->orderBy('created_at', 'desc');
 
-        // Apply filtering based on role
-        if ($role === 'Driver') {
+        // Special filter for "my-requests"
+        if ($statusFilter === 'my-requests') {
             $query->where('requested_by', $user->id);
-        } elseif ($role === 'Mechanic') {
-            $query->whereIn('status', ['received', 'inspected', 'approved', 'conducted', 'cancelled', 'completed']);
+
+        // Filter by valid status values
+        } elseif (in_array($statusFilter, [
+            'pending', 'received', 'inspected', 'approved', 'conducted', 'cancelled', 'completed'
+        ])) {
+            $query->where('status', $statusFilter);
         }
-        // Admin and staff: no filters
 
         $serviceRequests = $query->get()->map(function ($serviceRequest) {
             return [
@@ -50,13 +54,15 @@ class ServiceRequestController extends Controller
                 'date_received' => $serviceRequest->date_received ?: 'N/A',
                 'plan_id' => $serviceRequest->plan_id,
                 'status' => $serviceRequest->status,
+                'inspection_id' => $serviceRequest->serviceInspection?->inspection_id ?? '',
+                'inspection_confirmed' => $serviceRequest->serviceInspection?->confirmed_by ? true : false,
+                'maintenance_id' => $serviceRequest->maintenance?->maintenance_id ?? '',
             ];
         });
 
         return Inertia::render('services/requests/index', [
             'serviceRequests' => $serviceRequests,
-            //'userRole' => $role, // optionally pass this to conditionally render buttons on the frontend
-            //'userId' => $user->id, // optional if needed on frontend
+            'statusFilter' => $statusFilter,
         ]);
     }
 
@@ -194,6 +200,10 @@ class ServiceRequestController extends Controller
                 'message' => "Your {$serviceRequest->service_type} request for {$serviceRequest->vehicle->vehicle_name} has been received.",
             ]);
         }
+
+        if ($updateRequest->status === 'approved') {
+            $serviceRequest->vehicle->update(['status' => 'under maintenance']);
+        } 
 
         $serviceRequest->update($updateData);
 

@@ -400,7 +400,7 @@ export default function TripsIndex({ trips = [] }) {
                             </div>
 
                             <TabsContent value="list" className="space-y-4">
-                                <div className="grid gap-4">
+                                <div className="grid gap-4 md:grid-cols-2">
                                     {/* Today's Trips */}
                                     <CurrentDayTripsSection
                                         todayTrips={todayTrips}

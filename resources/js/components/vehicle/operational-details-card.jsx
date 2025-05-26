@@ -1,4 +1,3 @@
-import { OdometerLogModal } from '@/components/odometer/odometer-log-modal';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -19,7 +18,7 @@ export function OperationalDetailsCard({ vehicle, odometer_reading }) {
     };
     return (
         <div className="space-y-6 md:col-span-1">
-            <Card>
+            <Card className="h-full">
                 <CardHeader className="pb-3">
                     <CardTitle className="text-base">Operational Details</CardTitle>
                 </CardHeader>
@@ -35,7 +34,7 @@ export function OperationalDetailsCard({ vehicle, odometer_reading }) {
                                 ) : (
                                     <div className="text-muted-foreground my-4.5">No odometer log available for this vehicle yet.</div>
                                 )}
-                                <OdometerLogModal vehicle_id={vehicle.vehicle_id} vehicles={vehicle} formType="add" />
+                                {/* <OdometerLogModal vehicle_id={vehicle.vehicle_id} vehicles={vehicle} formType="add" /> */}
                             </div>
                             {odometer_reading && <p className="text-muted-foreground text-xs">Updated 3 days ago</p>}
                         </div>

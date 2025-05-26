@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('work_description');
             $table->dateTime('date_received')->nullable(); 
             $table->foreignId('received_by')->nullable()->constrained('users', 'id')->onDelete('set null');
-            $table->enum('status', ['pending', 'received', 'inspected', 'approved', 'cancelled', 'conducted', 'completed']);
+            $table->enum('status', ['pending', 'received', 'inspected', 'approved', 'rejected', 'conducted', 'completed']);
             $table->timestamps();
         });
     }

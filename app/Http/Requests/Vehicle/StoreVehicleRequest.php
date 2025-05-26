@@ -64,6 +64,8 @@ class StoreVehicleRequest extends FormRequest
 
             // Status - Required and should be one of the defined values (active, inactive, maintenance)
             'status' => 'required|string|in:available,in use,under maintenance,retired',
+
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
 }

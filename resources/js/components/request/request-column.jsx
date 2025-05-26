@@ -1,6 +1,6 @@
 import { router, usePage } from '@inertiajs/react';
 import { createColumnHelper } from '@tanstack/react-table';
-import { ArrowUpDown, Pencil, Printer, ScanSearch, Trash, Wrench } from 'lucide-react';
+import { ArrowUpDown, CircleArrowOutUpRight, FileWarning, Pencil, ScanSearch, Trash, Wrench } from 'lucide-react';
 
 import DestructiveDialog from '@/components/display/destructive-dialog';
 import { Badge } from '@/components/ui/badge';
@@ -132,6 +132,14 @@ export const RequestsColumn = (handleView, handleEdit, handleDelete, handleStatu
         header: () => <div className="text-center">Actions</div>,
         cell: ({ row }) => {
             const request = row.original;
+            console.log(request);
+            const goToMaintenanceRepair = () => {
+                if (request.service_type === 'maintenance') {
+                    router.get(route('maintenance.show', { maintenance_id: request.maintenance_id }));
+                } else {
+                    router.get(route('repairs.show', { maintenance_id: request.maintenance_id }));
+                }
+            };
             const { auth } = usePage().props;
             return (
                 <>
@@ -150,13 +158,7 @@ export const RequestsColumn = (handleView, handleEdit, handleDelete, handleStatu
                                     />
                                 </div>
                             )}
-                            {request.status === 'received' && (
-                                <div className="flex justify-center gap-2">
-                                    <Button className="bg-green-300 text-black hover:bg-green-400" onClick={() => handleEdit(request.request_id)}>
-                                        <Printer />
-                                    </Button>
-                                </div>
-                            )}
+                            {request.status === 'received' && <div className="flex justify-center gap-2">Display</div>}
                         </>
                     )}
                     {auth.user.role.name === 'Mechanic' && (
@@ -239,19 +241,59 @@ export const RequestsColumn = (handleView, handleEdit, handleDelete, handleStatu
                             {request.status === 'inspected' && (
                                 <div className="flex justify-center gap-2">
                                     {/* Approve button */}
-                                    <Button
-                                        className="bg-green-300 text-black hover:bg-green-400"
-                                        onClick={() => handleStatusUpdate(request.request_id, 'approved')}
-                                    >
-                                        Approve
-                                    </Button>
-                                    {/* Reject button */}
-                                    <Button
-                                        className="bg-red-300 text-black hover:bg-red-400"
-                                        onClick={() => handleStatusUpdate(request.request_id, 'rejected')}
-                                    >
-                                        Reject
-                                    </Button>
+                                    {request.inspection_confirmed ? (
+                                        <>
+                                            <Button
+                                                className="bg-green-300 text-black hover:bg-green-400"
+                                                onClick={() => handleStatusUpdate(request.request_id, 'approved')}
+                                            >
+                                                Approve
+                                            </Button>
+                                            {/* Reject button */}
+                                            <Button
+                                                className="bg-red-300 text-black hover:bg-red-400"
+                                                onClick={() => handleStatusUpdate(request.request_id, 'rejected')}
+                                            >
+                                                Reject
+                                            </Button>
+                                        </>
+                                    ) : (
+                                        <TooltipProvider>
+                                            <Tooltip>
+                                                <TooltipTrigger asChild>
+                                                    <Button
+                                                        onClick={() =>
+                                                            router.get(route('request-inspections.show', { inspection_id: request.inspection_id }))
+                                                        }
+                                                        className="bg-amber-300"
+                                                        variant="outline"
+                                                    >
+                                                        <FileWarning />
+                                                    </Button>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    <p>Inspection is not confirmed, click here to confirm</p>
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        </TooltipProvider>
+                                    )}
+                                </div>
+                            )}
+                            {request.status === 'conducted' && (
+                                <div className="flex justify-center gap-2">
+                                    {/* Confirm maintenance/repair button */}
+                                    <TooltipProvider>
+                                        <Tooltip>
+                                            <TooltipTrigger asChild>
+                                                <Button onClick={goToMaintenanceRepair} className="bg-amber-300" variant="outline">
+                                                    <CircleArrowOutUpRight />
+                                                </Button>
+                                            </TooltipTrigger>
+                                            <TooltipContent>
+                                                <p>Maintenance/repair record unconfirmed, click here to view</p>
+                                            </TooltipContent>
+                                        </Tooltip>
+                                    </TooltipProvider>
                                 </div>
                             )}
                         </>

@@ -11,6 +11,10 @@ class ServiceInspection extends Model
     use HasFactory;
 
     protected $primaryKey = 'inspection_id';
+    protected $casts = [
+        'started_at' => 'datetime',
+        'completed_at' => 'datetime',
+    ];
     protected $fillable = [
         'inspection_id',
         'request_id',
