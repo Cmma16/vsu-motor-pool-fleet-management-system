@@ -92,6 +92,10 @@ const mainNavItems = [
         href: '/reports',
         icon: ChartColumnBig,
         allowedRoles: ['Admin', 'Staff'],
+        children: [
+            // { title: 'Report Generation', href: '/reports', allowedRoles: ['Admin', 'Staff'] },
+            { title: 'Fleet Analytics', href: '/reports/fleet-analytics', allowedRoles: ['Admin', 'Staff'] },
+        ],
     },
 ];
 

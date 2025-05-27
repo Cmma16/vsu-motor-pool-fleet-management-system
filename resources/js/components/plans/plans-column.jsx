@@ -2,6 +2,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 import { ArrowUpDown } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
+import { format } from 'date-fns';
 
 import { DataTableRowActions } from '@/components/data-table-row-actions';
 import { usePage } from '@inertiajs/react';
@@ -30,7 +31,7 @@ export const PlansColumn = (handleView, handleEdit, handleDelete) => [
                 <ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>
         ),
-        cell: (info) => <div className="text-left">{info.getValue()}</div>,
+        cell: (info) => <div className="text-left">{format(info.getValue(), 'yyyy-MM-dd')}</div>,
     }),
     columnHelper.accessor('next_service_km', {
         header: () => <div className="text-left">Next service (km)</div>,

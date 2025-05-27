@@ -19,6 +19,7 @@ use App\Http\Controllers\PersonnelController;
 use App\Http\Controllers\MaintenancePartsController;
 use App\Http\Controllers\PassengerController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ReportsController;
 
 Route::get('/', function () {
     return Inertia::render('welcome');
@@ -78,6 +79,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/notifications', [NotificationController::class, 'index']);
     Route::put('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+
+    Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
+    Route::get('/reports/fleet-analytics', [ReportsController::class, 'fleetReports'])->name('reports.fleet');
 
     Route::post('maintenance-parts', [MaintenancePartsController::class, 'store'])->name('maintenance-parts.store');
     Route::put('maintenance-parts/{maintenancePart}', [MaintenancePartsController::class, 'update'])->name('maintenance-parts.update');

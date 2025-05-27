@@ -5,7 +5,9 @@ import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
 
 import { Head, router } from '@inertiajs/react';
+import { InfoIcon, Wrench } from 'lucide-react';
 import { toast } from 'sonner';
+
 const breadcrumbs = [
     {
         title: 'Maintenance',
@@ -14,7 +16,7 @@ const breadcrumbs = [
 ];
 
 const pageDetails = {
-    title: 'Maintenance List',
+    title: 'Maintenance Records',
     description: 'View and manage maintenance records here.',
 };
 
@@ -40,13 +42,25 @@ export default function MaintenanceIndex({ maintenanceRecords }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             <Head title="Maintenance" />
-            {console.log(maintenanceRecords)}
+            <div className="mx-4">
+                <h2 className="mb-2 text-lg font-semibold">Important Information</h2>
+                <div className="mb-2 flex items-start gap-2 rounded-md bg-blue-50 p-4 text-blue-800">
+                    <Wrench className="mt-0.5 h-5 w-5 text-blue-400" />
+                    <span>
+                        Mechanics can only edit maintenance records they created themselves. Confirmed maintenance records can no longer be edited or
+                        deleted.
+                    </span>
+                </div>
+                <div className="flex items-start gap-2 rounded-md bg-green-50 p-4 text-green-800">
+                    <InfoIcon className="mt-0.5 h-5 w-5 text-green-400" />
+                    <span>Only the Managers and Admin can confirm/verify maintenance records.</span>
+                </div>
+            </div>
             {/*delete this*/}
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <DataTable
                     columns={MaintenanceColumn}
                     data={maintenanceRecords}
-                    handleCreate={route('maintenance.create')}
                     handleView={veiwMaintenanceDetails}
                     handleEdit={editMaintenance}
                     handleDelete={deleteMaintenance}

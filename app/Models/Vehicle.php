@@ -53,4 +53,23 @@ class Vehicle extends Model
     {
         return $this->hasOne(OdometerLog::class, 'vehicle_id')->latest('created_at');
     }
+
+    public function trips()
+    {
+        return $this->hasMany(Trip::class, 'vehicle_id');
+    }
+
+    public function repairMaintenances()
+{
+    return $this->hasManyThrough(
+        Maintenance::class,
+        ServiceRequest::class,
+        'vehicle_id',           // Foreign key on service_requests
+        'request_id',   // Foreign key on maintenances
+        'vehicle_id',           // Local key on vehicles
+        'request_id'    // Local key on service_requests
+    )->whereHas('serviceRequest', function ($query) {
+        $query->where('service_type', 'repair');
+    });
+}
 }

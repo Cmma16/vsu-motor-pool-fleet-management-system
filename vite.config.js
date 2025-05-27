@@ -5,6 +5,8 @@ import { resolve } from 'node:path';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { defineConfig } from 'vite';
+// import fs from 'fs';
+// import fs from 'fs';
 
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
 const __dirname = path.dirname(__filename); // get the name of the directory
@@ -21,11 +23,11 @@ export default defineConfig({
     ],
     // For hosting on local network
     // server: {
-    //     host: '192.168.137.1',
+    //     host: '192.168.236.51',
     //     port: 5173,
     //     https: {
-    //         key: fs.readFileSync('certs/192.168.137.1-key.pem'),
-    //         cert: fs.readFileSync('certs/192.168.137.1.pem'),
+    //         key: fs.readFileSync('certs/192.168.236.51-key.pem'),
+    //         cert: fs.readFileSync('certs/192.168.236.51.pem'),
     //     },
     //     strictPort: true,
     //     cors: true, // enable CORS if needed

@@ -1,5 +1,6 @@
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { formatDistanceToNow } from 'date-fns';
 
 export function OperationalDetailsCard({ vehicle, odometer_reading }) {
     const getStatusBadge = (status) => {
@@ -19,6 +20,7 @@ export function OperationalDetailsCard({ vehicle, odometer_reading }) {
     return (
         <div className="space-y-6 md:col-span-1">
             <Card className="h-full">
+                {console.log(vehicle, odometer_reading)}
                 <CardHeader className="pb-3">
                     <CardTitle className="text-base">Operational Details</CardTitle>
                 </CardHeader>
@@ -36,15 +38,21 @@ export function OperationalDetailsCard({ vehicle, odometer_reading }) {
                                 )}
                                 {/* <OdometerLogModal vehicle_id={vehicle.vehicle_id} vehicles={vehicle} formType="add" /> */}
                             </div>
-                            {odometer_reading && <p className="text-muted-foreground text-xs">Updated 3 days ago</p>}
+                            <div className="space-y-1">
+                                <p className="text-muted-foreground text-xs">
+                                    Updated {formatDistanceToNow(new Date(odometer_reading.updated_at), { addSuffix: true })}
+                                </p>
+                            </div>
                         </div>
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-muted-foreground mb-2 text-sm">Current Status</p>
                                 <p className="font-medium">{getStatusBadge(vehicle.status)}</p>
                             </div>
-                            <div>
-                                <p className="text-muted-foreground text-xs">Updated 3 days ago</p>
+                            <div className="space-y-1">
+                                <p className="text-muted-foreground text-xs">
+                                    Updated {formatDistanceToNow(new Date(vehicle.updated_at), { addSuffix: true })}
+                                </p>
                             </div>
                         </div>
                     </div>

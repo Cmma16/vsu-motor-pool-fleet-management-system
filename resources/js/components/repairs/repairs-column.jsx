@@ -1,4 +1,5 @@
 import { ColorfulRowActions } from '@/components/display/colorful-row-actions';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { router } from '@inertiajs/react';
 import { createColumnHelper } from '@tanstack/react-table';
@@ -22,16 +23,6 @@ export const RepairsColumn = (handleView, handleEdit, handleDelete) => [
         ),
         cell: (info) => <div className="text-left">{info.getValue()}</div>,
     }),
-    columnHelper.accessor('request_description', {
-        header: () => <div className="text-left">Request description</div>,
-        cell: (info) => {
-            const value = info.getValue() || '';
-            const maxLength = 20;
-            const isTrimmed = value.length > maxLength;
-            const displayValue = isTrimmed ? value.slice(0, maxLength) + '...' : value;
-            return <div className="text-left">{displayValue}</div>;
-        },
-    }),
     columnHelper.accessor('date_in', {
         header: () => <div className="text-left">Date In</div>,
         cell: (info) => <div className="text-left">{info.getValue()}</div>,
@@ -50,6 +41,15 @@ export const RepairsColumn = (handleView, handleEdit, handleDelete) => [
         header: () => <div className="text-left">Odometer Reading</div>,
         cell: (info) => <div className="text-left">{info.getValue()}</div>,
     }),
+    columnHelper.accessor('confirmed_by', {
+        header: () => <div className="text-left">Confirmation</div>,
+        cell: (info) => (
+            <div className="text-left">
+                {info.getValue() ? <Badge variant="primary">Confirmed</Badge> : <Badge variant="secondary">Unconfirmed</Badge>}
+            </div>
+        ),
+    }),
+
     {
         id: 'actions',
         header: () => <div className="text-center">Actions</div>,

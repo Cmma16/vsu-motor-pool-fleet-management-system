@@ -6,6 +6,7 @@ import DestructiveDialog from '@/components/display/destructive-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { format } from 'date-fns';
 
 function getStatusBadge(status) {
     switch (status) {
@@ -106,7 +107,7 @@ export const RequestsColumn = (handleView, handleEdit, handleDelete, handleStatu
     }),
     columnHelper.accessor('date_filed', {
         header: () => <div className="text-left">Date filed</div>,
-        cell: (info) => <div className="text-left">{info.getValue()}</div>,
+        cell: (info) => <div className="text-left">{format(info.getValue(), 'yyyy-MM-dd')}</div>,
     }),
     columnHelper.accessor('service_type', {
         header: () => <div className="text-left">Service type</div>,

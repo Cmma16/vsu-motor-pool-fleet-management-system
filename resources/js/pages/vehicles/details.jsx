@@ -78,15 +78,15 @@ export default function details({ vehicle, odometer_reading, nextMaintenance, la
                                 Request Service
                             </Button>
                         )}
-                        {user.role.name === 'Admin' ||
-                            (user.role.name === 'Staff' && (
-                                <Button onClick={() => router.get(`${vehicle.vehicle_id}/edit`)} size="sm">
-                                    <Settings className="mr-2 h-4 w-4" />
-                                    Edit vehicle
-                                </Button>
-                            ))}
-                        {user.role.name === 'Admin' ||
-                            (user.role.name === 'Staff' && <UpdateVehiclePhoto vehicleId={vehicle.vehicle_id} currentPhoto={vehicle.image_path} />)}
+                        {(user.role.name === 'Admin' || user.role.name === 'Staff') && (
+                            <Button onClick={() => router.get(`${vehicle.vehicle_id}/edit`)} size="sm">
+                                <Settings className="mr-2 h-4 w-4" />
+                                Edit vehicle
+                            </Button>
+                        )}
+                        {(user.role.name === 'Admin' || user.role.name === 'Staff') && (
+                            <UpdateVehiclePhoto vehicleId={vehicle.vehicle_id} currentPhoto={vehicle.image_path} />
+                        )}
                     </div>
                 </div>
 
@@ -99,7 +99,7 @@ export default function details({ vehicle, odometer_reading, nextMaintenance, la
                                     {vehicle.image_path ? (
                                         <img src={`/storage/${vehicle.image_path}`} alt="Vehicle Image" className="h-full w-full object-cover" />
                                     ) : (
-                                        <div className="text-muted-foreground flex flex-col items-center gap-2 bg-red-500">
+                                        <div className="text-muted-foreground flex flex-col items-center gap-2">
                                             <Image className="h-12 w-12" />
                                             <p className="text-sm">Vehicle Image</p>
                                         </div>

@@ -6,8 +6,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import AppLayout from '@/layouts/app-layout';
-import { Head, useForm, usePage } from '@inertiajs/react';
+import { Head, router, useForm, usePage } from '@inertiajs/react';
 import { CalendarIcon, Car, FilterIcon, MapPin, Trophy, Wrench } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 const breadcrumbs = [
@@ -46,23 +47,69 @@ const years = Array.from({ length: 6 }, (_, i) => ({
     label: (currentYear - i).toString(),
 }));
 
-export default function ReportsIndex({ tripData, metrics }) {
+// Report types configuration
+const REPORT_TYPES = {
+    trip: {
+        label: 'Trip Analytics',
+        chartTitle: 'Trips by Vehicle',
+        chartDescription: 'Number of completed trips per vehicle',
+        barKey: 'total',
+        xKey: 'vehicle_name',
+        reportType: 'Trips',
+    },
+    repair: {
+        label: 'Repair Analytics',
+        chartTitle: 'Repairs by Vehicle',
+        chartDescription: 'Number of repairs conducted per vehicle',
+        barKey: 'total',
+        xKey: 'vehicle_name',
+        reportType: 'Repairs',
+    },
+    // Add more report types here in the future
+    maintenance: {
+        label: 'Maintenance Analytics',
+        chartTitle: 'Maintenance by Vehicle',
+        chartDescription: 'Number of maintenance services per vehicle',
+        barKey: 'total',
+        xKey: 'vehicle_name',
+        reportType: 'Maintenance',
+    },
+};
+
+export default function FleetAnalytics({ resultData, metrics }) {
     const { vehicles, filters } = usePage().props;
-    const { data, setData, get } = useForm({
+    const { data, setData, get, processing } = useForm({
         start_date: filters?.start_date || '',
         end_date: filters?.end_date || '',
         month: filters?.month || '',
         year: filters?.year || '',
         vehicle_ids: filters?.vehicle_ids || [],
+        report_type: filters?.report_type || '',
     });
+
+    const [hasChanges, setHasChanges] = useState(false);
+    const currentReportType = REPORT_TYPES[filters?.report_type] || REPORT_TYPES.trip;
+
+    // Compare current form data with initial filters
+    useEffect(() => {
+        const hasFormChanges =
+            data.start_date !== (filters?.start_date || '') ||
+            data.end_date !== (filters?.end_date || '') ||
+            data.month !== (filters?.month || '') ||
+            data.year !== (filters?.year || '') ||
+            data.report_type !== (filters?.report_type || '');
+
+        setHasChanges(hasFormChanges);
+    }, [data, filters]);
 
     const handleFilter = (e) => {
         e.preventDefault();
-        get(route('reports.index'), {
+        get(route('reports.fleet'), {
             preserveState: true,
             preserveScroll: true,
             onSuccess: () => {
                 toast.success('Filter successfully applied');
+                setHasChanges(false);
             },
         });
     };
@@ -70,8 +117,7 @@ export default function ReportsIndex({ tripData, metrics }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             <Head title="Reports" />
-            <div className="flex h-full flex-1 flex-col gap-6 p-6">
-                {console.log(tripData, metrics)}
+            <div className="flex h-full flex-1 flex-col gap-4 p-6">
                 {/* Metrics Cards */}
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                     <MetricsCard title="Total Trips" value={metrics.total_trips} description="Total number of trips completed" icon={MapPin} />
@@ -100,6 +146,26 @@ export default function ReportsIndex({ tripData, metrics }) {
                     </CardHeader>
                     <CardContent>
                         <form onSubmit={handleFilter} className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                            <div className="flex items-center gap-2 rounded-xl bg-white p-3 lg:col-span-4">
+                                <Label htmlFor="report_type">Report Type</Label>
+                                <Select
+                                    id="report_type"
+                                    value={data.report_type}
+                                    onValueChange={(value) => setData('report_type', value)}
+                                    disabled={processing}
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select report type" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {Object.entries(REPORT_TYPES).map(([value, config]) => (
+                                            <SelectItem key={value} value={value}>
+                                                {config.label}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
                             <div className="space-y-2">
                                 <Label htmlFor="start_date">Start Date</Label>
                                 <div className="relative">
@@ -110,6 +176,7 @@ export default function ReportsIndex({ tripData, metrics }) {
                                         value={data.start_date}
                                         onChange={(e) => setData('start_date', e.target.value)}
                                         className="pl-9"
+                                        disabled={processing}
                                     />
                                 </div>
                             </div>
@@ -123,12 +190,13 @@ export default function ReportsIndex({ tripData, metrics }) {
                                         value={data.end_date}
                                         onChange={(e) => setData('end_date', e.target.value)}
                                         className="pl-9"
+                                        disabled={processing}
                                     />
                                 </div>
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="month">Month</Label>
-                                <Select value={data.month} onValueChange={(value) => setData('month', value)}>
+                                <Select value={data.month} onValueChange={(value) => setData('month', value)} disabled={processing}>
                                     <SelectTrigger>
                                         <SelectValue placeholder="Select month" />
                                     </SelectTrigger>
@@ -143,7 +211,7 @@ export default function ReportsIndex({ tripData, metrics }) {
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="year">Year</Label>
-                                <Select value={data.year} onValueChange={(value) => setData('year', value)}>
+                                <Select value={data.year} onValueChange={(value) => setData('year', value)} disabled={processing}>
                                     <SelectTrigger>
                                         <SelectValue placeholder="Select year" />
                                     </SelectTrigger>
@@ -156,9 +224,18 @@ export default function ReportsIndex({ tripData, metrics }) {
                                     </SelectContent>
                                 </Select>
                             </div>
-                            <div className="col-span-full flex justify-end">
-                                <Button type="submit" className="w-full md:w-auto">
-                                    Apply Filters
+                            <div className="col-span-full flex justify-end gap-2">
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={() => router.get('/reports/fleet-analytics')}
+                                    className="w-full md:w-auto"
+                                    disabled={processing}
+                                >
+                                    Reset Filters
+                                </Button>
+                                <Button type="submit" className="w-full md:w-auto" disabled={processing || !hasChanges}>
+                                    {processing ? 'Applying...' : 'Apply Filters'}
                                 </Button>
                             </div>
                         </form>
@@ -169,11 +246,12 @@ export default function ReportsIndex({ tripData, metrics }) {
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
                     <div className="col-span-full">
                         <TripChart
-                            tripData={tripData}
-                            barKey={'total_trips'}
-                            xKey={'vehicle_name'}
-                            chartTitle={'Trips by Vehicle'}
-                            chartDescription={'Number of completed trips per vehicle'}
+                            tripData={resultData}
+                            barKey={currentReportType.barKey}
+                            xKey={currentReportType.xKey}
+                            report_type={currentReportType.reportType}
+                            chartTitle={currentReportType.chartTitle}
+                            chartDescription={currentReportType.chartDescription}
                         />
                     </div>
                 </div>

@@ -13,6 +13,10 @@ class MaintenancePlan extends Model
     protected $table = 'maintenance_plans';
     protected $primaryKey = 'plan_id';
 
+    protected $cast = [
+        'scheduled_date' => 'date',
+    ];
+
     protected $fillable = [
         'plan_id',
         'vehicle_id',

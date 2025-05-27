@@ -15,7 +15,7 @@ class ServiceRequest extends Model
     protected $primaryKey = 'request_id';
 
     protected $casts = [
-        'date_filed' => 'datetime',
+        'date_filed' => 'date',
         'date_received' => 'datetime',
     ];
 

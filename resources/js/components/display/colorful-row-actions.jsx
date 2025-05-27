@@ -1,5 +1,7 @@
 import DestructiveDialog from '@/components/display/destructive-dialog';
 import { Button } from '@/components/ui/button';
+
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { usePage } from '@inertiajs/react';
 
 import { Check, Eye, Pencil, TrashIcon } from 'lucide-react';
@@ -30,13 +32,21 @@ export function ColorfulRowActions({ row, rowKey = 'id', handleView, handleEdit,
                     )}
                 </div>
             )}
-            {user.role.name === 'Staff' && (
+            {(user.role.name === 'Staff' || user.role.name === 'Admin') && (
                 <>
                     {!row.confirmed_by && (
-                        <Button onClick={() => handleConfirm(rowId)}>
-                            <Check />
-                            Confirm
-                        </Button>
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <Button onClick={() => handleConfirm(rowId)}>
+                                        <Check />
+                                    </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p>Confirm record</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
                     )}
                 </>
             )}

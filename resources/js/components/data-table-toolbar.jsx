@@ -1,5 +1,4 @@
 import { DataTableActions } from '@/components/data-table-actions';
-import { DataTableExportOptions } from '@/components/data-table-export-options';
 import { DataTableViewOptions } from '@/components/data-table-view-options';
 import { usePage } from '@inertiajs/react';
 
@@ -15,7 +14,7 @@ export function DataTableToolbar({ table, handleCreate, filterColumn, placeholde
                 filterOptions={filterOptions}
                 filterColumnName={filterColumnName}
             />
-            {auth.user.role.name === 'Staff' || (auth.user.role.name === 'Admin' && <DataTableExportOptions />)}
+            {/* {auth.user.role.name === 'Staff' || (auth.user.role.name === 'Admin' && <DataTableExportOptions />)} */}
             <DataTableViewOptions table={table} />
         </div>
     );
