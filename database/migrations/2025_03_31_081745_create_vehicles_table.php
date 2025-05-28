@@ -24,7 +24,7 @@ return new class extends Migration
             $table->integer('capacity');
             $table->string('location');
             $table->year('year_acquired');
-            $table->enum('category', ['light vehicle', 'heavy vehicle']);
+            $table->enum('category', ['light vehicle', 'medium vehicle', 'heavy equipment']);
             $table->string('plate_number', 25);
             $table->enum('fuel_type', ['gasoline', 'diesel']);
             $table->enum('status', ['available', 'in use', 'under maintenance', 'out of service']); //changed from retired to out of service

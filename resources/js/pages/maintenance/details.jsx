@@ -73,7 +73,9 @@ export default function details({ maintenance, maintenanceParts, parts }) {
                         <CardTitle>Maintenance Information</CardTitle>
                         <CardDescription className="flex justify-between">
                             General overview of the maintenance.
-                            {user.role.name === 'Staff' && !maintenance.confirmed_by && <Button onClick={confirmMaintenance}>Confirm Record</Button>}
+                            {user.role.name === 'Manager' && !maintenance.confirmed_by && (
+                                <Button onClick={confirmMaintenance}>Confirm Record</Button>
+                            )}
                         </CardDescription>
                     </CardHeader>
                     <CardContent>

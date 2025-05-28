@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Trip;
 use App\Models\Vehicle;
 use App\Models\ServiceRequest;
+use App\Models\Part;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -106,13 +107,13 @@ class ReportsController extends Controller
             $query->withCount([
                 'trips as total' => function ($q) use ($startDate, $endDate, $month, $year) {
                     if ($startDate && $endDate) {
-                        $q->whereBetween('created_at', [$startDate, $endDate]);
+                        $q->whereBetween('start_date', [$startDate, $endDate]);
                     }
                     if ($month) {
-                        $q->whereMonth('created_at', $month);
+                        $q->whereMonth('start_date', $month);
                     }
                     if ($year) {
-                        $q->whereYear('created_at', $year);
+                        $q->whereYear('start_date', $year);
                     }
                 }
             ]);
@@ -126,28 +127,28 @@ class ReportsController extends Controller
                     });
 
                     if ($startDate && $endDate) {
-                        $query->whereBetween('service_date', [$startDate, $endDate]);
+                        $query->whereBetween('date_completed', [$startDate, $endDate]);
                     }
                     if ($month) {
-                        $query->whereMonth('service_date', $month);
+                        $query->whereMonth('date_completed', $month);
                     }
                     if ($year) {
-                        $query->whereYear('service_date', $year);
+                        $query->whereYear('date_completed', $year);
                     }
                 }
             ]);
-        } elseif ($reportType === 'maintenance') {
+        } elseif ($reportType === 'preventive') {
             $query->withCount([
                 'serviceRequests as total' => function ($query) use ($startDate, $endDate, $month, $year) {
                     $query->whereHas('maintenance', function ($q) {
                         $q->whereHas('serviceRequest', function ($q2) {
-                            $q2->where('service_type', 'maintenance');
+                            $q2->where('service_type', 'preventive');
                         });
                     });
         
-                    if ($startDate && $endDate) $query->whereBetween('service_date', [$startDate, $endDate]);
-                    if ($month) $query->whereMonth('service_date', $month);
-                    if ($year) $query->whereYear('service_date', $year);
+                    if ($startDate && $endDate) $query->whereBetween('date_completed', [$startDate, $endDate]);
+                    if ($month) $query->whereMonth('date_completed', $month);
+                    if ($year) $query->whereYear('date_completed', $year);
                 }
             ]); 
         } else {
@@ -184,8 +185,12 @@ class ReportsController extends Controller
             ]
         ];
 
+        $parts = Part::select('id', 'part_name', 'stock_quantity as current_stock', 'restock_threshold')
+            ->orderBy('part_name')
+            ->get();
+
         $resultData = $query
-            ->orderByDesc('total')
+        ->orderByDesc('total')
             ->get();
 
         return Inertia::render('report/fleet-analytics', [
@@ -195,6 +200,7 @@ class ReportsController extends Controller
                     'total' => $resultData->total,
                 ];
             }),
+            'parts' => $parts,
             'metrics' => $metrics,
             'filters' => [
                 'start_date' => $startDate,

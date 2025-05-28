@@ -2,7 +2,6 @@ import { createColumnHelper } from '@tanstack/react-table';
 import { ArrowUpDown } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 
 import { DataTableRowActions } from '@/components/data-table-row-actions';
 
@@ -11,21 +10,6 @@ const columnHelper = createColumnHelper();
 export const PartsColumn = (handleView, handleEdit, handleDelete) => [
     {
         id: 'select',
-        header: ({ table }) => (
-            <Checkbox
-                checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
-                onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                aria-label="Select all"
-            />
-        ),
-        cell: ({ row }) => (
-            <Checkbox
-                className="border border-black"
-                checked={row.getIsSelected()}
-                onCheckedChange={(value) => row.toggleSelected(!!value)}
-                aria-label="Select row"
-            />
-        ),
         enableSorting: false,
         enableHiding: false,
     },
@@ -38,17 +22,19 @@ export const PartsColumn = (handleView, handleEdit, handleDelete) => [
         ),
         cell: (info) => <div className="text-left">{info.getValue()}</div>,
     }),
-    columnHelper.accessor('stock_quantity', {
-        header: () => <div className="text-left">Stock</div>,
-        cell: (info) => <div className="text-left">{info.getValue()}</div>,
-    }),
-    columnHelper.accessor('unit', {
-        header: () => <div className="text-left">Unit</div>,
-        cell: (info) => <div className="text-left">{info.getValue()}</div>,
-    }),
+    columnHelper.accessor(
+        (row) => {
+            return `${row.stock_quantity} ${row.unit}`;
+        },
+        {
+            id: 'trip_dates',
+            header: () => <div className="text-left">Current Stock</div>,
+            cell: (info) => <div className="text-left">{info.getValue()}</div>,
+        },
+    ),
     columnHelper.accessor('unit_price', {
         header: () => <div className="text-left">Unit price</div>,
-        cell: (info) => <div className="text-left">{info.getValue()}</div>,
+        cell: (info) => <div className="text-left">₱{info.getValue()}</div>,
     }),
     columnHelper.accessor('restock_threshold', {
         header: () => <div className="text-left">Restock threshold</div>,

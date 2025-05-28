@@ -6,6 +6,7 @@ import { Head, useForm } from '@inertiajs/react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 import AppLayout from '@/layouts/app-layout';
+import { usePage } from '@inertiajs/react';
 
 const breadcrumbs = [
     {
@@ -24,12 +25,12 @@ const pageDetails = {
 };
 
 export default function AddPlan({ vehicles, users }) {
+    const user = usePage().props.auth.user;
     const { data, setData, post, processing, errors, reset } = useForm({
         vehicle_id: '',
         scheduled_date: '',
-        next_service_km: '',
-        created_by: '',
-        status: '',
+        created_by: user.id,
+        status: 'pending',
     });
 
     const createPlan = (e) => {

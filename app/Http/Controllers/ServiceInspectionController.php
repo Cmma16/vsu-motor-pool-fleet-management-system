@@ -52,7 +52,7 @@ class ServiceInspectionController extends Controller
                 'request_id' => $serviceRequest->request_id,
                 'work_description' => $serviceRequest->work_description,
                 'vehicle_name' => $serviceRequest->vehicle->vehicle_name,
-                'plan_name' => $serviceRequest->maintenancePlan?->scheduled_date . ' - ' . $serviceRequest->maintenancePlan?->next_service_km || "",
+                'plan_name' => $serviceRequest->maintenancePlan?->scheduled_date,
             ];
         });
         $users = User::select('id', 'first_name', 'last_name')->get();

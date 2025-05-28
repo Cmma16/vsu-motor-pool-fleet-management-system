@@ -73,7 +73,7 @@ export default function details({ repair, parts, repairParts }) {
                         <CardTitle>Repair Information</CardTitle>
                         <CardDescription className="flex justify-between">
                             General overview of the repair.
-                            {user.role.name === 'Staff' && !repair.confirmed_by && <Button onClick={confirmRepair}>Confirm Record</Button>}
+                            {user.role.name === 'Manager' && !repair.confirmed_by && <Button onClick={confirmRepair}>Confirm Record</Button>}
                         </CardDescription>
                     </CardHeader>
                     <CardContent>

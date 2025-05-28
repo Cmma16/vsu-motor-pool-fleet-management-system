@@ -49,13 +49,13 @@ export default function TripDetails({ trip }) {
                     <Button variant="outline" className="bg-white" onClick={() => router.get(route('trips.index'))}>
                         <ArrowLeft /> Trip List
                     </Button>
-                    {user.role.name === 'Driver' && trip.status === 'assigned' && (
+                    {trip.status === 'assigned' && (
                         <Button variant="default" onClick={() => router.get(route('trip-logs.create', trip.trip_id))}>
                             <FileText className="mr-2 h-4 w-4" />
                             Start Trip
                         </Button>
                     )}
-                    {user.role.name === 'Driver' && trip.status === 'ongoing' && (
+                    {trip.status === 'ongoing' && (
                         <Button
                             className="border-2 border-[#006600] bg-white text-black hover:bg-[#005500] hover:text-white"
                             onClick={() => router.get(route('trip-logs.end', trip.trip_id))}

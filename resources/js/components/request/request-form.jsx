@@ -10,14 +10,17 @@ export default function RequestForm({ formData, formType, setData, onSubmit, pro
             <div className="grid grid-cols-1 gap-6">
                 {/* Service Type */}
                 <div className="space-y-2">
-                    <Label htmlFor="service_type">Service Type</Label>
+                    <Label htmlFor="service_type">
+                        Service Type <span className="text-red-500">*</span>
+                    </Label>
                     <Select disabled={lockInputs} value={formData.service_type} onValueChange={(value) => setData('service_type', value)}>
                         <SelectTrigger id="service_type" tabIndex={4}>
                             <SelectValue placeholder="Select service type" />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="repair">Repair</SelectItem>
-                            <SelectItem value="maintenance">Maintenance</SelectItem>
+                            <SelectItem value="preventive">Preventive Maintenance</SelectItem>
+                            <SelectItem value="maintenance">Planned Maintenance</SelectItem>
                         </SelectContent>
                     </Select>
                     <InputError message={errors.service_type} />
@@ -26,7 +29,9 @@ export default function RequestForm({ formData, formType, setData, onSubmit, pro
                 {/* Maintenance Plan */}
                 {formData.service_type === 'maintenance' && (
                     <div className="space-y-2">
-                        <Label htmlFor="plan_id">Maintenance Plan</Label>
+                        <Label htmlFor="plan_id">
+                            Maintenance Plan <span className="text-red-500">*</span>
+                        </Label>
                         <Select
                             disabled={lockInputs}
                             value={formData.service_type === 'maintenance' ? String(formData.plan_id) : null}
@@ -59,7 +64,9 @@ export default function RequestForm({ formData, formType, setData, onSubmit, pro
                 {/* Vehicle */}
                 {formData.service_type !== 'maintenance' && (
                     <div className="space-y-2">
-                        <Label htmlFor="vehicle_id">Vehicle</Label>
+                        <Label htmlFor="vehicle_id">
+                            Vehicle <span className="text-red-500">*</span>
+                        </Label>
                         <Select value={String(formData.vehicle_id)} onValueChange={(value) => setData('vehicle_id', Number(value))}>
                             <SelectTrigger id="vehicle_id" tabIndex={1}>
                                 <SelectValue placeholder="Select vehicle" />
@@ -78,7 +85,9 @@ export default function RequestForm({ formData, formType, setData, onSubmit, pro
 
                 {/* Date filed */}
                 <div className="space-y-2">
-                    <Label htmlFor="date_filed">Date filed</Label>
+                    <Label htmlFor="date_filed">
+                        Date filed <span className="text-red-500">*</span>
+                    </Label>
                     <input
                         id="date_filed"
                         name="date_filed"
@@ -94,7 +103,9 @@ export default function RequestForm({ formData, formType, setData, onSubmit, pro
 
                 {/* Work Description */}
                 <div className="space-y-2">
-                    <Label htmlFor="work_description">Work Description</Label>
+                    <Label htmlFor="work_description">
+                        Work Description <span className="text-red-500">*</span>
+                    </Label>
                     <Textarea
                         id="work_description"
                         name="work_description"

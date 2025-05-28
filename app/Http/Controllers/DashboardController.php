@@ -31,8 +31,8 @@ class DashboardController extends Controller
                 return $this->getDriverDashboard();
             case 'Mechanic':
                 return $this->getMechanicDashboard();
-            case 'Staff':
-                return $this->getStaffDashboard();
+            case 'Manager':
+                return $this->getManagerDashboard();
             }
         }
     }
@@ -71,8 +71,8 @@ class DashboardController extends Controller
                     $query->where('name', 'Mechanic');
                 })->count(),
             
-                'staff' => User::whereHas('role', function ($query) {
-                    $query->where('name', 'Staff');
+                'manager' => User::whereHas('role', function ($query) {
+                    $query->where('name', 'Manager');
                 })->count(),
             ]
         ]);
@@ -128,8 +128,8 @@ class DashboardController extends Controller
                     $query->where('name', 'Mechanic');
                 })->count(),
             
-                'staff' => User::whereHas('role', function ($query) {
-                    $query->where('name', 'Staff');
+                'manager' => User::whereHas('role', function ($query) {
+                    $query->where('name', 'Manager');
                 })->count(),
             ]; 
             $vehicleStats = [
@@ -194,8 +194,8 @@ class DashboardController extends Controller
                     $query->where('name', 'Mechanic');
                 })->count(),
             
-                'staff' => User::whereHas('role', function ($query) {
-                    $query->where('name', 'Staff');
+                'manager' => User::whereHas('role', function ($query) {
+                    $query->where('name', 'Manager');
                 })->count(),
             ], 
             'uninspectedRequests' => ServiceRequest::where('status', 'received')->get(),
@@ -203,9 +203,9 @@ class DashboardController extends Controller
         ]);
     }
 
-    private function getStaffDashboard()
+    private function getManagerDashboard()
     {
-        return Inertia::render('dashboard/staff', [
+        return Inertia::render('dashboard/manager', [
             
             'vehicleStats' => [
                 'total' => Vehicle::count(),
@@ -234,8 +234,8 @@ class DashboardController extends Controller
                     $query->where('name', 'Mechanic');
                 })->count(),
             
-                'staff' => User::whereHas('role', function ($query) {
-                    $query->where('name', 'Staff');
+                'manager' => User::whereHas('role', function ($query) {
+                    $query->where('name', 'Manager');
                 })->count(),
             ], 
             'pendingTrips' => Trip::where('status', 'pending')->get(),

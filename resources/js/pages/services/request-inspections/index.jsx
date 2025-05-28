@@ -41,7 +41,7 @@ export default function InspectionsIndex({ serviceInspections }) {
                 <DataTable
                     columns={InspectionsColumn}
                     data={serviceInspections}
-                    handleCreate={route('request-inspections.create')}
+                    // handleCreate={}
                     handleView={veiwInspectionDetails}
                     handleEdit={editInspection}
                     handleDelete={deleteInspection}

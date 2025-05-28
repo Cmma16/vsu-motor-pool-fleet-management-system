@@ -1,4 +1,5 @@
 import { MetricsCard } from '@/components/report/metrics-card';
+import PartsInventoryChart from '@/components/report/part-inventory-chart';
 import { TripChart } from '@/components/report/trip-chart';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -66,17 +67,18 @@ const REPORT_TYPES = {
         reportType: 'Repairs',
     },
     // Add more report types here in the future
-    maintenance: {
-        label: 'Maintenance Analytics',
-        chartTitle: 'Maintenance by Vehicle',
-        chartDescription: 'Number of maintenance services per vehicle',
+
+    preventive: {
+        label: 'Preventive Maintenance Analytics',
+        chartTitle: 'Preventive Maintenance by Vehicle',
+        chartDescription: 'Number of preventive maintenance services per vehicle',
         barKey: 'total',
         xKey: 'vehicle_name',
-        reportType: 'Maintenance',
+        reportType: 'Preventive',
     },
 };
 
-export default function FleetAnalytics({ resultData, metrics }) {
+export default function FleetAnalytics({ resultData, metrics, parts }) {
     const { vehicles, filters } = usePage().props;
     const { data, setData, get, processing } = useForm({
         start_date: filters?.start_date || '',
@@ -135,6 +137,21 @@ export default function FleetAnalytics({ resultData, metrics }) {
                         icon={Trophy}
                     />
                 </div>
+                <div className="flex items-center gap-2 rounded-xl bg-white p-3 lg:col-span-4">
+                    <Label htmlFor="report_type">Report Type</Label>
+                    <Select id="report_type" value={data.report_type} onValueChange={(value) => setData('report_type', value)} disabled={processing}>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Select report type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {Object.entries(REPORT_TYPES).map(([value, config]) => (
+                                <SelectItem key={value} value={value}>
+                                    {config.label}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </div>
 
                 {/* Filters Card */}
                 <Card>
@@ -146,26 +163,6 @@ export default function FleetAnalytics({ resultData, metrics }) {
                     </CardHeader>
                     <CardContent>
                         <form onSubmit={handleFilter} className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                            <div className="flex items-center gap-2 rounded-xl bg-white p-3 lg:col-span-4">
-                                <Label htmlFor="report_type">Report Type</Label>
-                                <Select
-                                    id="report_type"
-                                    value={data.report_type}
-                                    onValueChange={(value) => setData('report_type', value)}
-                                    disabled={processing}
-                                >
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select report type" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {Object.entries(REPORT_TYPES).map(([value, config]) => (
-                                            <SelectItem key={value} value={value}>
-                                                {config.label}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                            </div>
                             <div className="space-y-2">
                                 <Label htmlFor="start_date">Start Date</Label>
                                 <div className="relative">
@@ -216,6 +213,9 @@ export default function FleetAnalytics({ resultData, metrics }) {
                                         <SelectValue placeholder="Select year" />
                                     </SelectTrigger>
                                     <SelectContent>
+                                        <SelectItem key="0" value="0">
+                                            All Years
+                                        </SelectItem>
                                         {years.map((year) => (
                                             <SelectItem key={year.value} value={year.value}>
                                                 {year.label}
@@ -253,6 +253,27 @@ export default function FleetAnalytics({ resultData, metrics }) {
                             chartTitle={currentReportType.chartTitle}
                             chartDescription={currentReportType.chartDescription}
                         />
+                    </div>
+                </div>
+                <PartsInventoryChart parts={parts} />
+
+                <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
+                    <div className="rounded-lg border p-4">
+                        <h4 className="font-semibold text-green-600">Well Stocked</h4>
+                        <p className="text-2xl font-bold">{parts.filter((part) => part.current_stock > part.restock_threshold).length}</p>
+                        <p className="text-muted-foreground text-sm">parts above threshold</p>
+                    </div>
+
+                    <div className="rounded-lg border p-4">
+                        <h4 className="font-semibold text-red-600">Need Restocking</h4>
+                        <p className="text-2xl font-bold">{parts.filter((part) => part.current_stock <= part.restock_threshold).length}</p>
+                        <p className="text-muted-foreground text-sm">parts below threshold</p>
+                    </div>
+
+                    <div className="rounded-lg border p-4">
+                        <h4 className="font-semibold text-blue-600">Total Parts</h4>
+                        <p className="text-2xl font-bold">{parts.length}</p>
+                        <p className="text-muted-foreground text-sm">in inventory</p>
                     </div>
                 </div>
             </div>

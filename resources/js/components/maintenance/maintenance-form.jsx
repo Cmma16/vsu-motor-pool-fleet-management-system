@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 import React from 'react';
 
 export default function MaintenanceForm({
@@ -35,7 +36,7 @@ export default function MaintenanceForm({
 
     return (
         <form onSubmit={onSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div className="grid grid-cols-1 gap-4">
                 <div className="space-y-2">
                     <Label htmlFor="vehicle_id">
                         Vehicle <span className="text-red-500">*</span>
@@ -101,7 +102,7 @@ export default function MaintenanceForm({
                         <SelectContent>
                             {maintenancePlans.map((plan) => (
                                 <SelectItem key={plan.plan_id} value={String(plan.plan_id)}>
-                                    {`${plan.vehicle_name} - ${plan.scheduled_date} - ${plan.next_service_km} km`}
+                                    {`${plan.vehicle_name} - ${plan.scheduled_date}`}
                                 </SelectItem>
                             ))}
                         </SelectContent>
@@ -148,7 +149,7 @@ export default function MaintenanceForm({
                     <Label htmlFor="maintenance_summary">
                         Summary <span className="text-red-500">*</span>
                     </Label>
-                    <Input
+                    <Textarea
                         id="maintenance_summary"
                         name="maintenance_summary"
                         placeholder="Description of the maintenance conducted"
@@ -156,7 +157,7 @@ export default function MaintenanceForm({
                         onChange={(e) => setData('maintenance_summary', e.target.value)}
                         disabled={processing}
                         tabIndex={6}
-                        className="mt-2"
+                        className="mt-2 min-h-[120px] resize-y rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:outline-none"
                     />
                     <InputError message={errors.maintenance_summary} />
                 </div>
@@ -173,7 +174,14 @@ export default function MaintenanceForm({
                         placeholder="No odometer reading available"
                         className="bg-gray-100"
                     />
-                    {formData.vehicle_id && <OdometerLogModal vehicles={vehicles} formType={'add'} vehicle_id={formData.vehicle_id} />}
+                    {formData.vehicle_id && (
+                        <OdometerLogModal
+                            latestReading={latestOdometer?.reading ?? 0}
+                            vehicles={vehicles}
+                            formType={'add'}
+                            vehicle_id={formData.vehicle_id}
+                        />
+                    )}
                     <InputError message={errors.odometer_id} />
                 </div>
             </div>

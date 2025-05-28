@@ -86,9 +86,9 @@ class VehicleController extends Controller
      */
     public function show(Vehicle $vehicle)
     {
-        $odometer_reading = OdometerLog::OfVehicle($vehicle->vehicle_id)->orderBy('logged_at', 'desc')->first();
+        $odometer_reading = $vehicle->latestOdometerLog;
 
-        $odometer_reading = $odometer_reading ? $odometer_reading : null;
+        // $odometer_reading = $odometer_reading ? $odometer_reading : null;
 
         // Get the latest odometer reading for the vehicle
         $latestOdometerReading = $vehicle->latestOdometerLog?->reading ?? 0;
@@ -96,23 +96,17 @@ class VehicleController extends Controller
         // Get pending maintenance plans
         $nextMaintenance = MaintenancePlan::where('vehicle_id', $vehicle->vehicle_id)
             ->where('status', 'pending')
-            ->where(function ($query) use ($latestOdometerReading) {
-                // Either the scheduled date is upcoming or the next_service_km is approaching
-                $query->where('scheduled_date', '>=', Carbon::parse(now())->timezone('Asia/Manila')->format('Y-m-d H:i:s'))
-                    ->orWhere('next_service_km', '>=', $latestOdometerReading);
+            ->where(function ($query) {
+                // Either the scheduled date is upcoming
+                $query->where('scheduled_date', '>=', Carbon::parse(now())->timezone('Asia/Manila')->format('Y-m-d H:i:s'));
             })
-            ->orderBy(function ($query) use ($latestOdometerReading) {
-                // Calculate urgency score based on both date and odometer
-                // Lower score means more urgent
-                $query->selectRaw('
-                    CASE 
-                        WHEN scheduled_date <= datetime("now", "+7 days") THEN 1
-                        WHEN next_service_km <= ? + 1000 THEN 1
-                        ELSE 2
-                    END as urgency_score', [$latestOdometerReading]);
-            })
+            ->orderByRaw('
+                CASE 
+                    WHEN scheduled_date <= datetime("now", "+7 days") THEN 1
+                    ELSE 2
+                END
+            ')
             ->orderBy('scheduled_date', 'asc')
-            ->orderBy('next_service_km', 'asc')
             ->first();
 
         $latestMaintenance = ServiceRequest::where('vehicle_id', $vehicle->vehicle_id)

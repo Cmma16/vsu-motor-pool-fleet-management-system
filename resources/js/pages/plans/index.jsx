@@ -41,7 +41,7 @@ export default function PlansIndex({ maintenancePlans }) {
                 <DataTable
                     columns={PlansColumn}
                     data={maintenancePlans}
-                    handleCreate={user.role.name === 'Admin' || user.role.name === 'Staff' ? route('plans.create') : null}
+                    handleCreate={user.role.name === 'Admin' || user.role.name === 'Manager' ? route('plans.create') : null}
                     handleView={veiwPlanDetails}
                     handleEdit={editPlan}
                     handleDelete={deletePlan}

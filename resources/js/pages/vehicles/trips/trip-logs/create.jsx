@@ -36,7 +36,6 @@ export default function CreateTripLog({ trip }) {
     const { data, setData, post, errors, processing, reset } = useForm({
         trip_id: trip.trip_id,
         received_at: '',
-        fuel_lubricant_issued_at: '',
         departure_time_actual: '',
         odometer_out: trip.vehicle?.latest_odometer?.odometer_id || '',
         odometer_reading: trip.vehicle?.latest_odometer?.reading || 0,
@@ -102,23 +101,6 @@ export default function CreateTripLog({ trip }) {
                                         required
                                     />
                                     {errors.received_at && <p className="mt-1 text-xs text-red-500">{errors.received_at}</p>}
-                                </div>
-
-                                <div className="">
-                                    <Label htmlFor="fuel_lubricant_issued_at" className="text-sm font-medium">
-                                        Fuel/Lubricant Issued <span className="text-red-500">*</span>
-                                    </Label>
-                                    <Input
-                                        type="date"
-                                        id="fuel_lubricant_issued_at"
-                                        value={data.fuel_lubricant_issued_at}
-                                        onChange={(e) => setData('fuel_lubricant_issued_at', e.target.value)}
-                                        className="w-full"
-                                        required
-                                    />
-                                    {errors.fuel_lubricant_issued_at && (
-                                        <p className="mt-1 text-xs text-red-500">{errors.fuel_lubricant_issued_at}</p>
-                                    )}
                                 </div>
 
                                 <div className="space-y-2">

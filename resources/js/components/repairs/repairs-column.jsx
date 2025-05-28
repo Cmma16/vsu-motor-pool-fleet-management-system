@@ -54,6 +54,7 @@ export const RepairsColumn = (handleView, handleEdit, handleDelete) => [
         id: 'actions',
         header: () => <div className="text-center">Actions</div>,
         cell: ({ row }) => {
+            console.log(row.original);
             const repair = row.original;
             const handleConfirm = () => {
                 // Merged maintenance and repairs into one table named maintenance(to be changed to service_logs)

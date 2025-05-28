@@ -24,7 +24,6 @@ export function MaintenancePartModal({ maintenance_id, parts, formType = 'add', 
 
     const handleSubmit = () => {
         if (formType === 'edit') {
-            console.log(data);
             put(route('maintenance-parts.update', maintenancePart.id), {
                 onSuccess: () => {
                     toast.success('Part usage record updated successfully');

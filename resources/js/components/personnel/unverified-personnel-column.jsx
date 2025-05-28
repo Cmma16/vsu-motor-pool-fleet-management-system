@@ -48,8 +48,8 @@ export const UnverifiedPersonnelColumn = (handleView, handleEdit, handleDelete, 
                 router.put(`/personnel/${personnel.id}/verify`, {
                     preserveScroll: true,
                     onSuccess: () => {
-                        toast('Verified', {
-                            description: 'Personnel has been verified',
+                        toast.success('Personnel has been verified', {
+                            description: 'The personnel has been successfully verified and can now access the system.',
                         });
                     },
                     onError: () => {

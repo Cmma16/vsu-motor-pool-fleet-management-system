@@ -86,7 +86,7 @@ export const PersonnelColumn = (handleView, handleEdit, handleDelete, roles) => 
             const handleUnverify = () => {
                 router.put(`/personnel/${personnel.id}/unverify`);
 
-                toast('Unverified');
+                toast.success('Personnel has been unverified.');
             };
             return (
                 <div className="flex gap-2">

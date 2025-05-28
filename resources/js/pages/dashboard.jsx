@@ -88,7 +88,7 @@ export default function Dashboard() {
                             data={[
                                 { label: 'Drivers', quantity: 34, fill: 'green' },
                                 { label: 'Mechanics', quantity: 14, fill: 'yellow' },
-                                { label: 'Staff', quantity: 12, fill: 'orange' },
+                                { label: 'Manager', quantity: 12, fill: 'orange' },
                             ]}
                             config={{
                                 active: { label: 'On duty', color: 'hsl(var(--chart-1))' },

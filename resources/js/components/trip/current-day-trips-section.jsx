@@ -42,7 +42,9 @@ export function CurrentDayTripsSection({
                                     </div>
                                     <div className="text-muted-foreground flex items-center text-sm">
                                         <Clock className="mr-2 h-4 w-4" />
-                                        {formatTripDate(trip.start_date, trip.departure_time)}
+                                        {trip.start_date === trip.end_date
+                                            ? formatTripDate(trip.start_date, trip.departure_time)
+                                            : `${formatTripDate(trip.start_date, trip.departure_time)} - ${format(trip.end_date, 'LLL dd, yyyy')}`}
                                     </div>
                                     <div className="text-muted-foreground flex items-center text-sm">
                                         <MapPin className="mr-2 h-4 w-4" />

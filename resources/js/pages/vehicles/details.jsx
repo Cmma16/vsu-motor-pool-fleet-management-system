@@ -59,13 +59,13 @@ export default function details({ vehicle, odometer_reading, nextMaintenance, la
                             <Car className="h-6 w-6" />
                             {vehicle.vehicle_name}
                             {/* <span className="ml-2">{getStatusBadge(vehicleData.status)}</span> */}
-                            {vehicle.qr_code_path && (user.role.name === 'Admin' || user.role.name === 'Staff') && (
+                            {vehicle.qr_code_path && (user.role.name === 'Admin' || user.role.name === 'Manager') && (
                                 <QRCodeModal vehicle_name={vehicle.vehicle_name} qr_code_path={vehicle.qr_code_path} asset_tag={vehicle.asset_tag} />
                             )}
                         </h1>
                     </div>
                     <div className="mt-4 flex gap-2 md:mt-0">
-                        {!vehicle.qr_code_path && (user.role.name === 'Admin' || user.role.name === 'Staff') && (
+                        {!vehicle.qr_code_path && (user.role.name === 'Admin' || user.role.name === 'Manager') && (
                             <Button disabled={isLoading} variant="outline" size="sm" onClick={generateQRCode}>
                                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                                 <QrCode className="mr-2 h-4 w-4" />
@@ -78,13 +78,13 @@ export default function details({ vehicle, odometer_reading, nextMaintenance, la
                                 Request Service
                             </Button>
                         )}
-                        {(user.role.name === 'Admin' || user.role.name === 'Staff') && (
+                        {(user.role.name === 'Admin' || user.role.name === 'Manager') && (
                             <Button onClick={() => router.get(`${vehicle.vehicle_id}/edit`)} size="sm">
                                 <Settings className="mr-2 h-4 w-4" />
                                 Edit vehicle
                             </Button>
                         )}
-                        {(user.role.name === 'Admin' || user.role.name === 'Staff') && (
+                        {(user.role.name === 'Admin' || user.role.name === 'Manager') && (
                             <UpdateVehiclePhoto vehicleId={vehicle.vehicle_id} currentPhoto={vehicle.image_path} />
                         )}
                     </div>

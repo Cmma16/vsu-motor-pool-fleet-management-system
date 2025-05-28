@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { router, usePage } from '@inertiajs/react';
-import { Calendar, Clock, Edit3, Fuel, Gauge, HeartPulse } from 'lucide-react';
+import { Calendar, Clock, Edit3, Gauge, HeartPulse } from 'lucide-react';
 
 export default function TripLogDetails({ pre_trip, post_trip, trip_log_id, trip_status }) {
     const user = usePage().props.auth.user;
@@ -25,19 +25,12 @@ export default function TripLogDetails({ pre_trip, post_trip, trip_log_id, trip_
                 )}
             </CardHeader>
             <CardContent className="space-y-6 p-6">
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-5">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
                     <div className="flex flex-row gap-3 rounded-lg border border-blue-100/50 bg-blue-50/30 p-3">
                         <Calendar className="h-6 w-6 text-blue-600" />
                         <div className="flex flex-col gap-1">
                             <p className="text-sm font-medium text-blue-700/80">Date Received</p>
                             <p className="text-lg font-semibold text-blue-900">{pre_trip.received_at}</p>
-                        </div>
-                    </div>
-                    <div className="flex flex-row gap-3 rounded-lg border border-green-100/50 bg-green-50/30 p-3">
-                        <Fuel className="h-6 w-6 text-green-600" />
-                        <div className="flex flex-col gap-1">
-                            <p className="text-sm font-medium text-green-700/80">Fuel/Lubricant Issued</p>
-                            <p className="text-lg font-semibold text-green-900">{pre_trip.fuel_lubricant_issued_at}</p>
                         </div>
                     </div>
                     <div className="flex flex-row gap-3 rounded-lg border border-purple-100/50 bg-purple-50/30 p-3">
@@ -72,19 +65,12 @@ export default function TripLogDetails({ pre_trip, post_trip, trip_log_id, trip_
                         </div>
                     </CardHeader>
                     <CardContent className="space-y-6 p-6">
-                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-5">
+                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
                             <div className="flex flex-row gap-3 rounded-lg border border-emerald-100/50 bg-emerald-50/30 p-3">
                                 <Calendar className="h-6 w-6 text-emerald-600" />
                                 <div className="flex flex-col gap-1">
                                     <p className="text-sm font-medium text-emerald-700/80">Date Returned</p>
                                     <p className="text-lg font-semibold text-emerald-900">{post_trip.date_returned}</p>
-                                </div>
-                            </div>
-                            <div className="flex flex-row gap-3 rounded-lg border border-teal-100/50 bg-teal-50/30 p-3">
-                                <Fuel className="h-6 w-6 text-teal-600" />
-                                <div className="flex flex-col gap-1">
-                                    <p className="text-sm font-medium text-teal-700/80">Fuel/Lubricant Balanced</p>
-                                    <p className="text-lg font-semibold text-teal-900">{post_trip.fuel_lubricant_balanced_at}</p>
                                 </div>
                             </div>
                             <div className="flex flex-row gap-3 rounded-lg border border-indigo-100/50 bg-indigo-50/30 p-3">

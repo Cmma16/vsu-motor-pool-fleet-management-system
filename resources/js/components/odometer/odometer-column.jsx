@@ -3,14 +3,7 @@ import { ArrowUpDown } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { MoreHorizontal, Pencil, TrashIcon } from 'lucide-react';
 const columnHelper = createColumnHelper();
 
@@ -66,8 +59,6 @@ export const OdometerColumn = (handleView, handleEdit, handleDelete) => [
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem onClick={() => navigator.clipboard.writeText(odometer.odometer_id)}>Copy payment ID</DropdownMenuItem>
-                        <DropdownMenuSeparator />
                         <DropdownMenuItem onClick={() => handleEdit(odometer)}>
                             <Pencil /> Edit
                         </DropdownMenuItem>

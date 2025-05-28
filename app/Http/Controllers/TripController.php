@@ -30,7 +30,7 @@ class TripController extends Controller
             $query->where('driver_id', $user->id);
         }
         
-        $trips = $query->get()
+        $trips = $query->orderBy('created_at', 'desc')->get()
             ->map(function ($trip) {
                 return [
                     'trip_id' => $trip->trip_id,
@@ -135,14 +135,12 @@ class TripController extends Controller
                 'pre_trip' => $trip->tripLog ? [
                     'received_at' => $trip->tripLog->received_at,
                     'pre_trip_condition' => $trip->tripLog->pre_trip_condition,
-                    'fuel_lubricant_issued_at' => $trip->tripLog->fuel_lubricant_issued_at,
                     'departure_time' => $trip->tripLog->departure_time_actual,
                     'odometer_out' => $trip->tripLog->odometerOut?->reading ?? null,
                 ] : null,
                 'post_trip' => $trip->tripLog ? [
                     'date_returned' => $trip->tripLog->date_returned ?? null,
                     'post_trip_condition' => $trip->tripLog->post_trip_condition ?? null,
-                    'fuel_lubricant_balanced_at' => $trip->tripLog->fuel_lubricant_balanced_at ?? null,
                     'arrival_time' => $trip->tripLog->arrival_time ?? null,
                     'odometer_in' => $trip->tripLog->odometerIn->reading ?? null,
                 ] : null,

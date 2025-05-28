@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Head, Link, router, usePage } from '@inertiajs/react';
+import { format } from 'date-fns';
 import { ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -75,7 +76,7 @@ export default function RequestDetails({ serviceRequest }) {
                                 {/* Date Filed */}
                                 <div className="flex flex-col space-y-2">
                                     <Label htmlFor="date_filed">Date Filed</Label>
-                                    <span>{serviceRequest.date_filed}</span>
+                                    <span>{format(serviceRequest.date_filed, 'LLL dd, y HH:mm')}</span>
                                 </div>
                                 {/* Service Type */}
                                 <div className="flex flex-col space-y-2">
@@ -95,7 +96,7 @@ export default function RequestDetails({ serviceRequest }) {
                                 {/* Date Received */}
                                 <div className="flex flex-col space-y-2">
                                     <Label htmlFor="date_received">Date Received</Label>
-                                    <span>{serviceRequest.date_received}</span>
+                                    <span>{format(serviceRequest.date_received, 'LLL dd, y HH:mm')}</span>
                                 </div>
                                 {/* Status */}
                                 <div className="flex flex-col space-y-2">
@@ -103,7 +104,7 @@ export default function RequestDetails({ serviceRequest }) {
                                     <span>{serviceRequest.status}</span>
                                 </div>
 
-                                {serviceRequest.status === 'inspected' && user.role.name === 'Staff' && (
+                                {serviceRequest.status === 'inspected' && user.role.name === 'Manager' && (
                                     <div className="col-span-2 flex gap-2">
                                         <Button onClick={() => handleStatusUpdate(serviceRequest.request_id, 'approved')}>Approve Request</Button>
                                         <Button variant="destructive" onClick={() => handleStatusUpdate(serviceRequest.request_id, 'rejected')}>

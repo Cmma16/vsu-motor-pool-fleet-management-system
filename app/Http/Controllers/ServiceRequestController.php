@@ -37,6 +37,9 @@ class ServiceRequestController extends Controller
             $query->where('status', $statusFilter);
         }
 
+        if($user->role->name === 'Driver'){
+            $query->where('requested_by', $user->id);
+        }
         $serviceRequests = $query->get()->map(function ($serviceRequest) {
             return [
                 'request_id' => $serviceRequest->request_id,
@@ -73,14 +76,14 @@ class ServiceRequestController extends Controller
     {   
         $vehicles = Vehicle::select('vehicle_id', 'vehicle_name')->get();
         $maintenancePlans = MaintenancePlan::with('vehicle')
-            ->select('plan_id', 'vehicle_id', 'scheduled_date', 'next_service_km')
+            ->select('plan_id', 'vehicle_id', 'scheduled_date')
             ->where('status', 'pending')
             ->get()
                 ->map(function ($plan) {
                 return [
                     'plan_id' => $plan->plan_id,
                     'vehicle_id' => $plan->vehicle_id,
-                    'plan_name' => $plan->vehicle->vehicle_name . ' - ' . $plan->scheduled_date . ' - ' . $plan->next_service_km,
+                    'plan_name' => $plan->vehicle->vehicle_name . ' - ' . $plan->scheduled_date,
                 ];
             });
         // $users = User::select('id', 'first_name', 'last_name')->get(); delete this   
@@ -139,13 +142,13 @@ class ServiceRequestController extends Controller
         $serviceRequest = $request;
         $vehicles = Vehicle::select('vehicle_id', 'vehicle_name')->get();
         $maintenancePlans = MaintenancePlan::with('vehicle')
-            ->select('plan_id', 'vehicle_id', 'scheduled_date', 'next_service_km')
+            ->select('plan_id', 'vehicle_id', 'scheduled_date')
             ->get()
                 ->map(function ($plan) {
                 return [
                     'plan_id' => $plan->plan_id,
                     'vehicle_id' => $plan->vehicle_id,
-                    'plan_name' => $plan->vehicle->vehicle_name . ' - ' . $plan->scheduled_date . ' - ' . $plan->next_service_km,
+                    'plan_name' => $plan->vehicle->vehicle_name . ' - ' . $plan->scheduled_date,
                 ];
             });
         $users = User::select('id', 'first_name', 'last_name')->get();

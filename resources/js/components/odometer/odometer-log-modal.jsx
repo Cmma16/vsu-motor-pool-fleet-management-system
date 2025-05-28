@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { useForm } from '@inertiajs/react';
 import React from 'react';
 
-export function OdometerLogModal({ vehicle_id = null, vehicles, formType }) {
+export function OdometerLogModal({ vehicle_id = null, vehicles, formType, latestReading }) {
     const [open, setOpen] = React.useState(false);
     const { data, setData, post, processing, errors, reset } = useForm({
         vehicle_id: vehicle_id ?? '',
@@ -51,6 +51,7 @@ export function OdometerLogModal({ vehicle_id = null, vehicles, formType }) {
                         errors={errors}
                         vehicles={vehicles}
                         disableVehicleSelect={isScoped}
+                        latestReading={latestReading}
                     />
                 </div>
                 <DialogFooter>

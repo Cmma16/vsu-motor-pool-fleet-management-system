@@ -23,11 +23,11 @@ export default defineConfig({
     ],
     // For hosting on local network
     // server: {
-    //     host: '192.168.236.51',
+    //     host: '192.168.68.54',
     //     port: 5173,
     //     https: {
-    //         key: fs.readFileSync('certs/192.168.236.51-key.pem'),
-    //         cert: fs.readFileSync('certs/192.168.236.51.pem'),
+    //         key: fs.readFileSync('certs/192.168.68.54-key.pem'),
+    //         cert: fs.readFileSync('certs/192.168.68.54.pem'),
     //     },
     //     strictPort: true,
     //     cors: true, // enable CORS if needed

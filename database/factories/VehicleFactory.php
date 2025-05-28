@@ -43,7 +43,7 @@ class VehicleFactory extends Factory
             'capacity' => $this->faker->numberBetween(2, 50),
             'location' => $this->faker->city(),
             'year_acquired' => $this->faker->year(),
-            'category' => $this->faker->randomElement(['light vehicle', 'heavy vehicle']),
+            'category' => $this->faker->randomElement(['light vehicle', 'medium vehicle', 'heavy equipment']),
             'plate_number' => strtoupper($this->faker->bothify('???-####')),
             // 'odometer_reading' => $this->faker->numberBetween(0, 500000),
             'fuel_type' => $this->faker->randomElement(['gasoline', 'diesel']),

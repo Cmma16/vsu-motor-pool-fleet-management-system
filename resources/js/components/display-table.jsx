@@ -69,7 +69,7 @@ export function DisplayTable({ columns, data, handleCreate, handleView, handleEd
                     </TableBody>
                 </Table>
             </div>
-            {table.getRowModel().rows?.length > 5 && <DataTablePagination table={table} />}
+            <DataTablePagination table={table} />
         </div>
     );
 }

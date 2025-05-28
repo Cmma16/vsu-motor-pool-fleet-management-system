@@ -17,11 +17,20 @@ export function TripChart({ tripData, barKey, xKey, chartTitle, chartDescription
                                 top: 20,
                                 right: 30,
                                 left: 20,
-                                bottom: 5,
+                                bottom: 20,
                             }}
                         >
                             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--muted))" />
-                            <XAxis dataKey={xKey} tickLine={false} axisLine={false} tick={{ fill: 'hsl(var(--muted-foreground))' }} />
+                            <XAxis
+                                dataKey={xKey}
+                                tickLine={false}
+                                axisLine={false}
+                                interval={0}
+                                angle={-35}
+                                textAnchor="end"
+                                height={80}
+                                tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
+                            />
                             <YAxis
                                 tickLine={false}
                                 axisLine={false}

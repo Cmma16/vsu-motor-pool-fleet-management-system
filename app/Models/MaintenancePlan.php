@@ -21,7 +21,6 @@ class MaintenancePlan extends Model
         'plan_id',
         'vehicle_id',
         'scheduled_date',
-        'next_service_km',
         'created_by',
         'status',
     ];

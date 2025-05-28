@@ -65,14 +65,20 @@ function serviceTypeBadge(serviceType) {
     switch (serviceType) {
         case 'repair':
             return (
-                <Badge variant="default" className="bg-green-500">
+                <Badge variant="outline" className="bg-green-500">
                     Repair
                 </Badge>
             );
         case 'maintenance':
             return (
-                <Badge variant="default" className="bg-yellow-500">
+                <Badge variant="outline" className="bg-yellow-500">
                     Maintenance
+                </Badge>
+            );
+        case 'preventive':
+            return (
+                <Badge variant="outline" className="bg-blue-400">
+                    Preventive
                 </Badge>
             );
     }
@@ -133,12 +139,13 @@ export const RequestsColumn = (handleView, handleEdit, handleDelete, handleStatu
         header: () => <div className="text-center">Actions</div>,
         cell: ({ row }) => {
             const request = row.original;
-            console.log(request);
             const goToMaintenanceRepair = () => {
                 if (request.service_type === 'maintenance') {
                     router.get(route('maintenance.show', { maintenance_id: request.maintenance_id }));
-                } else {
+                } else if (request.service_type === 'repair') {
                     router.get(route('repairs.show', { maintenance_id: request.maintenance_id }));
+                } else {
+                    router.get(route('preventive.show', { maintenance_id: request.maintenance_id }));
                 }
             };
             const { auth } = usePage().props;
@@ -159,7 +166,7 @@ export const RequestsColumn = (handleView, handleEdit, handleDelete, handleStatu
                                     />
                                 </div>
                             )}
-                            {request.status === 'received' && <div className="flex justify-center gap-2">Display</div>}
+                            {request.status === 'received' && <div className="flex justify-center gap-2"></div>}
                         </>
                     )}
                     {auth.user.role.name === 'Mechanic' && (
@@ -189,7 +196,7 @@ export const RequestsColumn = (handleView, handleEdit, handleDelete, handleStatu
                             )}
                             {request.status === 'approved' && (
                                 <div className="flex justify-center gap-2">
-                                    {/* Repair/Maintenance button */}
+                                    {/* Repair/Maintenance/Preventive button */}
                                     {request.service_type === 'repair' && (
                                         <Button
                                             className="bg-green-300 text-black hover:bg-green-400"
@@ -222,11 +229,28 @@ export const RequestsColumn = (handleView, handleEdit, handleDelete, handleStatu
                                             <Wrench />
                                         </Button>
                                     )}
+                                    {request.service_type === 'preventive' && (
+                                        <Button
+                                            className="bg-green-300 text-black hover:bg-green-400"
+                                            onClick={() =>
+                                                router.get(
+                                                    route('preventive.create', {
+                                                        data: {
+                                                            requestId: request.request_id,
+                                                            vehicleId: request.vehicle_id,
+                                                        },
+                                                    }),
+                                                )
+                                            }
+                                        >
+                                            <Wrench />
+                                        </Button>
+                                    )}
                                 </div>
                             )}
                         </>
                     )}
-                    {auth.user.role.name === 'Staff' && (
+                    {auth.user.role.name === 'Manager' && (
                         <>
                             {request.status === 'pending' && (
                                 <div className="flex justify-center gap-2">

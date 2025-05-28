@@ -59,7 +59,7 @@ export default function EditRequest({ vehicles, users, serviceRequest, maintenan
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             <Head title="Repairs" />
-            <div className="mx-6 mb-3 space-y-6 rounded-lg bg-white">
+            <div className="mx-auto my-8 mb-3 w-full max-w-xl space-y-6 rounded-lg bg-white">
                 <Card className="w-full">
                     <CardHeader>
                         <CardTitle>Service Request Information</CardTitle>

@@ -31,7 +31,6 @@ export default function UpcomingMaintenancePlanCard({ upcomingMaintenancePlans }
                                     </div>
                                     <div className="mt-1 text-sm sm:mt-0 sm:text-right">
                                         <div>{plan.scheduled_date}</div>
-                                        <div className="text-muted-foreground">{plan.next_service_km} km</div>
                                     </div>
                                 </div>
                                 <div className="mt-2 flex gap-2">

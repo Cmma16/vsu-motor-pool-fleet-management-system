@@ -4,6 +4,25 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
 export default function PartForm({ formData, formType, setData, onSubmit, processing, errors }) {
+    const handleChange = (e) => {
+        const raw = e.target.value;
+
+        // Allow only digits and 1 decimal point, but don't block empty or partial values
+        if (raw === '' || /^\d*\.?\d*$/.test(raw)) {
+            setData('amount', raw);
+        }
+    };
+
+    const handleBlur = () => {
+        const raw = data.amount;
+
+        // Avoid formatting empty or invalid values
+        if (!raw || isNaN(parseFloat(raw))) return;
+
+        // Format to 2 decimal places
+        setData('amount', parseFloat(raw).toFixed(2));
+    };
+
     return (
         <form onSubmit={onSubmit} className="space-y-6">
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -56,14 +75,24 @@ export default function PartForm({ formData, formType, setData, onSubmit, proces
                     <Label htmlFor="unit_price">Unit Price</Label>
                     <Input
                         id="unit_price"
-                        type="number"
+                        type="text" // <-- Switch to "text" to allow partial inputs like `12.`
+                        inputMode="decimal" // <-- Suggest decimal keypad on mobile
                         value={formData.unit_price}
-                        onChange={(e) => setData('unit_price', e.target.value)}
+                        onChange={(e) => {
+                            const value = e.target.value;
+                            // Allow numbers and one decimal point, or allow clearing the field
+                            if (value === '' || /^\d*\.?\d*$/.test(value)) {
+                                setData('unit_price', value);
+                            }
+                        }}
+                        onBlur={() => {
+                            const raw = formData.unit_price;
+                            if (!raw || isNaN(parseFloat(raw))) return;
+                            setData('unit_price', parseFloat(raw).toFixed(2));
+                        }}
                         disabled={processing}
                         placeholder="Unit Price"
                         tabIndex={4}
-                        step="0.01"
-                        min="0"
                     />
                     <InputError message={errors.unit_price} />
                 </div>

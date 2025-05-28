@@ -55,11 +55,11 @@ export default function AddMaintenance({ maintenancePlans, vehicles, users, serv
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             <Head title="Maintenance" />
-            <div className="mx-6 mb-3 space-y-6 rounded-lg bg-white">
-                <Card className="w-full">
+            <div className="flex min-h-screen items-center justify-center">
+                <Card className="m-4 w-full max-w-2xl rounded-xl bg-white p-6 shadow-lg">
                     <CardHeader>
                         <CardTitle>Maintenance Information</CardTitle>
-                        <CardDescription>Enter the details of the maintenance.</CardDescription>
+                        <CardDescription>Enter the details of the maintenance conducted.</CardDescription>
                     </CardHeader>
                     <CardContent>
                         <MaintenanceForm

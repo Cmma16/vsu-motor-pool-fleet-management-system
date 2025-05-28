@@ -1,12 +1,42 @@
 import { createColumnHelper } from '@tanstack/react-table';
 import { ArrowUpDown } from 'lucide-react';
 
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 
 import { DataTableRowActions } from '@/components/data-table-row-actions';
 
 const columnHelper = createColumnHelper();
+
+function getStatusBadge(status) {
+    switch (status) {
+        case 'in use':
+            return (
+                <Badge variant="outline" className="bg-gray-100 text-indigo-500">
+                    In use
+                </Badge>
+            );
+        case 'under maintenance':
+            return (
+                <Badge variant="default" className="bg-yellow-500">
+                    Under Maintenance
+                </Badge>
+            );
+        case 'available':
+            return (
+                <Badge variant="default" className="bg-green-500">
+                    Available
+                </Badge>
+            );
+        case 'retired':
+            return (
+                <Badge variant="default" className="bg-red-500">
+                    Retired
+                </Badge>
+            );
+    }
+}
 
 export const columns = (handleView, handleEdit, handleDelete) => [
     {
@@ -56,7 +86,7 @@ export const columns = (handleView, handleEdit, handleDelete) => [
     }),
     columnHelper.accessor('status', {
         header: () => <div className="text-left">Status</div>,
-        cell: (info) => <div className="text-left">{info.getValue()}</div>,
+        cell: (info) => <div className="text-left">{getStatusBadge(info.getValue())}</div>,
     }),
     {
         id: 'actions',

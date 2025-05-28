@@ -170,7 +170,8 @@ export default function VehicleForm({ formData, formType, setData, onSubmit, pro
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="light vehicle">Light Vehicle</SelectItem>
-                            <SelectItem value="heavy vehicle">Heavy Vehicle</SelectItem>
+                            <SelectItem value="medium vehicle">Medium Vehicle</SelectItem>
+                            <SelectItem value="heavy equipment">Heavy Equipment</SelectItem>
                         </SelectContent>
                     </Select>
                     <InputError message={errors.category} />

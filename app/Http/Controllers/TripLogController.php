@@ -110,7 +110,6 @@ class TripLogController extends Controller
                 'trip_id' => $tripLog->trip_id,
                 'received_at' => $tripLog->received_at,
                 'pre_trip_condition' => $tripLog->pre_trip_condition,
-                'fuel_lubricant_issued_at' => $tripLog->fuel_lubricant_issued_at,
                 'departure_time_actual' => $tripLog->departure_time_actual,
                 'odometerOut' => $tripLog->odometerOut ? [
                     'odometer_id' => $tripLog->odometerOut->odometer_id,
@@ -213,7 +212,6 @@ class TripLogController extends Controller
                 'trip_id' => $tripLog->trip_id,
                 'received_at' => $tripLog->received_at,
                 'pre_trip_condition' => $tripLog->pre_trip_condition,
-                'fuel_lubricant_issued_at' => $tripLog->fuel_lubricant_issued_at,
                 'departure_time_actual' => $tripLog->departure_time_actual,
                 'odometerOut' => $tripLog->odometerOut ? [
                     'vehicle_id' => $tripLog->odometerOut->vehicle_id,
@@ -223,7 +221,6 @@ class TripLogController extends Controller
                 ] : null,
                 'date_returned' => $tripLog->date_returned,
                 'post_trip_condition' => $tripLog->post_trip_condition,
-                'fuel_lubricant_balanced_at' => $tripLog->fuel_lubricant_balanced_at,
                 'arrival_time' => $tripLog->arrival_time,
                 'odometerIn' => $tripLog->odometerIn ? [
                     'vehicle_id' => $tripLog->odometerIn->vehicle_id,

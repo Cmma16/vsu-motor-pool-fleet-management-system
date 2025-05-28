@@ -42,7 +42,7 @@ class StoreVehicleRequest extends FormRequest
             'chassis_number' => 'required|integer',
 
             // Vehicle Type - Required and should be a string
-            'vehicle_type' => 'required|string|in:sedan,truck,motorcycle,bus,other',
+            'vehicle_type' => 'required|string|in:sedan,truck,bus,van,pickup,suv',
 
             // Capacity - Must be a valid integer and a positive number
             'capacity' => 'required|integer|min:1',
@@ -54,7 +54,7 @@ class StoreVehicleRequest extends FormRequest
             'year_acquired' => 'nullable|digits:4|integer|min:1900|max:' . date('Y'),
 
             // Category - Should be a string and not required
-            'category' => 'required|string|in:light vehicle, heavy vehicle',
+            'category' => 'required|string|in:light vehicle,medium vehicle,heavy equipment',
 
             // Plate Number - Should be unique and a string
             'plate_number' => 'required|string|max:20|unique:vehicles,plate_number',

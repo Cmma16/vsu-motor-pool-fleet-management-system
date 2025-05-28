@@ -1,8 +1,9 @@
+import LogoutWithConfirmation from '@/components/log-out-with-confirmation';
 import { DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import { UserInfo } from '@/components/user-info';
 import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
 import { Link } from '@inertiajs/react';
-import { LogOut, Settings } from 'lucide-react';
+import { Settings } from 'lucide-react';
 
 export function UserMenuContent({ user }) {
     const cleanup = useMobileNavigation();
@@ -25,10 +26,7 @@ export function UserMenuContent({ user }) {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-                <Link className="block w-full" method="post" href={route('logout')} as="button" onClick={cleanup}>
-                    <LogOut className="mr-2" />
-                    Log out
-                </Link>
+                <LogoutWithConfirmation cleanup={cleanup} />
             </DropdownMenuItem>
         </>
     );

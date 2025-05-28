@@ -1,6 +1,5 @@
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
@@ -42,21 +41,6 @@ export default function PlanForm({ formData, formType, setData, onSubmit, proces
                     <InputError message={errors.scheduled_date} />
                 </div>
 
-                {/* Next Service (km) */}
-                <div className="space-y-2">
-                    <Label htmlFor="next_service_km">Next service (km)</Label>
-                    <Input
-                        id="next_service_km"
-                        type="number"
-                        value={formData.next_service_km}
-                        onChange={(e) => setData('next_service_km', e.target.value)}
-                        disabled={processing}
-                        placeholder="Next service (km)"
-                        tabIndex={3}
-                    />
-                    <InputError message={errors.next_service_km} />
-                </div>
-
                 {/* Created By */}
                 <div className="space-y-2">
                     <Label htmlFor="created_by">Created By</Label>
@@ -83,8 +67,8 @@ export default function PlanForm({ formData, formType, setData, onSubmit, proces
                             <SelectValue placeholder="Select status" />
                         </SelectTrigger>
                         <SelectContent>
+                            <SelectItem value="pending">Pending</SelectItem>
                             <SelectItem value="scheduled">Scheduled</SelectItem>
-                            <SelectItem value="overdue">Overdue</SelectItem>
                             <SelectItem value="completed">Completed</SelectItem>
                             <SelectItem value="cancelled">Cancelled</SelectItem>
                         </SelectContent>

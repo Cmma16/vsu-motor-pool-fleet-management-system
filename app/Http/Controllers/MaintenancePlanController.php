@@ -24,7 +24,6 @@ class MaintenancePlanController extends Controller
                     'plan_id' => $plan->plan_id,
                     'vehicle_name' => $plan->vehicle->vehicle_name ?? 'N/A',
                     'scheduled_date' => $plan->scheduled_date,
-                    'next_service_km' => $plan->next_service_km,
                     'created_by' => $plan->createdBy ? $plan->createdBy->first_name . ' ' . $plan->createdBy->last_name : 'N/A',
                     'status' => $plan->status,
                 ];
@@ -69,7 +68,6 @@ class MaintenancePlanController extends Controller
                 'plan_id' => $maintenancePlan->plan_id,
                 'vehicle_name' => $maintenancePlan->vehicle->vehicle_name ?? 'N/A',
                 'scheduled_date' => $maintenancePlan->scheduled_date,
-                'next_service_km' => $maintenancePlan->next_service_km,
                 'created_by' => $maintenancePlan->createdBy ? $maintenancePlan->createdBy->first_name . ' ' . $maintenancePlan->createdBy->last_name : 'N/A',
                 'status' => $maintenancePlan->status,
             ],
@@ -90,7 +88,6 @@ class MaintenancePlanController extends Controller
                 'plan_id' => $maintenancePlan->plan_id,
                 'vehicle_id' => $maintenancePlan->vehicle_id,
                 'scheduled_date' => $maintenancePlan->scheduled_date,
-                'next_service_km' => $maintenancePlan->next_service_km,
                 'created_by' => $maintenancePlan->created_by,
                 'status' => $maintenancePlan->status,
             ],

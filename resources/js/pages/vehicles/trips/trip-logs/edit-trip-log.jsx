@@ -38,13 +38,11 @@ export default function EditTripLog({ tripLog, trip }) {
         trip_id: tripLog.trip_id,
         received_at: tripLog.received_at || '',
         pre_trip_condition: tripLog.pre_trip_condition?.toLowerCase() || '',
-        fuel_lubricant_issued_at: tripLog.fuel_lubricant_issued_at || '',
         departure_time_actual: tripLog.departure_time_actual || '',
         odometer_out: tripLog.odometerOut?.odometer_id,
         odometer_out_reading: tripLog.odometerOut?.reading || 0,
         date_returned: tripLog.date_returned || '',
         post_trip_condition: tripLog.post_trip_condition?.toLowerCase() || '',
-        fuel_lubricant_balanced_at: tripLog.fuel_lubricant_balanced_at || '',
         arrival_time: tripLog.arrival_time || '',
         odometer_in: tripLog.odometerIn?.odometer_id,
         odometer_in_reading: tripLog.odometerIn?.reading || 0,
@@ -128,23 +126,6 @@ export default function EditTripLog({ tripLog, trip }) {
                                                 required
                                             />
                                             {errors.received_at && <p className="mt-1 text-xs text-red-500">{errors.received_at}</p>}
-                                        </div>
-
-                                        <div className="space-y-2">
-                                            <Label htmlFor="fuel_lubricant_issued_at" className="text-sm font-medium">
-                                                Fuel/Lubricant Issued <span className="text-red-500">*</span>
-                                            </Label>
-                                            <Input
-                                                type="date"
-                                                id="fuel_lubricant_issued_at"
-                                                value={data.fuel_lubricant_issued_at}
-                                                onChange={(e) => setData('fuel_lubricant_issued_at', e.target.value)}
-                                                className="w-full"
-                                                required
-                                            />
-                                            {errors.fuel_lubricant_issued_at && (
-                                                <p className="mt-1 text-xs text-red-500">{errors.fuel_lubricant_issued_at}</p>
-                                            )}
                                         </div>
 
                                         <div className="space-y-2">
@@ -241,23 +222,6 @@ export default function EditTripLog({ tripLog, trip }) {
                                                 required
                                             />
                                             {errors.date_returned && <p className="mt-1 text-xs text-red-500">{errors.date_returned}</p>}
-                                        </div>
-
-                                        <div className="space-y-2">
-                                            <Label htmlFor="fuel_lubricant_balanced_at" className="text-sm font-medium">
-                                                Fuel/Lubricant Balanced <span className="text-red-500">*</span>
-                                            </Label>
-                                            <Input
-                                                type="date"
-                                                id="fuel_lubricant_balanced_at"
-                                                value={data.fuel_lubricant_balanced_at}
-                                                onChange={(e) => setData('fuel_lubricant_balanced_at', e.target.value)}
-                                                className="w-full"
-                                                required
-                                            />
-                                            {errors.fuel_lubricant_balanced_at && (
-                                                <p className="mt-1 text-xs text-red-500">{errors.fuel_lubricant_balanced_at}</p>
-                                            )}
                                         </div>
 
                                         <div className="space-y-2">

@@ -220,7 +220,15 @@ export default function TripsIndex({ trips = [] }) {
         setSearchQuery('');
     };
 
-    const todayTrips = filteredTrips.filter((trip) => isToday(parseISO(trip.start_date)));
+    const todayTrips = filteredTrips.filter((trip) => {
+        const start = parseISO(trip.start_date);
+        const end = parseISO(trip.end_date);
+
+        return isWithinInterval(new Date(), {
+            start: startOfDay(start),
+            end: endOfDay(end),
+        });
+    });
     const upcomingTrips = filteredTrips.filter((trip) => {
         const startDate = parseISO(trip.start_date);
         return startDate > new Date() && !isToday(startDate);

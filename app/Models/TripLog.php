@@ -18,12 +18,10 @@ class TripLog extends Model
         'trip_id',
         'received_at',
         'pre_trip_condition',
-        'fuel_lubricant_issued_at',
         'departure_time_actual',
         'odometer_out',
         'date_returned',
         'post_trip_condition',
-        'fuel_lubricant_balanced_at',
         'arrival_time',
         'odometer_in',
     ];

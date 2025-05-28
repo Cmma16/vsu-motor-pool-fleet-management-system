@@ -33,7 +33,7 @@ class MaintenanceController extends Controller
             ->map(function ($maintenance) {
                 return [
                     'maintenance_id' => $maintenance->maintenance_id,
-                    'maintenance_plan' => Carbon::parse($maintenance->serviceRequest->maintenancePlan->scheduled_date)->format('M d, Y') . ' - ' . $maintenance->serviceRequest->maintenancePlan->next_service_km . 'km' ?? 'N/A',
+                    'maintenance_plan' => Carbon::parse($maintenance->serviceRequest->maintenancePlan->scheduled_date)->format('M d, Y') ?? 'N/A',
                     'request_description' => $maintenance->serviceRequest->work_description ?? 'N/A', 
                     'vehicle_name' => $maintenance->serviceRequest->maintenancePlan->vehicle->vehicle_name ?? 'N/A',
                     'date_in' => $maintenance->date_in,
@@ -57,7 +57,7 @@ class MaintenanceController extends Controller
     public function create(Request $request)
     {
         $maintenancePlans = MaintenancePlan::with('vehicle')
-            ->select('plan_id', 'vehicle_id', 'scheduled_date', 'next_service_km')
+            ->select('plan_id', 'vehicle_id', 'scheduled_date')
             ->where('status', 'scheduled')
             ->get()
                 ->map(function ($plan) {
@@ -66,7 +66,6 @@ class MaintenanceController extends Controller
                     'vehicle_id' => $plan->vehicle_id,
                     'vehicle_name' => $plan->vehicle->vehicle_name,
                     'scheduled_date' => Carbon::parse($plan->scheduled_date)->format('M d, Y'),
-                    'next_service_km' => $plan->next_service_km,
                 ];
             });
         $serviceRequests = ServiceRequest::select('request_id', 'work_description')->where('status', 'approved')->get();
@@ -119,7 +118,7 @@ class MaintenanceController extends Controller
             'maintenance' => [
                 'maintenance_id' => $maintenance->maintenance_id,
                 'vehicle_name' => $maintenance->serviceRequest->vehicle->vehicle_name ?? 'N/A',
-                'maintenance_plan' => $maintenance->serviceRequest->maintenancePlan->scheduled_date . ' - ' . $maintenance->serviceRequest->maintenancePlan->next_service_km . 'km' ?? 'N/A',
+                'maintenance_plan' => $maintenance->serviceRequest->maintenancePlan->scheduled_date ?? 'N/A',
                 'request_description' => $maintenance->serviceRequest->work_description ?? 'N/A',
                 'odometer_reading' => $maintenance->odometerReading->reading ?? 'N/A',
                 'performed_by' => $maintenance->performedBy ? $maintenance->performedBy->first_name . ' ' . $maintenance->performedBy->last_name : 'N/A',
@@ -145,7 +144,7 @@ class MaintenanceController extends Controller
         return Inertia::render('maintenance/edit-maintenance', [
             'maintenance' => [
                 'maintenance_id' => $maintenance->maintenance_id,
-                'plan_description' => $maintenance->serviceRequest->maintenancePlan->scheduled_date . ' - ' . $maintenance->serviceRequest->maintenancePlan->next_service_km . 'km' ?? 'N/A',
+                'plan_description' => $maintenance->serviceRequest->maintenancePlan->scheduled_date ?? 'N/A',
                 'request_description' => $maintenance->serviceRequest->work_description ?? 'N/A',
                 'vehicle_name' => $maintenance->serviceRequest->vehicle->vehicle_name ?? 'N/A',
                 'vehicle_id' => $maintenance->serviceRequest->vehicle->vehicle_id,

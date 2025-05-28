@@ -40,7 +40,6 @@ class UpdateTripLogRequest extends FormRequest
             return [
                 'date_returned' => 'required|date',
                 'post_trip_condition' => 'required|string',
-                'fuel_lubricant_balanced_at' => 'required|date',
                 'arrival_time' => 'required|date_format:H:i',
                 'odometer_reading' => 'required|integer|min:0',
             ];
@@ -50,12 +49,10 @@ class UpdateTripLogRequest extends FormRequest
         return [
             'received_at' => 'required|date',
             'pre_trip_condition' => 'required|string',
-            'fuel_lubricant_issued_at' => 'required|date',
             'departure_time_actual' => 'required|date_format:H:i',
             'odometer_out' => 'required|exists:odometer_logs,odometer_id',
             'date_returned' => 'required|date',
             'post_trip_condition' => 'required|string',
-            'fuel_lubricant_balanced_at' => 'required|date',
             'arrival_time' => 'required|date_format:H:i',
             'odometer_in' => 'required|exists:odometer_logs,odometer_id',
         ];

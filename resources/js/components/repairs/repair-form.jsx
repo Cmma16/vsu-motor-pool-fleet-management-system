@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 import React from 'react';
 
 export default function RepairForm({
@@ -35,7 +36,7 @@ export default function RepairForm({
 
     return (
         <form onSubmit={onSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <div className="grid grid-cols-1 gap-6">
                 {/* Vehicle */}
                 <div className="space-y-2">
                     <Label htmlFor="vehicle_id">
@@ -127,7 +128,7 @@ export default function RepairForm({
                     <Label htmlFor="maintenance_summary">
                         Summary <span className="text-red-500">*</span>
                     </Label>
-                    <Input
+                    <Textarea
                         id="maintenance_summary"
                         name="maintenance_summary"
                         className="mt-2"
@@ -151,12 +152,19 @@ export default function RepairForm({
                         placeholder="No odometer reading available"
                         className="mt-2 bg-gray-100 disabled:border-gray-300 disabled:opacity-100"
                     />
-                    {formData.vehicle_id && <OdometerLogModal vehicles={vehicles} formType={'add'} vehicle_id={formData.vehicle_id} />}
+                    {formData.vehicle_id && (
+                        <OdometerLogModal
+                            latestReading={latestOdometer?.reading ?? 0}
+                            vehicles={vehicles}
+                            formType={'add'}
+                            vehicle_id={formData.vehicle_id}
+                        />
+                    )}
                     <InputError message={errors.odometer_id} />
                 </div>
             </div>
             <Button disabled={processing} className="w-1/3">
-                {formType === 'edit' ? 'Save Changes' : 'Add Repair'}
+                {formType === 'edit' ? 'Save Changes' : 'Add Record'}
             </Button>
         </form>
     );

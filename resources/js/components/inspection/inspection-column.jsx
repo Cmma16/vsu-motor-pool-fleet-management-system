@@ -114,6 +114,7 @@ export const InspectionsColumn = (handleView, handleEdit, handleDelete) => [
                                 },
                                 duration: 6000,
                             });
+                            router.reload();
                         },
                         onError: (error) => {
                             toast.error('Inspection confirmation failed', {

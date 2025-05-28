@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import { Head, router } from '@inertiajs/react';
+import { format } from 'date-fns';
 import { AlertTriangle, Car, MapPin, Package } from 'lucide-react';
 
 const breadcrumbs = [
@@ -68,7 +69,7 @@ export default function Dashboard({
     const personnelSummary = [
         { label: 'Drivers', quantity: personnelStats.driver || 0, fill: 'green' },
         { label: 'Mechanics', quantity: personnelStats.mechanic || 0, fill: 'yellow' },
-        { label: 'Staff', quantity: personnelStats.staff || 0, fill: 'orange' },
+        { label: 'Manager', quantity: personnelStats.manager || 0, fill: 'orange' },
     ];
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
@@ -107,12 +108,7 @@ export default function Dashboard({
                                                 </div>
                                                 <div className="flex flex-col gap-1">
                                                     <span className="text-sm font-medium">Odometer Reading</span>
-                                                    <span className="flex items-center gap-1">
-                                                        {latestOdometerReading?.reading}
-                                                        <span className="text-muted-foreground text-xs">
-                                                            due at: {nextMaintenance?.next_service_km || 'N/A'} km
-                                                        </span>
-                                                    </span>
+                                                    <span className="flex items-center gap-1">{latestOdometerReading?.reading}</span>
                                                 </div>
                                                 <div className="flex flex-col gap-1">
                                                     <span className="text-sm font-medium">Next Maintenance</span>
@@ -154,7 +150,9 @@ export default function Dashboard({
                                                 <div key={request.request_id} className="rounded-lg border p-3">
                                                     <div className="flex justify-between">
                                                         <h4 className="font-medium">{request.vehicle?.vehicle_name}</h4>
-                                                        <span className="text-muted-foreground text-xs">{request.date_filed.split(' ')[0]}</span>
+                                                        <span className="text-muted-foreground text-xs">
+                                                            {format(request.date_filed, 'LLL dd, yyyy')}
+                                                        </span>
                                                     </div>
                                                     <p className="mt-1 text-sm">{request.work_description}</p>
                                                 </div>

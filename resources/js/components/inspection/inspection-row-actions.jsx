@@ -27,7 +27,7 @@ export function InspectionRowActions({ row, rowKey = 'id', handleView, handleEdi
                     )}
                 </div>
             )}
-            {user.role.name === 'Staff' && (
+            {user.role.name === 'Manager' && (
                 <>
                     {!row.confirmed_by && (
                         <TooltipProvider>

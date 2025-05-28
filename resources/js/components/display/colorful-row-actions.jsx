@@ -32,7 +32,7 @@ export function ColorfulRowActions({ row, rowKey = 'id', handleView, handleEdit,
                     )}
                 </div>
             )}
-            {(user.role.name === 'Staff' || user.role.name === 'Admin') && (
+            {(user.role.name === 'Manager' || user.role.name === 'Admin') && (
                 <>
                     {!row.confirmed_by && (
                         <TooltipProvider>

@@ -28,7 +28,6 @@ export default function EditPlan({ maintenancePlan, vehicles, users }) {
         vehicle_id: maintenancePlan.vehicle_id,
         description: maintenancePlan.description,
         scheduled_date: maintenancePlan.scheduled_date,
-        next_service_km: maintenancePlan.next_service_km,
         created_by: maintenancePlan.created_by,
         status: maintenancePlan.status,
     });

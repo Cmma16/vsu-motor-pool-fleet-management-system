@@ -3,7 +3,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-export default function OdometerLogForm({ formData, setData, processing, errors, vehicles, disableVehicleSelect }) {
+export default function OdometerLogForm({ formData, setData, processing, errors, vehicles, disableVehicleSelect, latestReading }) {
     return (
         <div className="grid grid-cols-1 gap-6">
             {/* Vehicle */}
@@ -38,8 +38,9 @@ export default function OdometerLogForm({ formData, setData, processing, errors,
                     value={formData.reading}
                     onChange={(e) => setData('reading', e.target.value)}
                     disabled={processing}
-                    placeholder="Odometer Reading"
+                    placeholder={String(latestReading)}
                     tabIndex={5}
+                    min={latestReading}
                 />
                 <InputError message={errors.reading} />
             </div>

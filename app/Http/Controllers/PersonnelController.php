@@ -16,6 +16,7 @@ class PersonnelController extends Controller
     {
         $roles = UserRole::select('role_id', 'name')->get();
         $personnel = User::where('is_verified', 1)
+            ->orderBy('created_at', 'desc')
             ->get()
             ->map(function ($personnel) {
                 return [

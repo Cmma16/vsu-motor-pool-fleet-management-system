@@ -1,12 +1,5 @@
 import { Button } from '@/components/ui/button';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 import { MoreHorizontal, NotepadText, Pencil, TrashIcon } from 'lucide-react';
 
@@ -25,8 +18,6 @@ export function DataTableRowActions({ row, rowKey = 'id', handleView, handleEdit
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <DropdownMenuItem onClick={() => navigator.clipboard.writeText(row.id)}>Copy payment ID</DropdownMenuItem>
-                <DropdownMenuSeparator />
                 {handleView && (
                     <DropdownMenuItem onClick={() => handleView(rowId)}>
                         <NotepadText />

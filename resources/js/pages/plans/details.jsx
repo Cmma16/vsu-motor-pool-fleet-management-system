@@ -46,12 +46,6 @@ export default function details({ maintenancePlan }) {
                                     <span>{maintenancePlan.scheduled_date ?? 'N/A'}</span>
                                 </div>
 
-                                {/* Next Service KM */}
-                                <div className="flex flex-col space-y-2">
-                                    <Label htmlFor="next_service_km">Next Service (km)</Label>
-                                    <span>{maintenancePlan?.next_service_km ? `${maintenancePlan.next_service_km} km` : 'N/A'}</span>
-                                </div>
-
                                 {/* Created By */}
                                 <div className="flex flex-col space-y-2">
                                     <Label htmlFor="created_by">Created By</Label>

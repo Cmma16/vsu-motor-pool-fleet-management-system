@@ -14,7 +14,7 @@ export function DataTableToolbar({ table, handleCreate, filterColumn, placeholde
                 filterOptions={filterOptions}
                 filterColumnName={filterColumnName}
             />
-            {/* {auth.user.role.name === 'Staff' || (auth.user.role.name === 'Admin' && <DataTableExportOptions />)} */}
+            {/* {auth.user.role.name === 'Manager' || (auth.user.role.name === 'Admin' && <DataTableExportOptions />)} */}
             <DataTableViewOptions table={table} />
         </div>
     );

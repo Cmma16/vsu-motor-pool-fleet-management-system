@@ -20,6 +20,8 @@ use App\Http\Controllers\MaintenancePartsController;
 use App\Http\Controllers\PassengerController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ReportsController;
+use App\Http\Controllers\PreventiveController;
+
 
 Route::get('/', function () {
     return Inertia::render('welcome');
@@ -43,6 +45,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('repairs', RepairsController::class);
     Route::patch('repairs/{repair}/confirm', [RepairsController::class, 'confirm'])->name('repairs.confirm');
+    Route::resource('preventive', PreventiveController::class);
+    Route::patch('preventive/{preventive}/confirm', [PreventiveController::class, 'confirm'])->name('preventive.confirm');
+
     Route::resource('services/requests', ServiceRequestController::class);
     Route::patch('services/requests/{request}/status', [ServiceRequestController::class, 'updateStatus'])->name('requests.updateStatus');
 
@@ -71,10 +76,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/trip-logs/{tripLog}/complete', [TripLogController::class, 'completeTrip'])->name('trip-logs.complete');
     Route::put('/trip-logs/{tripLog}', [TripLogController::class, 'update'])->name('trip-logs.update');
     Route::resource('trip-logs', TripLogController::class)->except(['create']);
-    
-    Route::resource('personnel', PersonnelController::class);
+    Route::middleware('role:Admin')->group(function () {
+        Route::resource('personnel', PersonnelController::class);
+    });
     Route::resource('passengers', PassengerController::class);
-
     Route::post('/passengers/{id}/assign-party-head', [PassengerController::class, 'assignPartyHead']);
 
     Route::get('/notifications', [NotificationController::class, 'index']);
@@ -82,6 +87,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
     Route::get('/reports/fleet-analytics', [ReportsController::class, 'fleetReports'])->name('reports.fleet');
+    Route::get('/reports/part-analytics', [ReportsController::class, 'partsAnalytics'])->name('reports.part');
 
     Route::post('maintenance-parts', [MaintenancePartsController::class, 'store'])->name('maintenance-parts.store');
     Route::put('maintenance-parts/{maintenancePart}', [MaintenancePartsController::class, 'update'])->name('maintenance-parts.update');

@@ -5,6 +5,7 @@ import { Head, Link, router } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import { usePage } from '@inertiajs/react';
+import { format } from 'date-fns';
 import { ArrowRight } from 'lucide-react';
 
 const breadcrumbs = [
@@ -50,13 +51,13 @@ export default function InspectionDetails({ serviceInspection }) {
                                 {/* Started at */}
                                 <div className="flex flex-col space-y-2">
                                     <Label htmlFor="started_at">Started at</Label>
-                                    <span>{serviceInspection.started_at}</span>
+                                    <span>{format(serviceInspection.started_at, 'LLL dd, y hh:mm a')}</span>
                                 </div>
 
                                 {/* Completed at */}
                                 <div className="flex flex-col space-y-2">
                                     <Label htmlFor="completed_at">Completed at</Label>
-                                    <span>{serviceInspection.completed_at}</span>
+                                    <span>{format(serviceInspection.completed_at, 'LLL dd, y hh:mm a')}</span>
                                 </div>
 
                                 {/* Parts Available */}
@@ -97,7 +98,7 @@ export default function InspectionDetails({ serviceInspection }) {
                                         Edit Inspection
                                     </Link>
                                 )}
-                                {user.role.name == 'Staff' && !serviceInspection.confirmed_by && (
+                                {user.role.name == 'Manager' && !serviceInspection.confirmed_by && (
                                     <Button
                                         className="col-span-2 w-1/3 rounded-md bg-[#006600] px-3 py-2 text-center text-white hover:bg-[#005500]"
                                         onClick={handleConfirmInspection}

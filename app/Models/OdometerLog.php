@@ -11,6 +11,11 @@ class OdometerLog extends Model
     use HasFactory;
 
     protected $primaryKey = 'odometer_id';
+
+    protected $cast = [
+        'logged_at' => 'datetime',
+    ];
+
     protected $fillable = [
         'vehicle_id',
         'reading',
