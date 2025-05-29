@@ -62,7 +62,7 @@ export default function Dashboard({
     const vehicleSummary = [
         { label: 'Available', quantity: vehicleStats.available || 0, fill: 'green' },
         { label: 'In Use', quantity: vehicleStats.inUse || 0, fill: 'yellow' },
-        { label: 'Maintenance or Repair', quantity: vehicleStats.maintenance || 0, fill: 'blue' },
+        { label: 'Maintenance or Repair', quantity: vehicleStats.underMaintenance || 0, fill: 'blue' },
         { label: 'Retired', quantity: vehicleStats.retired || 0, fill: 'red' },
     ];
 
@@ -112,7 +112,7 @@ export default function Dashboard({
                                                 </div>
                                                 <div className="flex flex-col gap-1">
                                                     <span className="text-sm font-medium">Next Maintenance</span>
-                                                    <span>{nextMaintenance?.scheduled_date || 'N/A'}</span>
+                                                    <span>{nextMaintenance?.scheduled_date || 'No upcoming maintenance'}</span>
                                                 </div>
                                             </div>
                                         </div>

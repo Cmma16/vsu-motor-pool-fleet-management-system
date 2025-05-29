@@ -74,7 +74,7 @@ class ServiceInspectionController extends Controller
                 'message' => "Your inspection for {$request_inspection->serviceRequest->work_description} has been confirmed.",
             ]);
 
-        return redirect()->route('request-inspections.index');
+        return redirect()->route('requests.show', $request_inspection->serviceRequest->request_id);
     }
 
     /**

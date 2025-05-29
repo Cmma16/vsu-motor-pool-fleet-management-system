@@ -157,7 +157,7 @@ class PreventiveController extends Controller
             'message' => "Your preventive maintenance record for {$preventive->serviceRequest->vehicle->vehicle_name} has been confirmed.",
         ]);
 
-        return with('success', 'preventive record confirmed successfully.');
+        return redirect()->route('preventive.show', $preventive->maintenance_id);
     }
 
     /**

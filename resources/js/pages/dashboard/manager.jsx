@@ -48,7 +48,7 @@ export default function Dashboard({ vehicleStats, maintenanceStats, tripStats, s
     const vehicleSummary = [
         { label: 'Available', quantity: vehicleStats.available || 0, fill: 'green' },
         { label: 'In Use', quantity: vehicleStats.inUse || 0, fill: 'yellow' },
-        { label: 'Maintenance or Repair', quantity: vehicleStats.maintenance || 0, fill: 'blue' },
+        { label: 'Maintenance or Repair', quantity: vehicleStats.underMaintenance || 0, fill: 'blue' },
         { label: 'Retired', quantity: vehicleStats.retired || 0, fill: 'red' },
     ];
 

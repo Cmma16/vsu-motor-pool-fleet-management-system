@@ -166,9 +166,9 @@ class MaintenanceController extends Controller
         $maintenance->serviceRequest->update(['status' => 'completed']);
         $maintenance->serviceRequest->vehicle->update(['status' => 'available']);
         Notification::create([
-            'user_id' => $repair->performed_by,
+            'user_id' => $maintenance->performed_by,
             'title' => "Repair Record Confirmed",
-            'message' => "Your repair record for {$repair->serviceRequest->vehicle->vehicle_name} has been confirmed.",
+            'message' => "Your repair record for {$maintenance->serviceRequest->vehicle->vehicle_name} has been confirmed.",
         ]);
 
         return redirect()->route('maintenance.index')->with('success', 'Maintenance record confirmed successfully.');

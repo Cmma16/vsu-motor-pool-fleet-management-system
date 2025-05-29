@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 export default function PlanForm({ formData, formType, setData, onSubmit, processing, errors, vehicles, users }) {
     return (
         <form onSubmit={onSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <div className="grid grid-cols-1 gap-6">
                 {/* Vehicle */}
                 <div className="space-y-2">
                     <Label htmlFor="vehicle_id">Vehicle</Label>
@@ -39,41 +39,6 @@ export default function PlanForm({ formData, formType, setData, onSubmit, proces
                         tabIndex={2}
                     />
                     <InputError message={errors.scheduled_date} />
-                </div>
-
-                {/* Created By */}
-                <div className="space-y-2">
-                    <Label htmlFor="created_by">Created By</Label>
-                    <Select value={String(formData.created_by)} onValueChange={(value) => setData('created_by', Number(value))}>
-                        <SelectTrigger id="created_by" tabIndex={4}>
-                            <SelectValue placeholder="Select planner" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {users.map((user) => (
-                                <SelectItem key={user.id} value={String(user.id)}>
-                                    {`${user.first_name} ${user.last_name}`}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-                    <InputError message={errors.created_by} />
-                </div>
-
-                {/* Status */}
-                <div className="space-y-2">
-                    <Label htmlFor="status">Status</Label>
-                    <Select value={formData.status} onValueChange={(value) => setData('status', value)}>
-                        <SelectTrigger id="status" tabIndex={6}>
-                            <SelectValue placeholder="Select status" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="pending">Pending</SelectItem>
-                            <SelectItem value="scheduled">Scheduled</SelectItem>
-                            <SelectItem value="completed">Completed</SelectItem>
-                            <SelectItem value="cancelled">Cancelled</SelectItem>
-                        </SelectContent>
-                    </Select>
-                    <InputError message={errors.status} />
                 </div>
             </div>
             <Button disabled={processing} className="w-1/3">

@@ -25,7 +25,7 @@ export const InspectionsColumn = (handleView, handleEdit, handleDelete) => [
         ),
         cell: (info) => {
             const value = info.getValue() || '';
-            const maxLength = 15;
+            const maxLength = 40;
             const isTrimmed = value.length > maxLength;
             const displayValue = isTrimmed ? value.slice(0, maxLength) + '...' : value;
 
@@ -66,26 +66,26 @@ export const InspectionsColumn = (handleView, handleEdit, handleDelete) => [
             return <div className="text-left">{formattedDateTime}</div>;
         },
     }),
-    columnHelper.accessor('parts_available', {
-        header: () => <div className="text-left">Parts available</div>,
-        cell: (info) => {
-            const isAvailable = info.getValue();
-            const value = isAvailable ? 'Yes' : 'No';
-            return <div className="text-left">{value}</div>;
-        },
-    }),
-    columnHelper.accessor('personnel_available', {
-        header: () => <div className="text-left">Personnel available</div>,
-        cell: (info) => {
-            const personnelAvailable = info.getValue();
-            const value = personnelAvailable ? 'Yes' : 'No';
-            return <div className="text-left">{value}</div>;
-        },
-    }),
-    columnHelper.accessor('estimated_duration', {
-        header: () => <div className="text-left">Estimated duration</div>,
-        cell: (info) => <div className="text-left">{info.getValue()}</div>,
-    }),
+    // columnHelper.accessor('parts_available', {
+    //     header: () => <div className="text-left">Parts available</div>,
+    //     cell: (info) => {
+    //         const isAvailable = info.getValue();
+    //         const value = isAvailable ? 'Yes' : 'No';
+    //         return <div className="text-left">{value}</div>;
+    //     },
+    // }),
+    // columnHelper.accessor('personnel_available', {
+    //     header: () => <div className="text-left">Personnel available</div>,
+    //     cell: (info) => {
+    //         const personnelAvailable = info.getValue();
+    //         const value = personnelAvailable ? 'Yes' : 'No';
+    //         return <div className="text-left">{value}</div>;
+    //     },
+    // }),
+    // columnHelper.accessor('estimated_duration', {
+    //     header: () => <div className="text-left">Estimated duration</div>,
+    //     cell: (info) => <div className="text-left">{info.getValue()}</div>,
+    // }),
 
     columnHelper.accessor('confirmed_by', {
         header: () => <div className="text-left">Confirmation</div>,

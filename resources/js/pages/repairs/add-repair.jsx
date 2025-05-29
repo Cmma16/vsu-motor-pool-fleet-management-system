@@ -46,8 +46,8 @@ export default function AddRepair({ vehicles, users, serviceRequests, odometerLo
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             <Head title="Repairs" />
-            <div className="mx-6 mb-3 space-y-6 rounded-lg bg-white">
-                <Card className="w-full">
+            <div className="mx-6 mb-3 space-y-6 rounded-lg">
+                <Card className="mx-auto w-full md:max-w-xl">
                     <CardHeader>
                         <CardTitle>Repair Information</CardTitle>
                         <CardDescription>Enter the details of the repair.</CardDescription>

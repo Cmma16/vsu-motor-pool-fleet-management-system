@@ -86,6 +86,7 @@ class TripLogController extends Controller
 
         // Update the trip status to 'ongoing'
         $trip->update(['status' => 'ongoing']);
+        $vehicle->update(['status' => 'in use']);
 
         return redirect()->route('trips.show', $trip->trip_id)
             ->with('success', 'Trip started successfully');
@@ -182,6 +183,7 @@ class TripLogController extends Controller
 
         // Update the trip status to 'completed'
         $trip->update(['status' => 'completed']);
+        $vehicle->update(['status' => 'available']);
 
         return redirect()->route('trips.show', $trip->trip_id)
             ->with('success', 'Trip completed successfully');

@@ -60,7 +60,7 @@ export const PreventiveColumn = (handleView, handleEdit, handleDelete) => [
                 // Merged maintenance and repairs into one table named maintenance(to be changed to service_logs)
                 //TODO: Change the route to /service_logs/${repair.repair_id}/confirm
                 router.patch(
-                    `/repairs/${preventive.preventive_id}/confirm`,
+                    `/preventive/${preventive.preventive_id}/confirm`,
                     {}, // empty data object since we're not sending any data
                     {
                         onSuccess: () => {

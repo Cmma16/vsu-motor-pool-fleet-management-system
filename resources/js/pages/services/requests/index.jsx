@@ -1,6 +1,7 @@
 import { DataTable } from '@/components/data-table';
 import { RequestsColumn } from '@/components/request/request-column';
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
+import { ServiceCard } from '@/components/request/service-card';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { usePage } from '@inertiajs/react';
 import { toast } from 'sonner';
 
@@ -22,6 +23,7 @@ const pageDetails = {
 
 export default function RequestsIndex({ serviceRequests }) {
     const user = usePage().props.auth.user;
+    const isMobile = useIsMobile();
 
     const deleteRequest = (id) => {
         router.delete(route('requests.destroy', { id }), {
@@ -85,20 +87,25 @@ export default function RequestsIndex({ serviceRequests }) {
             </div>
             <div className="flex h-full w-full max-w-full flex-1 flex-col gap-2 rounded-xl p-2 sm:gap-4 sm:p-4">
                 <div className="w-full max-w-full overflow-x-auto rounded-lg">
-                    <DataTable
-                        columns={RequestsColumn}
-                        data={serviceRequests}
-                        handleCreate={user.role.name === 'Driver' ? route('requests.create') : null}
-                        handleView={veiwRequestDetails}
-                        handleEdit={editRequest}
-                        handleDelete={deleteRequest}
-                        handleStatusUpdate={handleStatusUpdate}
-                        filterColumn={'vehicle_name'}
-                        placeholder={'Search vehicle name'}
-                    />
-                </div>
-                <div className="border-sidebar-border/70 dark:border-sidebar-border relative mt-2 min-h-[100vh] w-full max-w-full flex-1 overflow-hidden rounded-xl border md:min-h-min">
-                    <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
+                    {isMobile ? (
+                        <div className="flex flex-col gap-2">
+                            {serviceRequests.map((request) => (
+                                <ServiceCard request={request} onEdit={editRequest} onDelete={deleteRequest} onStatusUpdate={handleStatusUpdate} />
+                            ))}
+                        </div>
+                    ) : (
+                        <DataTable
+                            columns={RequestsColumn}
+                            data={serviceRequests}
+                            handleCreate={user.role.name === 'Driver' ? route('requests.create') : null}
+                            handleView={veiwRequestDetails}
+                            handleEdit={editRequest}
+                            handleDelete={deleteRequest}
+                            handleStatusUpdate={handleStatusUpdate}
+                            filterColumn={'vehicle_name'}
+                            placeholder={'Search vehicle name'}
+                        />
+                    )}
                 </div>
             </div>
         </AppLayout>
