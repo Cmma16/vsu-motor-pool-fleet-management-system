@@ -42,9 +42,9 @@ export default function PlansIndex({ maintenancePlans }) {
                     columns={PlansColumn}
                     data={maintenancePlans}
                     handleCreate={user.role.name === 'Admin' || user.role.name === 'Manager' ? route('plans.create') : null}
-                    handleView={veiwPlanDetails}
-                    handleEdit={editPlan}
-                    handleDelete={deletePlan}
+                    handleView={null}
+                    handleEdit={user.role.name === 'Admin' || user.role.name === 'Manager' ? editPlan : null}
+                    handleDelete={user.role.name === 'Admin' ? deletePlan : null}
                     filterColumn={'vehicle_name'}
                     placeholder={'Search plan by vehicle name'}
                 />

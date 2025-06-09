@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
-import { Head } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 import { AlertTriangle, Car, MapPin, Package } from 'lucide-react';
 
 const breadcrumbs = [
@@ -88,9 +88,10 @@ export default function Dashboard({
         html2pdf(element);
     };
 
+    const handleViewRequest = () => {};
+
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
-            {console.log(uninspectedRequests, approvedRequests)}
             <Head title="Dashboard" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl px-6">
                 <div className="flex items-center justify-between space-y-2">
@@ -116,7 +117,6 @@ export default function Dashboard({
                                     <div className="grid gap-4">
                                         {uninspectedRequests.length === 0 ? (
                                             <div className="text-muted-foreground flex flex-col items-center justify-center py-8">
-                                                <span className="mb-2 text-3xl">😢</span>
                                                 <span className="text-lg font-medium">No uninspected requests found</span>
                                             </div>
                                         ) : (
@@ -141,7 +141,33 @@ export default function Dashboard({
                                                         </div>
                                                     </div>
                                                     <div className="mt-2 flex gap-2">
-                                                        <Button variant="outline" size="sm">
+                                                        <Button
+                                                            variant="outline"
+                                                            size="sm"
+                                                            onClick={() => {
+                                                                if (request.service_type === 'repair') {
+                                                                    router.get(
+                                                                        route('repairs.create', {
+                                                                            data: { requestId: request.request_id, vehicleId: request.vehicle_id },
+                                                                        }),
+                                                                    );
+                                                                } else if (request.service_type === 'maintenance') {
+                                                                    router.get(
+                                                                        route('maintenance.create', {
+                                                                            data: { requestId: request.request_id, vehicleId: request.vehicle_id },
+                                                                        }),
+                                                                    );
+                                                                } else if (request.service_type === 'preventive') {
+                                                                    router.get(
+                                                                        route('preventive.create', {
+                                                                            data: { requestId: request.request_id, vehicleId: request.vehicle_id },
+                                                                        }),
+                                                                    );
+                                                                } else {
+                                                                    router.get(route('requests.show', request.request_id));
+                                                                }
+                                                            }}
+                                                        >
                                                             View Details
                                                         </Button>
                                                     </div>
@@ -151,7 +177,7 @@ export default function Dashboard({
                                     </div>
                                 </CardContent>
                             </Card>
-                            <Card className="flex-1">
+                            <Card className="max-h-96 flex-1 overflow-y-auto">
                                 <CardHeader className="pb-2">
                                     <CardTitle>Approved Requests</CardTitle>
                                     <CardDescription>Service requests that are ready for repair/maintenance</CardDescription>
@@ -185,7 +211,31 @@ export default function Dashboard({
                                                         </div>
                                                     </div>
                                                     <div className="mt-2 flex gap-2">
-                                                        <Button variant="outline" size="sm">
+                                                        <Button
+                                                            variant="outline"
+                                                            size="sm"
+                                                            onClick={() => {
+                                                                if (request.service_type === 'repair') {
+                                                                    router.get(
+                                                                        route('repairs.create', {
+                                                                            data: { requestId: request.request_id, vehicleId: request.vehicle_id },
+                                                                        }),
+                                                                    );
+                                                                } else if (request.service_type === 'maintenance') {
+                                                                    router.get(
+                                                                        route('maintenance.create', {
+                                                                            data: { requestId: request.request_id, vehicleId: request.vehicle_id },
+                                                                        }),
+                                                                    );
+                                                                } else if (request.service_type === 'preventive') {
+                                                                    router.get(
+                                                                        route('preventive.create', {
+                                                                            data: { requestId: request.request_id, vehicleId: request.vehicle_id },
+                                                                        }),
+                                                                    );
+                                                                }
+                                                            }}
+                                                        >
                                                             View Details
                                                         </Button>
                                                     </div>

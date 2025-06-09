@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { usePage } from '@inertiajs/react';
 import { format, parseISO } from 'date-fns';
 
-export function UpcomingTripsSection({ upcomingTrips, formatTripDate, getStatusBadge, editTrip, viewTripDetails }) {
+export function UpcomingTripsSection({ upcomingTrips, formatTripDate, getStatusBadge, editTrip, viewTripDetails, handleStatusUpdate }) {
     const user = usePage().props.auth.user;
 
     const formatStatus = (string) => {
@@ -70,8 +70,8 @@ export function UpcomingTripsSection({ upcomingTrips, formatTripDate, getStatusB
                                         <Button variant="outline" onClick={() => viewTripDetails(trip.trip_id)}>
                                             View
                                         </Button>
-                                        {user.role.name !== 'Driver' && (
-                                            <Button variant="outline" onClick={() => cancelTrip(trip.trip_id)}>
+                                        {user.role.name !== 'Driver' && trip.status !== 'cancelled' && (
+                                            <Button variant="outline" onClick={() => handleStatusUpdate(trip.trip_id, 'cancelled')}>
                                                 Cancel
                                             </Button>
                                         )}

@@ -13,7 +13,7 @@ export default function AuthSplitLayout({ children, title, description }) {
                     {name}
                 </Link>
                 <img
-                    src="/vsu-cover-page.jpg"
+                    src="/motor-pool-cover-photo-sq.jpg"
                     width={550}
                     height={550}
                     alt="Fleet management illustration"

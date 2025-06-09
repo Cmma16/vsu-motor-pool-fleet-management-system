@@ -46,20 +46,29 @@ class ServiceInspectionController extends Controller
      */
     public function create(Request $request)
     {
-        $serviceRequests = ServiceRequest::with(['vehicle', 'maintenancePlan'])->where('status', 'received')->get()
-        ->map(function ($serviceRequest) {
-            return [
-                'request_id' => $serviceRequest->request_id,
-                'work_description' => $serviceRequest->work_description,
-                'vehicle_name' => $serviceRequest->vehicle->vehicle_name,
-                'plan_name' => $serviceRequest->maintenancePlan?->scheduled_date,
-            ];
-        });
+        $requestId = $request->input('data.requestId');
+        $serviceRequest = ServiceRequest::with(['vehicle', 'maintenancePlan'])
+            ->where('request_id', $requestId)
+            ->first();
+
+        $serviceRequestData = [
+            'request_id' => $serviceRequest->request_id,
+            'work_description' => $serviceRequest->work_description,
+            'date_filed' => $serviceRequest->date_filed,
+            'date_received' => $serviceRequest->date_received,
+            'vehicle_name' => $serviceRequest->vehicle->vehicle_name,
+            'plan_name' => $serviceRequest->maintenancePlan?->scheduled_date,
+            'received_by' => $serviceRequest->receivedBy ? $serviceRequest->receivedBy->first_name . ' ' . $serviceRequest->receivedBy->last_name : 'N/A',
+            'service_type' => $serviceRequest->service_type,
+            'requested_by' => $serviceRequest->requestedBy ? $serviceRequest->requestedBy->first_name . ' ' . $serviceRequest->requestedBy->last_name : 'N/A',
+            'status' => $serviceRequest->status,
+        ];
+
         $users = User::select('id', 'first_name', 'last_name')->get();
 
         return Inertia::render('services/request-inspections/add-inspection', [
-            'requestId' => $request->input('data.requestId'),
-            'serviceRequests' => $serviceRequests,
+            'requestId' => $requestId,
+            'serviceRequest' => $serviceRequestData,
             'users' => $users,
         ]);
     }

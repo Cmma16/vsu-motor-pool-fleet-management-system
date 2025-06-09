@@ -8,7 +8,7 @@ const chartConfig = {
     },
     restock_threshold: {
         label: 'Restock Threshold',
-        color: '#a3e635', // Light Green
+        color: '#ab1200', // Red
     },
 };
 
@@ -70,7 +70,7 @@ export default function PartsInventoryChart({ parts }) {
                             fill={chartConfig.restock_threshold.color}
                             radius={[6, 6, 0, 0]}
                         >
-                            <LabelList dataKey="restock_threshold" position="top" fill="#a3e635" fontSize={13} />
+                            <LabelList dataKey="restock_threshold" position="top" fill="#ab1200" fontSize={13} />
                         </Bar>
                     </BarChart>
                 </ResponsiveContainer>

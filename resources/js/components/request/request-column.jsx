@@ -250,7 +250,7 @@ export const RequestsColumn = (handleView, handleEdit, handleDelete, handleStatu
                             )}
                         </>
                     )}
-                    {auth.user.role.name === 'Manager' && (
+                    {(auth.user.role.name === 'Manager' || auth.user.role.name === 'Admin') && (
                         <>
                             {request.status === 'pending' && (
                                 <div className="flex justify-center gap-2">

@@ -96,7 +96,7 @@ export default function RequestDetails({ serviceRequest }) {
                                 {/* Date Received */}
                                 <div className="flex flex-col space-y-2">
                                     <Label htmlFor="date_received">Date Received</Label>
-                                    <span>{format(serviceRequest.date_received, 'LLL dd, y HH:mm')}</span>
+                                    <span>{serviceRequest.date_received ? format(serviceRequest.date_received, 'LLL dd, y HH:mm') : 'N/A'}</span>
                                 </div>
                                 {/* Status */}
                                 <div className="flex flex-col space-y-2">

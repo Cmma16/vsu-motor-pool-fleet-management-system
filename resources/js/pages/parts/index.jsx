@@ -4,7 +4,7 @@ import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 
 import AppLayout from '@/layouts/app-layout';
 
-import { Head, router } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
 
 const breadcrumbs = [
     {
@@ -19,6 +19,7 @@ const pageDetails = {
 };
 
 export default function PartsIndex({ parts }) {
+    const user = usePage().props.auth.user;
     const deletePart = (id) => {
         if (confirm('Are you sure?')) {
             router.delete(route('parts.destroy', { id }));
@@ -39,10 +40,10 @@ export default function PartsIndex({ parts }) {
                 <DataTable
                     columns={PartsColumn}
                     data={parts}
-                    handleCreate={route('parts.create')}
+                    handleCreate={user.role.name === 'Manager' ? null : route('parts.create')}
                     handleView={veiwPartDetails}
                     handleEdit={editPart}
-                    handleDelete={deletePart}
+                    handleDelete={user.role.name === 'Manager' ? null : deletePart}
                     filterColumn={'part_name'}
                     placeholder={'Search part name'}
                 />

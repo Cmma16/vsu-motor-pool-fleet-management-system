@@ -273,13 +273,13 @@ export default function TripsIndex({ trips = [] }) {
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             <Head title="Vehicles" />
             {console.log(trips)}
-            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-                <div className="container mx-auto py-6">
-                    <div className="mb-6 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
-                        <div className="flex items-center gap-2">
+            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-2 sm:p-4">
+                <div className="container mx-auto py-4 sm:py-6">
+                    <div className="mb-4 flex flex-col items-start justify-between gap-4 sm:mb-6">
+                        <div className="flex w-full flex-wrap items-center gap-2">
                             <Dialog open={isFilterOpen} onOpenChange={setIsFilterOpen}>
                                 <DialogTrigger asChild>
-                                    <Button variant={selectedVehicles.length > 0 ? 'default' : 'outline'}>
+                                    <Button variant={selectedVehicles.length > 0 ? 'default' : 'outline'} className="w-full sm:w-auto">
                                         <Filter className="mr-2 h-4 w-4" />
                                         Filter
                                         {selectedVehicles.length > 0 && (
@@ -334,7 +334,7 @@ export default function TripsIndex({ trips = [] }) {
                                 <Button
                                     variant="default"
                                     size="default"
-                                    className="flex items-center"
+                                    className="flex w-full items-center sm:w-auto"
                                     onClick={() => router.get(route('trips.create'))}
                                 >
                                     <Car className="mr-2 h-4 w-4" />
@@ -344,37 +344,37 @@ export default function TripsIndex({ trips = [] }) {
                         </div>
                     </div>
 
-                    <div className="grid gap-6">
+                    <div className="grid gap-4 sm:gap-6">
                         {/* Summary Cards */}
                         <TripSummaryCard todayTrips={todayTrips} upcomingTrips={upcomingTrips} trips={trips} />
 
                         {/* Main Content */}
                         <Tabs defaultValue="list" className="w-full">
-                            <div className="mb-4 flex items-center justify-between">
-                                <TabsList className="bg-white">
-                                    <TabsTrigger value="list" className="flex items-center">
+                            <div className="mb-4 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+                                <TabsList className="w-full bg-white sm:w-auto">
+                                    <TabsTrigger value="list" className="flex flex-1 items-center sm:flex-none">
                                         <List className="mr-2 h-4 w-4" />
                                         List View
                                     </TabsTrigger>
-                                    <TabsTrigger value="calendar" className="flex items-center">
+                                    <TabsTrigger value="calendar" className="flex flex-1 items-center sm:flex-none">
                                         <Calendar className="mr-2 h-4 w-4" />
                                         Calendar View
                                     </TabsTrigger>
-                                    <TabsTrigger value="table" className="flex items-center">
+                                    <TabsTrigger value="table" className="flex flex-1 items-center sm:flex-none">
                                         <Table className="mr-2 h-4 w-4" />
                                         Table View
                                     </TabsTrigger>
                                 </TabsList>
-                                <div className="flex items-center gap-2">
+                                <div className="flex w-full flex-col items-stretch gap-2 sm:w-auto sm:flex-row sm:items-center">
                                     <Input
                                         type="text"
                                         placeholder="Search trip/driver/vehicle..."
-                                        className="w-[200px] md:w-[300px]"
+                                        className="w-full sm:w-[200px] md:w-[300px]"
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
                                     />
                                     <Select value={statusFilter} onValueChange={setStatusFilter}>
-                                        <SelectTrigger className="w-[130px] bg-white">
+                                        <SelectTrigger className="w-full bg-white sm:w-[130px]">
                                             <SelectValue placeholder="Status" />
                                         </SelectTrigger>
                                         <SelectContent className="bg-white">
@@ -408,7 +408,7 @@ export default function TripsIndex({ trips = [] }) {
                             </div>
 
                             <TabsContent value="list" className="space-y-4">
-                                <div className="grid gap-4 md:grid-cols-2">
+                                <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
                                     {/* Today's Trips */}
                                     <CurrentDayTripsSection
                                         todayTrips={todayTrips}
@@ -419,6 +419,7 @@ export default function TripsIndex({ trips = [] }) {
                                         handleStatusUpdate={handleStatusUpdate}
                                         startTrip={startTrip}
                                         endTrip={endTrip}
+                                        deleteTrip={deleteTrip}
                                     />
 
                                     {/* Upcoming Trips */}
@@ -429,12 +430,13 @@ export default function TripsIndex({ trips = [] }) {
                                         editTrip={editTrip}
                                         viewTripDetails={viewTripDetails}
                                         handleStatusUpdate={handleStatusUpdate}
+                                        deleteTrip={deleteTrip}
                                     />
                                 </div>
                             </TabsContent>
 
                             <TabsContent value="calendar" className="space-y-4">
-                                <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+                                <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
                                     <Card className="col-span-1">
                                         <CardHeader className="bg-white">
                                             <CardTitle className="bg-white">Calendar</CardTitle>

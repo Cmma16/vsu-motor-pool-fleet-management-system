@@ -6,6 +6,9 @@ import { Head, useForm } from '@inertiajs/react';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
+import { Label } from '@/components/ui/label';
+import { format } from 'date-fns';
+
 import AppLayout from '@/layouts/app-layout';
 
 const breadcrumbs = [
@@ -18,7 +21,7 @@ const pageDetails = {
     description: 'Record the details of a vehicle repair.',
 };
 
-export default function CreateInspection({ serviceRequests, users, requestId }) {
+export default function CreateInspection({ serviceRequest, users, requestId }) {
     const { data, setData, post, processing, errors, reset } = useForm({
         request_id: requestId,
         started_at: '',
@@ -52,7 +55,60 @@ export default function CreateInspection({ serviceRequests, users, requestId }) 
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             {console.log(requestId)}
             <Head title="Repairs" />
-            <div className="mx-6 mb-3 space-y-6 rounded-lg bg-white">
+            <div className="mx-6 mb-3 space-y-6 rounded-lg">
+                <Card className="w-full">
+                    <CardHeader>
+                        <CardTitle>Service Request Information</CardTitle>
+                        <CardDescription>General overview of the request.</CardDescription>
+                        {console.log(serviceRequest)}
+                    </CardHeader>
+                    <CardContent>
+                        <div className="space-y-6">
+                            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                                {/* Vehicle Name */}
+                                <div className="flex flex-col space-y-2">
+                                    <Label htmlFor="vehicle_name">Vehicle Name</Label>
+                                    <span>{serviceRequest.vehicle_name}</span>
+                                </div>
+                                {/* Request By */}
+                                <div className="flex flex-col space-y-2">
+                                    <Label htmlFor="requested_by">Requested by</Label>
+                                    <span>{serviceRequest.requested_by}</span>
+                                </div>
+                                {/* Date Filed */}
+                                <div className="flex flex-col space-y-2">
+                                    <Label htmlFor="date_filed">Date Filed</Label>
+                                    <span>{format(serviceRequest.date_filed, 'LLL dd, y HH:mm')}</span>
+                                </div>
+                                {/* Service Type */}
+                                <div className="flex flex-col space-y-2">
+                                    <Label htmlFor="service_type">Service Type</Label>
+                                    <span>{serviceRequest.service_type}</span>
+                                </div>
+                                {/* Work Description */}
+                                <div className="flex flex-col space-y-2">
+                                    <Label htmlFor="work_description">Work Description</Label>
+                                    <span>{serviceRequest.work_description}</span>
+                                </div>
+                                {/* Received By */}
+                                <div className="flex flex-col space-y-2">
+                                    <Label htmlFor="received_by">Received By</Label>
+                                    <span>{serviceRequest.received_by}</span>
+                                </div>
+                                {/* Date Received */}
+                                <div className="flex flex-col space-y-2">
+                                    <Label htmlFor="date_received">Date Received</Label>
+                                    <span>{format(serviceRequest.date_received, 'LLL dd, y HH:mm')}</span>
+                                </div>
+                                {/* Status */}
+                                <div className="flex flex-col space-y-2">
+                                    <Label htmlFor="status">Status</Label>
+                                    <span>{serviceRequest.status}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
                 <Card className="w-full">
                     <CardHeader>
                         <CardTitle>Inspection Information</CardTitle>
@@ -66,7 +122,6 @@ export default function CreateInspection({ serviceRequests, users, requestId }) 
                             onSubmit={createInspection}
                             processing={processing}
                             errors={errors}
-                            serviceRequests={serviceRequests}
                             users={users}
                             lockInputs={requestId ? true : false}
                         />

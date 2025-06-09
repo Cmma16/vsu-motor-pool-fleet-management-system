@@ -76,12 +76,10 @@ export const PlansColumn = (handleView, handleEdit, handleDelete) => [
         cell: ({ row }) => {
             const plan = row.original;
             const { auth } = usePage().props;
-            if (auth.user.role === 'Admin' || auth.user.role === 'Manager') {
-                return (
-                    <DataTableRowActions row={plan} rowKey="plan_id" handleView={handleView} handleEdit={handleEdit} handleDelete={handleDelete} />
-                );
+            if (!handleView && !handleEdit && !handleDelete) {
+                return null;
             }
-            return null;
+            return <DataTableRowActions row={plan} rowKey="plan_id" handleView={handleView} handleEdit={handleEdit} handleDelete={handleDelete} />;
         },
     },
 ];

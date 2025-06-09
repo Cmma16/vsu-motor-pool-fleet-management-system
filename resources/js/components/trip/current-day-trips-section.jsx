@@ -12,6 +12,7 @@ export function CurrentDayTripsSection({
     editTrip,
     viewTripDetails,
     handleStatusUpdate,
+    deleteTrip,
     startTrip,
     endTrip,
 }) {
@@ -77,11 +78,14 @@ export function CurrentDayTripsSection({
                                         <Button variant="outline" onClick={() => viewTripDetails(trip.trip_id)}>
                                             View
                                         </Button>
-                                        {user.role.name !== 'Driver' && (
-                                            <Button variant="outline" onClick={() => handleStatusUpdate(trip.trip_id, 'cancelled')}>
-                                                Cancel
-                                            </Button>
-                                        )}
+                                        {user.role.name !== 'Driver' &&
+                                            trip.status !== 'cancelled' &&
+                                            trip.status !== 'ongoing' &&
+                                            trip.status !== 'completed' && (
+                                                <Button variant="outline" onClick={() => handleStatusUpdate(trip.trip_id, 'cancelled')}>
+                                                    Cancel
+                                                </Button>
+                                            )}
 
                                         {user.role.name === 'Driver' && trip.status === 'assigned' && (
                                             <Button onClick={() => startTrip(trip.trip_id)}>Start Trip</Button>

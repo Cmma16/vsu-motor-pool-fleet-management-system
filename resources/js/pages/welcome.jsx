@@ -60,7 +60,7 @@ export default function Welcome() {
                                 </div>
                                 <div className="flex items-center justify-center">
                                     <img
-                                        src="/vsu-cover-page.jpg"
+                                        src="/motor-pool-cover-photo-sq.jpg"
                                         width={550}
                                         height={550}
                                         alt="Fleet management illustration"

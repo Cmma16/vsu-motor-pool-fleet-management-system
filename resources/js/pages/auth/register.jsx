@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
+import { toast } from 'sonner';
 
 export default function Register() {
     //personally added feature
@@ -37,10 +38,12 @@ export default function Register() {
 
     const submit = (e) => {
         e.preventDefault();
-        console.log('Submitting form data:', data);
         post(route('register'), {
             onSuccess: () => {
                 console.log('Registration successful');
+                toast.success('Registration Successful', {
+                    description: 'You can only log in once the admin verifies your registration.',
+                });
             },
             onError: (errors) => {
                 console.error('Registration failed:', errors);

@@ -26,7 +26,6 @@ export function PassengerModal({ trip_id, formType = 'add', passenger = null }) 
     }, [passenger]);
 
     const handleSubmit = () => {
-        console.log(data);
         if (formType === 'edit') {
             put(route('passengers.update', passenger.id), {
                 onSuccess: () => {

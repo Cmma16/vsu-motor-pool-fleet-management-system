@@ -4,28 +4,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-export default function InspectionForm({ formData, formType, setData, onSubmit, processing, errors, serviceRequests, users, lockInputs }) {
+export default function InspectionForm({ formData, formType, setData, onSubmit, processing, errors, users, lockInputs }) {
     return (
         <form onSubmit={onSubmit} className="space-y-6">
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                {/* Request */}
-                <div className="space-y-2">
-                    <Label htmlFor="request_id">Service request</Label>
-                    <Select disabled={lockInputs} value={String(formData.request_id)} onValueChange={(value) => setData('request_id', Number(value))}>
-                        <SelectTrigger id="request_id" tabIndex={1}>
-                            <SelectValue placeholder="Select service request" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {serviceRequests.map((request) => (
-                                <SelectItem key={request.request_id} value={String(request.request_id)}>
-                                    {request.work_description}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-                    <InputError message={errors.request_id} />
-                </div>
-
                 {/* Started at */}
                 <div className="space-y-2">
                     <Label htmlFor="started_at">Started at</Label>

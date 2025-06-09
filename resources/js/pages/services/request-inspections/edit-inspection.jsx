@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 
 import InspectionForm from '@/components/inspection/inspection-form';
 import AppLayout from '@/layouts/app-layout';
+import { format, parseISO } from 'date-fns';
 
 const breadcrumbs = [
     {
@@ -26,8 +27,8 @@ const pageDetails = {
 export default function EditInspection({ users, serviceRequests, serviceInspection }) {
     const { data, setData, put, processing, errors, reset } = useForm({
         request_id: serviceInspection.request_id,
-        started_at: serviceInspection.started_at,
-        completed_at: serviceInspection.completed_at,
+        started_at: format(parseISO(serviceInspection.started_at), "yyyy-MM-dd'T'HH:mm"),
+        completed_at: format(parseISO(serviceInspection.completed_at), "yyyy-MM-dd'T'HH:mm"),
         parts_available: serviceInspection.parts_available,
         personnel_available: serviceInspection.personnel_available,
         estimated_duration: serviceInspection.estimated_duration,
@@ -37,7 +38,7 @@ export default function EditInspection({ users, serviceRequests, serviceInspecti
 
     const updateInspection = (e) => {
         e.preventDefault();
-
+        console.log(data);
         put(route('request-inspections.update', serviceInspection.inspection_id), {
             // data, // Sends all form data
             // forceFormData: true, // Ensures file uploads and proper formatting

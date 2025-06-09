@@ -74,13 +74,13 @@ export const RequestActions = ({ request, handleEdit, handleDelete, handleStatus
                 </>
             )}
 
-            {role === 'Manager' && request.status === 'pending' && (
+            {(role === 'Manager' || role === 'Admin') && request.status === 'pending' && (
                 <Button className="bg-yellow-300 text-black hover:bg-yellow-400" onClick={() => handleStatusUpdate(request.request_id, 'received')}>
                     Receive
                 </Button>
             )}
 
-            {role === 'Manager' && request.status === 'inspected' && (
+            {(role === 'Manager' || role === 'Admin') && request.status === 'inspected' && (
                 <>
                     {request.inspection_confirmed ? (
                         <>

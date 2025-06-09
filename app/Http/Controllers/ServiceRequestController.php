@@ -24,7 +24,7 @@ class ServiceRequestController extends Controller
         $statusFilter = $request->get('status'); // Ex: 'pending', 'approved', 'my-requests'
 
         $query = ServiceRequest::with(['vehicle', 'requestedBy', 'receivedBy'])
-            ->orderBy('created_at', 'desc');
+            ->orderBy('updated_at', 'desc');
 
         // Special filter for "my-requests"
         if ($statusFilter === 'my-requests') {
@@ -127,7 +127,7 @@ class ServiceRequestController extends Controller
                 'service_type' => $serviceRequest->service_type,
                 'work_description' => $serviceRequest->work_description,
                 'received_by' => trim(($serviceRequest->receivedBy->first_name ?? '') . ' ' . ($serviceRequest->receivedBy->middle_name ?? '') . ' ' . ($serviceRequest->receivedBy->last_name ?? '')) ?: 'N/A',
-                'date_received' => $serviceRequest->date_received ? $serviceRequest->date_received : 'N/A',
+                'date_received' => $serviceRequest->date_received ? $serviceRequest->date_received : null,
                 'status' => $serviceRequest->status,
                 'inspection_id' => $serviceRequest->serviceInspection->inspection_id ?? 'N/A',
             ],

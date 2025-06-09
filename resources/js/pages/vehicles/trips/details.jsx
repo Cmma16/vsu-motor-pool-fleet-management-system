@@ -49,7 +49,7 @@ export default function TripDetails({ trip }) {
                     <Button variant="outline" className="bg-white" onClick={() => router.get(route('trips.index'))}>
                         <ArrowLeft /> Trip List
                     </Button>
-                    {trip.status === 'assigned' && (
+                    {trip.status === 'assigned' && user.role.name === 'Driver' && (
                         <Button variant="default" onClick={() => router.get(route('trip-logs.create', trip.trip_id))}>
                             <FileText className="mr-2 h-4 w-4" />
                             Start Trip

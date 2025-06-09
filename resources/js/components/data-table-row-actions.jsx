@@ -24,13 +24,17 @@ export function DataTableRowActions({ row, rowKey = 'id', handleView, handleEdit
                         View details
                     </DropdownMenuItem>
                 )}
-                <DropdownMenuItem onClick={() => handleEdit(rowId)}>
-                    <Pencil /> Edit
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleDelete(rowId)}>
-                    <TrashIcon />
-                    Delete
-                </DropdownMenuItem>
+                {handleEdit && (
+                    <DropdownMenuItem onClick={() => handleEdit(rowId)}>
+                        <Pencil /> Edit
+                    </DropdownMenuItem>
+                )}
+                {handleDelete && (
+                    <DropdownMenuItem onClick={() => handleDelete(rowId)}>
+                        <TrashIcon />
+                        Delete
+                    </DropdownMenuItem>
+                )}
             </DropdownMenuContent>
         </DropdownMenu>
     );

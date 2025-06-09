@@ -3,40 +3,40 @@ import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxi
 
 export function TripChart({ tripData, barKey, xKey, chartTitle, chartDescription, report_type }) {
     return (
-        <Card>
+        <Card className="w-full">
             <CardHeader>
                 <CardTitle>{chartTitle}</CardTitle>
                 <CardDescription>{chartDescription}</CardDescription>
             </CardHeader>
             <CardContent>
-                <div className="h-[400px]">
+                <div className="h-[400px] w-full">
                     <ResponsiveContainer width="100%" height="100%">
                         <BarChart
                             data={tripData}
+                            layout="vertical"
                             margin={{
                                 top: 20,
                                 right: 30,
-                                left: 20,
+                                left: 150,
                                 bottom: 20,
                             }}
                         >
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--muted))" />
+                            <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="hsl(var(--muted))" />
                             <XAxis
-                                dataKey={xKey}
-                                tickLine={false}
-                                axisLine={false}
-                                interval={0}
-                                angle={-35}
-                                textAnchor="end"
-                                height={80}
-                                tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
-                            />
-                            <YAxis
+                                type="number"
                                 tickLine={false}
                                 axisLine={false}
                                 tick={{ fill: 'hsl(var(--muted-foreground))' }}
                                 allowDecimals={false}
                                 tickCount={6}
+                            />
+                            <YAxis
+                                dataKey={xKey}
+                                type="category"
+                                tickLine={false}
+                                axisLine={false}
+                                tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
+                                width={150}
                             />
                             <Tooltip
                                 content={({ active, payload }) => {
@@ -59,7 +59,7 @@ export function TripChart({ tripData, barKey, xKey, chartTitle, chartDescription
                                     return null;
                                 }}
                             />
-                            <Bar dataKey={barKey} fill="#22c55e" radius={[4, 4, 0, 0]} />
+                            <Bar dataKey={barKey} fill="#22c55e" radius={[0, 4, 4, 0]} />
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
