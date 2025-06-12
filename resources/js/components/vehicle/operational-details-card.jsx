@@ -39,9 +39,13 @@ export function OperationalDetailsCard({ vehicle, odometer_reading }) {
                                 {/* <OdometerLogModal vehicle_id={vehicle.vehicle_id} vehicles={vehicle} formType="add" /> */}
                             </div>
                             <div className="space-y-1">
-                                <p className="text-muted-foreground text-xs">
-                                    Updated {formatDistanceToNow(new Date(odometer_reading.updated_at), { addSuffix: true })}
-                                </p>
+                                {odometer_reading ? (
+                                    <p className="text-muted-foreground text-xs">
+                                        Updated {formatDistanceToNow(new Date(odometer_reading.updated_at), { addSuffix: true })}
+                                    </p>
+                                ) : (
+                                    ''
+                                )}
                             </div>
                         </div>
                         <div className="flex items-center justify-between">

@@ -38,7 +38,7 @@ function setAsPartyHead(passengerId) {
 
 export default function TripDetails({ trip }) {
     // Format the departure time to 12-hour format
-    const formattedTime = trip.departure_time ? format(parse(trip.departure_time, 'HH:mm', new Date()), 'h:mm a') : '';
+    const formattedTime = trip.departure_time ? format(parse(trip.departure_time, 'HH:mm:ss', new Date()), 'h:mm a') : '';
     const user = usePage().props.auth.user;
 
     return (

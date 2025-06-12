@@ -21,7 +21,7 @@ return new class extends Migration
             $table->text('city');
             $table->text('barangay');
             $table->text('address_details')->nullable();
-            $table->foreignId('role_id')->nullable()->constrained('user_roles', 'role_id')->onDelete('set null');
+            //$table->foreignId('role_id')->nullable()->constrained('user_roles', 'role_id')->onDelete('set null');
             $table->string('email')->unique();
             $table->boolean('is_verified')->default(false);
             $table->string('password');

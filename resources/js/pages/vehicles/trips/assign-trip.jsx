@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/app-layout';
 import { Head, router, useForm } from '@inertiajs/react';
+import { format, parse } from 'date-fns';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -40,7 +41,7 @@ export default function AssignTrip({ trip, availableVehicles, availableDrivers }
         end_date: trip.end_date,
         purpose: trip.purpose,
         destination: trip.destination,
-        departure_time: trip.departure_time,
+        departure_time: format(parse(trip.departure_time, 'HH:mm:ss', new Date()), 'h:mm'),
         requesting_party: trip.requesting_party,
         status: trip.status,
 

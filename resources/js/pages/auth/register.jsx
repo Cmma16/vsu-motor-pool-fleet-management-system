@@ -42,7 +42,7 @@ export default function Register() {
             onSuccess: () => {
                 console.log('Registration successful');
                 toast.success('Registration Successful', {
-                    description: 'You can only log in once the admin verifies your registration.',
+                    description: 'You can only log in once you verify your email and the admin verifies your registration.',
                 });
             },
             onError: (errors) => {

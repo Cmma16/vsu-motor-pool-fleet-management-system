@@ -8,9 +8,9 @@ class RemoveNextServiceKmFromMaintenancePlanTable extends Migration
 {
     public function up()
     {
-        Schema::table('maintenance_plans', function (Blueprint $table) {
-            $table->dropColumn('next_service_km');
-        });
+        // Schema::table('maintenance_plans', function (Blueprint $table) {
+        //     $table->dropColumn('next_service_km');
+        // });
     }
 
     public function down()

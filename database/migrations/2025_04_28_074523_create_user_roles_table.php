@@ -23,7 +23,11 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('service_accomplishments');
+        Schema::dropIfExists('maintenance');
+        Schema::dropIfExists('odometer_logs');
         Schema::dropIfExists('service_requests');
+        Schema::dropIfExists('maintenance_plans');
         Schema::dropIfExists('users');
         Schema::dropIfExists('user_roles');
     }

@@ -8,6 +8,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
+import { usePage } from '@inertiajs/react';
 import { toast } from 'sonner';
 
 export default function Login({ status, canResetPassword }) {
@@ -16,6 +17,8 @@ export default function Login({ status, canResetPassword }) {
         password: '',
         remember: false,
     });
+    const user = usePage().props.user;
+    const props = usePage().props;
 
     const submit = (e) => {
         e.preventDefault();
@@ -25,6 +28,7 @@ export default function Login({ status, canResetPassword }) {
             },
             onError: () => {
                 toast.error('Login failed');
+                console.log(props);
             },
             onFinish: () => reset('password'),
         });

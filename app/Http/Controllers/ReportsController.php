@@ -185,7 +185,7 @@ class ReportsController extends Controller
             ]
         ];
 
-        $parts = Part::select('id', 'part_name', 'stock_quantity as current_stock', 'restock_threshold')
+        $parts = Part::select('part_id', 'part_name', 'stock_quantity as current_stock', 'restock_threshold')
             ->orderBy('part_name')
             ->get();
 

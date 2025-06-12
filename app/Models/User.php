@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\UserRole;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
@@ -39,11 +39,16 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if the user is verified.
+     * Check if the user is admin verified.
      */
     public function isVerified(): bool
     {
         return $this->is_verified;
+    }
+
+    public function isFullyVerified(): bool
+    {
+        return $this->hasVerifiedEmail() && $this->isAdminVerified();
     }
 
     /**
@@ -80,6 +85,7 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
+            'email_verified_at' => 'datetime',
             'is_verified' => 'boolean',
             'password' => 'hashed',
         ];

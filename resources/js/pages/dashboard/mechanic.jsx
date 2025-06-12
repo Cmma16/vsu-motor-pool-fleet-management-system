@@ -145,27 +145,11 @@ export default function Dashboard({
                                                             variant="outline"
                                                             size="sm"
                                                             onClick={() => {
-                                                                if (request.service_type === 'repair') {
-                                                                    router.get(
-                                                                        route('repairs.create', {
-                                                                            data: { requestId: request.request_id, vehicleId: request.vehicle_id },
-                                                                        }),
-                                                                    );
-                                                                } else if (request.service_type === 'maintenance') {
-                                                                    router.get(
-                                                                        route('maintenance.create', {
-                                                                            data: { requestId: request.request_id, vehicleId: request.vehicle_id },
-                                                                        }),
-                                                                    );
-                                                                } else if (request.service_type === 'preventive') {
-                                                                    router.get(
-                                                                        route('preventive.create', {
-                                                                            data: { requestId: request.request_id, vehicleId: request.vehicle_id },
-                                                                        }),
-                                                                    );
-                                                                } else {
-                                                                    router.get(route('requests.show', request.request_id));
-                                                                }
+                                                                router.get(
+                                                                    route('request-inspections.create', {
+                                                                        data: { requestId: request.request_id, vehicleId: request.vehicle_id },
+                                                                    }),
+                                                                );
                                                             }}
                                                         >
                                                             View Details
@@ -175,6 +159,14 @@ export default function Dashboard({
                                             ))
                                         )}
                                     </div>
+                                    <a
+                                        href={`/services/requests/1/pdf`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="rounded bg-blue-600 px-4 py-2 text-white"
+                                    >
+                                        Download PDF
+                                    </a>
                                 </CardContent>
                             </Card>
                             <Card className="max-h-96 flex-1 overflow-y-auto">

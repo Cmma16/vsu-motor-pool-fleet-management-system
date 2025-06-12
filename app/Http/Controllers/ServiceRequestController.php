@@ -12,6 +12,7 @@ use App\Http\Requests\ServiceRequests\UpdateServiceRequestRequest;
 use App\Models\Notification;
 use Inertia\Inertia;
 use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ServiceRequestController extends Controller
 {
@@ -134,6 +135,16 @@ class ServiceRequestController extends Controller
         ]);
     }
 
+
+    public function printServiceRequest(ServiceRequest $request)
+    {
+        $data = ServiceRequest::with('serviceInspection')->find($request->request_id);
+
+        return Pdf::loadView('pdf.service-request', compact('data'))
+            ->setPaper('a4', 'portrait')
+            ->stream('service-request.pdf');
+    }
+    
     /**
      * Show the form for editing the specified resource.
      */

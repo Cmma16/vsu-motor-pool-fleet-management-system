@@ -8,15 +8,16 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     * 2025_05_05_033230_create_odometer_logs_table
      */
     public function up(): void
     {
-        Schema::create('maintenance_plans', function (Blueprint $table) {
-            $table->id('plan_id');
+        Schema::create('odometer_logs', function (Blueprint $table) {
+            $table->id('odometer_id');
             $table->foreignId('vehicle_id')->constrained('vehicles', 'vehicle_id')->onDelete('cascade');
-            $table->date('scheduled_date');
-            $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onDelete('set null');
-            $table->enum('status', ['pending', 'scheduled', 'completed', 'cancelled']);
+            $table->integer('reading');
+            $table->datetime('logged_at');
+            $table->foreignId('recorded_by')->nullable()->constrained('users', 'id')->onDelete('set null');
             $table->timestamps();
         });
     }
@@ -26,7 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('maintenance');
-        Schema::dropIfExists('maintenance_plans');
+        Schema::dropIfExists('odometer_logs');
     }
 };

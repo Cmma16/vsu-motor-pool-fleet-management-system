@@ -13,11 +13,17 @@ class EnsureUserIsVerified
         $user = Auth::user();
 
         // Check if logged in AND not verified
-        if ($user && !$user->is_verified) {
-            Auth::logout(); // Force logout
-            return redirect()->route('login')->withErrors([
-                'email' => 'Your account is pending admin approval.',
-            ]);
+        if ($user) {
+            // Check email verification first
+            if (!$user->hasVerifiedEmail()) {
+                return redirect()->route('verification.notice')->with('verification-status', 'Email not verified');
+            }
+
+            // Then check admin verification
+            if (!$user->isVerified()) {
+                //Auth::logout(); // Force logout
+                return redirect()->route('registration.pending')->with('verification-status', 'Your account is pending admin approval.');
+            }
         }
 
         return $next($request);

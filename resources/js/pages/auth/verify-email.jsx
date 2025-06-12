@@ -5,9 +5,18 @@ import { LoaderCircle } from 'lucide-react';
 import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import AuthLayout from '@/layouts/auth-layout';
+import { usePage } from '@inertiajs/react';
+import { useEffect } from 'react';
+import { toast } from 'sonner';
 
 export default function VerifyEmail({ status }) {
     const { post, processing } = useForm({});
+    const { flash } = usePage().props;
+    useEffect(() => {
+        if (flash['verification-status']) {
+            toast.warning(flash['verification-status']);
+        }
+    }, [flash['verification-status']]);
 
     const submit = (e) => {
         e.preventDefault();

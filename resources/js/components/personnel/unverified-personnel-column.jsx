@@ -59,6 +59,21 @@ export const UnverifiedPersonnelColumn = (handleView, handleEdit, handleDelete, 
                     },
                 });
             };
+            const handleDelete = () => {
+                router.delete(`/personnel/${personnel.id}`, {
+                    preserveScroll: true,
+                    onSuccess: () => {
+                        toast.success('Delete successful', {
+                            description: 'The personnel has been successfully deleted from the system.',
+                        });
+                    },
+                    onError: () => {
+                        toast('Error', {
+                            description: 'Failed to delete personnel',
+                        });
+                    },
+                });
+            };
             return (
                 <div className="flex gap-2">
                     <Button
@@ -82,6 +97,24 @@ export const UnverifiedPersonnelColumn = (handleView, handleEdit, handleDelete, 
                                         onClick={handleVerify}
                                     >
                                         Yes
+                                    </Button>
+                                </div>
+                            </DialogHeader>
+                        </DialogContent>
+                    </Dialog>
+                    <Dialog>
+                        <DialogTrigger className="rounded bg-red-700 px-3 text-white hover:bg-red-800">Delete</DialogTrigger>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Delete User?</DialogTitle>
+                                <DialogDescription>This action cannot be undone. Are you sure you want to delete this user?</DialogDescription>
+                                <div className="mt-4 flex justify-end gap-2">
+                                    <Button className="border-2 transition-all hover:bg-transparent hover:text-black">Cancel</Button>
+                                    <Button
+                                        className="border-2 border-red-600 bg-red-600 transition-all hover:bg-transparent hover:text-black"
+                                        onClick={handleDelete}
+                                    >
+                                        Delete
                                     </Button>
                                 </div>
                             </DialogHeader>

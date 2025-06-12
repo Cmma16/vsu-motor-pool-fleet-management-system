@@ -6,17 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    //2025_05_04_070135_create_maintenance_plans_table.php
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('odometer_logs', function (Blueprint $table) {
-            $table->id('odometer_id');
+        Schema::create('maintenance_plans', function (Blueprint $table) {
+            $table->id('plan_id');
             $table->foreignId('vehicle_id')->constrained('vehicles', 'vehicle_id')->onDelete('cascade');
-            $table->integer('reading');
-            $table->datetime('logged_at');
-            $table->foreignId('recorded_by')->nullable()->constrained('users', 'id')->onDelete('set null');
+            $table->date('scheduled_date');
+            $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onDelete('set null');
+            $table->enum('status', ['pending', 'scheduled', 'completed', 'cancelled']);
             $table->timestamps();
         });
     }
@@ -26,6 +27,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('odometer_logs');
+        Schema::dropIfExists('maintenance');
+        Schema::dropIfExists('maintenance_plans');
     }
 };

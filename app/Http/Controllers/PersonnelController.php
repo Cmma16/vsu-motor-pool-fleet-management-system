@@ -125,8 +125,8 @@ class PersonnelController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ServiceRequest $request)
+    public function destroy(User $personnel)
     {
-        //
+        $personnel->delete();
     }
 }

@@ -51,6 +51,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('services/requests', ServiceRequestController::class);
     Route::patch('services/requests/{request}/status', [ServiceRequestController::class, 'updateStatus'])->name('requests.updateStatus');
 
+    Route::get('/services/requests/{request}/pdf', [ServiceRequestController::class, 'printServiceRequest'])->name('requests.print');
+
     Route::resource('services/request-inspections', ServiceInspectionController::class);
     Route::patch('services/request-inspections/{request_inspection}/confirm', [ServiceInspectionController::class, 'confirmInspection'])->name('request-inspections.confirm');
 
@@ -97,6 +99,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/personnel/{person}/role', [PersonnelController::class, 'updateRole'])->name('personnel.updateRole');
         Route::put('/personnel/{person}/verify', [PersonnelController::class, 'verifyPersonnel'])->name('personnel.verify');
         Route::put('/personnel/{person}/unverify', [PersonnelController::class, 'unverifyPersonnel'])->name('personnel.unverify');
+        Route::delete('/personnel/{person}', [PersonnelController::class, 'destroy'])->name('personnel.destroy');
     });
 
     Route::get('/trips/check-availability', [TripController::class, 'checkAvailability'])->name('trips.check-availability');

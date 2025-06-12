@@ -17,8 +17,8 @@ return new class extends Migration
             $table->date('date_in')->nullable();
             $table->date('date_completed')->nullable();
             $table->foreignId('odometer_id')->nullable()->constrained('odometer_logs', 'odometer_id')->onDelete('set null');
-            $table->foreignId('performed_by')->nullable()->constrained('users')->onDelete('set null');
-            $table->foreignId('confirmed_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('performed_by')->nullable()->constrained('users', 'id')->onDelete('set null');
+            $table->foreignId('confirmed_by')->nullable()->constrained('users', 'id')->onDelete('set null');
             $table->dateTime('date_confirmed')->nullable();
             $table->text('maintenance_summary')->nullable();
             $table->timestamps();

@@ -102,7 +102,7 @@ class VehicleController extends Controller
             })
             ->orderByRaw('
                 CASE 
-                    WHEN scheduled_date <= datetime("now", "+7 days") THEN 1
+                    WHEN scheduled_date <= NOW() + INTERVAL 7 DAY THEN 1
                     ELSE 2
                 END
             ')
@@ -115,11 +115,11 @@ class VehicleController extends Controller
             ->orderBy('updated_at', 'desc')
             ->first();
 
-            $latestRepair = Maintenance::with('serviceRequest')
-            ->where('vehicle_id', $vehicle->vehicle_id)
+        $latestRepair = Maintenance::with('serviceRequest')
             ->where('confirmed_by', '!=', null)
-            ->whereHas('serviceRequest', function ($query) {
-                $query->where('service_type', 'repair');
+            ->whereHas('serviceRequest', function ($query) use ($vehicle) {
+                $query->where('vehicle_id', $vehicle->vehicle_id)
+                    ->where('service_type', 'repair');
             })
             ->orderBy('updated_at', 'desc')
             ->first();
