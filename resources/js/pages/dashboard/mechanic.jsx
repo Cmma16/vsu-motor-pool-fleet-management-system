@@ -159,14 +159,6 @@ export default function Dashboard({
                                             ))
                                         )}
                                     </div>
-                                    <a
-                                        href={`/services/requests/1/pdf`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="rounded bg-blue-600 px-4 py-2 text-white"
-                                    >
-                                        Download PDF
-                                    </a>
                                 </CardContent>
                             </Card>
                             <Card className="max-h-96 flex-1 overflow-y-auto">

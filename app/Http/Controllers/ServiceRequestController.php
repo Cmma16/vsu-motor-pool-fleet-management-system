@@ -138,7 +138,25 @@ class ServiceRequestController extends Controller
 
     public function printServiceRequest(ServiceRequest $request)
     {
-        $data = ServiceRequest::with('serviceInspection')->find($request->request_id);
+        $data = ServiceRequest::with([
+            'serviceInspection.conductedBy.role',
+            'serviceInspection.confirmedBy.role',
+            'receivedBy.role',
+            'requestedBy.role'
+        ])->find($request->request_id);
+
+        $data->formatted_date_filed = Carbon::parse($data->date_filed)->format('F d, Y');
+        $data->formatted_date_received = Carbon::parse($data->date_received)->format('F d, Y');
+        $data->requested_by_name = $data->requestedBy->first_name . ' ' . $data->requestedBy->last_name;
+        $data->received_by_name = $data->receivedBy->first_name . ' ' . $data->receivedBy->last_name;
+        $data->date_of_inspection = Carbon::parse($data->serviceInspection->started_at)->format('F d, Y');
+        $data->time_started = Carbon::parse($data->serviceInspection->started_at)->format('h:i');
+        $data->time_ended = Carbon::parse($data->serviceInspection->completed_at)->format('h:i');
+
+        if ($data->serviceInspection) {
+            $data->conducted_by_name = $data->serviceInspection->conductedBy->first_name . ' ' . $data->serviceInspection->conductedBy->last_name;
+            $data->confirmed_by_name = $data->serviceInspection->confirmedBy->first_name . ' ' . $data->serviceInspection->confirmedBy->last_name;
+        }
 
         return Pdf::loadView('pdf.service-request', compact('data'))
             ->setPaper('a4', 'portrait')

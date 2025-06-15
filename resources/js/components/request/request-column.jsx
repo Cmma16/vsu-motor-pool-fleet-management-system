@@ -1,6 +1,6 @@
 import { router, usePage } from '@inertiajs/react';
 import { createColumnHelper } from '@tanstack/react-table';
-import { ArrowUpDown, CircleArrowOutUpRight, FileWarning, Pencil, ScanSearch, Trash, Wrench } from 'lucide-react';
+import { ArrowUpDown, CircleArrowOutUpRight, FileWarning, Pencil, Printer, ScanSearch, Trash, Wrench } from 'lucide-react';
 
 import DestructiveDialog from '@/components/display/destructive-dialog';
 import { Badge } from '@/components/ui/badge';
@@ -151,6 +151,14 @@ export const RequestsColumn = (handleView, handleEdit, handleDelete, handleStatu
             const { auth } = usePage().props;
             return (
                 <>
+                    {request.status === 'completed' && (
+                        <Button
+                            onClick={() => window.open(`/services/requests/${request.request_id}/pdf`, '_blank')}
+                            className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-800"
+                        >
+                            <Printer />
+                        </Button>
+                    )}
                     {auth.user.role.name === 'Driver' && (
                         <>
                             {request.status === 'pending' && (
