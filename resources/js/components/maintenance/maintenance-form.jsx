@@ -167,13 +167,7 @@ export default function MaintenanceForm({
                     <Label htmlFor="odometer_id">
                         Odometer Reading <span className="text-red-500">*</span>
                     </Label>
-                    <Input
-                        className="mt-2"
-                        value={latestOdometer?.reading ?? ''}
-                        disabled
-                        placeholder="No odometer reading available"
-                        className="bg-gray-100"
-                    />
+                    <Input className="mt-2 bg-gray-100" value={latestOdometer?.reading ?? ''} disabled placeholder="No odometer reading available" />
                     {formData.vehicle_id && (
                         <OdometerLogModal
                             latestReading={latestOdometer?.reading ?? 0}
