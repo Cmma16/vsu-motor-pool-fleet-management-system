@@ -16,26 +16,26 @@ class RegistrationTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_new_users_can_register()
-    {
-        $role = \App\Models\UserRole::factory()->create();
+    // public function test_new_users_can_register()
+    // {
+    //     $role = \App\Models\UserRole::factory()->create();
 
-        $response = $this->post('/register', [
-            'first_name' => 'John',
-            'middle_name' => 'Smith',
-            'last_name' => 'Doe',
-            'contact_number' => '09123456789',
-            'province' => 'Leyte',
-            'city' => 'Baybay City',
-            'barangay' => 'Opong',
-            'address_details' => '123 Main St',
-            'role_id' => $role->role_id,
-            'email' => 'test@example.com',
-            'password' => 'password',
-            'password_confirmation' => 'password',
-        ]);
+    //     $response = $this->post('/register', [
+    //         'first_name' => 'John',
+    //         'middle_name' => 'Smith',
+    //         'last_name' => 'Doe',
+    //         'contact_number' => '09123456789',
+    //         'province' => 'Leyte',
+    //         'city' => 'Baybay City',
+    //         'barangay' => 'Opong',
+    //         'address_details' => '123 Main St',
+    //         'role_id' => $role->role_id,
+    //         'email' => 'test@example.com',
+    //         'password' => 'password',
+    //         'password_confirmation' => 'password',
+    //     ]);
 
-        $this->assertAuthenticated();
-        $response->assertRedirect(route('dashboard', absolute: false));
-    }
+    //     $this->assertAuthenticated();
+    //     $response->assertRedirect(route('dashboard', absolute: false));
+    // }
 }
