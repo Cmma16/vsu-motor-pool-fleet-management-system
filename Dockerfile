@@ -3,7 +3,12 @@ FROM php:8.3-fpm
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
-    git curl zip unzip libpng-dev libonig-dev libxml2-dev npm nodejs
+    git curl zip unzip libpng-dev libonig-dev libxml2-dev \
+    libzip-dev libcurl4-openssl-dev libssl-dev \
+    npm nodejs
+
+# Install PHP extensions
+RUN docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl bcmath
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
