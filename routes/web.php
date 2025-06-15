@@ -77,7 +77,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/trips/{trip}/logs/end', [TripLogController::class, 'endTrip'])->name('trip-logs.end');
     Route::post('/trip-logs/{tripLog}/complete', [TripLogController::class, 'completeTrip'])->name('trip-logs.complete');
     Route::put('/trip-logs/{tripLog}', [TripLogController::class, 'update'])->name('trip-logs.update');
-    Route::resource('trip-logs', TripLogController::class)->except(['create']);
+    Route::resource('trip-logs', TripLogController::class)->except(['create', 'update']);
     Route::middleware('role:Admin')->group(function () {
         Route::resource('personnel', PersonnelController::class);
     });
