@@ -64,10 +64,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('maintenance/{maintenance}/confirm', [MaintenanceController::class, 'confirm'])->name('maintenance.confirm');
 
     Route::resource('odometer', OdometerLogController::class);
+
     Route::resource('vehicles/trips', TripController::class);
     Route::get('/trips/{trip}/assign', [TripController::class, 'assign'])->name('trips.assign');
     Route::patch('trips/{trip}/status', [TripController::class, 'updateStatus'])->name('trips.updateStatus');
-    Route::post('/trips/check-availability', [TripController::class, 'checkAvailability'])->name('trips.check-availability');
+    //Route::post('/trips/check-availability', [TripController::class, 'checkAvailability'])->name('trips.check-availability');
     
     //not working
     Route::get('/trips/{trip}/pdf', [TripController::class, 'downloadPDF'])->name('trips.download-pdf');
