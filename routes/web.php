@@ -21,6 +21,17 @@ use App\Http\Controllers\PassengerController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\PreventiveController;
+use Illuminate\Support\Facades\File;
+
+Route::get('/debug-log', function () {
+    $logPath = storage_path('logs/laravel.log');
+    
+    if (!File::exists($logPath)) {
+        return 'No log file found.';
+    }
+
+    return response()->file($logPath);
+});
 
 
 Route::get('/', function () {
