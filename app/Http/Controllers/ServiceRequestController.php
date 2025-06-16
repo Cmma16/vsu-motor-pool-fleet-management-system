@@ -36,6 +36,8 @@ class ServiceRequestController extends Controller
             'pending', 'received', 'inspected', 'approved', 'conducted', 'cancelled', 'completed'
         ])) {
             $query->where('status', $statusFilter);
+        }else {
+            $query->whereNot('status', 'completed');
         }
 
         if($user->role->name === 'Driver'){

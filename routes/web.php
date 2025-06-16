@@ -64,6 +64,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/services/requests/{request}/pdf', [ServiceRequestController::class, 'printServiceRequest'])->name('requests.print');
 
+
     Route::resource('services/request-inspections', ServiceInspectionController::class);
     Route::patch('services/request-inspections/{request_inspection}/confirm', [ServiceInspectionController::class, 'confirmInspection'])->name('request-inspections.confirm');
 
@@ -73,6 +74,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('maintenance', MaintenanceController::class);
     Route::patch('maintenance/{maintenance}/confirm', [MaintenanceController::class, 'confirm'])->name('maintenance.confirm');
+    Route::get('/maintenance/{maintenance}/pdf', [MaintenanceController::class, 'printMaintenanceRecord'])->name('maintenance.print');
 
     Route::resource('odometer', OdometerLogController::class);
 
@@ -93,6 +95,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware('role:Admin')->group(function () {
         Route::resource('personnel', PersonnelController::class);
     });
+
     Route::resource('passengers', PassengerController::class);
     Route::post('/passengers/{id}/assign-party-head', [PassengerController::class, 'assignPartyHead']);
 
