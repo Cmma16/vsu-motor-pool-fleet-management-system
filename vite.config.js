@@ -21,11 +21,6 @@ export default defineConfig({
         react(),
         tailwindcss(),
     ],
-    base: '/build/', // optional but helps clarify asset base path
-    build: {
-        manifest: true,
-        outDir: 'public/build',
-    },
     // For hosting on local network
     // server: {
     //     host: '10.22.253.4',
