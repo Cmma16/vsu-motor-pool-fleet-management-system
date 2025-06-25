@@ -39,6 +39,11 @@ class Trip extends Model
         return $this->belongsTo(User::class, 'driver_id');
     }
 
+    public function dispatcher()
+    {
+        return $this->belongsTo(User::class, 'dispatcher_id');
+    }
+
     public function passengers()
     {
         return $this->hasMany(Passenger::class, 'trip_id');

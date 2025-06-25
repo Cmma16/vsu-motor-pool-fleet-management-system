@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { usePage } from '@inertiajs/react';
 
-import { Check, Eye, Pencil, TrashIcon } from 'lucide-react';
+import { Check, Eye, Pencil, Printer, TrashIcon } from 'lucide-react';
 
 export function ColorfulRowActions({ row, rowKey = 'id', handleView, handleEdit, handleDelete, handleConfirm }) {
     const rowId = row[rowKey];
@@ -15,6 +15,14 @@ export function ColorfulRowActions({ row, rowKey = 'id', handleView, handleEdit,
             <Button className="bg-amber-400 hover:bg-amber-500" onClick={() => handleView(rowId)}>
                 <Eye />
             </Button>
+            {row.confirmed_by && (
+                <Button
+                    onClick={() => window.open(`/maintenance/${rowId}/pdf`, '_blank')}
+                    className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-800"
+                >
+                    <Printer />
+                </Button>
+            )}
             {user.role.name === 'Mechanic' && (
                 <div className="gap-2">
                     {!row.confirmed_by && (

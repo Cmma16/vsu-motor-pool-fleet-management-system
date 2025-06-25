@@ -84,7 +84,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     //Route::post('/trips/check-availability', [TripController::class, 'checkAvailability'])->name('trips.check-availability');
     
     //not working
-    Route::get('/trips/{trip}/pdf', [TripController::class, 'downloadPDF'])->name('trips.download-pdf');
+    Route::get('/trips/{trip}/pdf', [TripController::class, 'printTripRecord'])->name('trips.print');
     
     // Trip Log routes
     Route::get('/trips/{trip}/logs/create', [TripLogController::class, 'create'])->name('trip-logs.create');

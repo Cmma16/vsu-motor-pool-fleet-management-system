@@ -207,11 +207,38 @@ class TripController extends Controller
     }
 
     //currently not working
-    public function downloadPDF(Trip $trip) 
+    public function printTripRecord(Trip $trip) 
     {
-        $trip = Trip::with(['vehicle', 'driver', 'passengers'])->find($trip->trip_id);
+        $trip = Trip::with(['vehicle', 'driver', 'passengers', 'tripLog.odometerOut', 'tripLog.odometerIn', 'dispatcher'])->find($trip->trip_id);
+        
+        $trip->formatted_date_filed = Carbon::parse($trip->date_filed)->format('F d, Y');
+        
+        $start = Carbon::parse($trip->start_date);
+        $end = Carbon::parse($trip->end_date);
+        if ($start->isSameDay($end)) {
+            $trip->scheduled_date = $start->format('F d, Y');
+        } elseif ($start->isSameMonth($end)) {
+            $trip->scheduled_date = $start->format('F d') . ' - ' . $end->format('d, Y');
+        } else {
+            $trip->scheduled_date = $start->format('F d') . ' - ' . $end->format('F d, Y');
+        }
+        $trip->formatted_departure_time = Carbon::parse($trip->departure_time)->format('h:i A');
+        $trip->party_head = $trip->passengers->firstWhere('is_party_head', true);
+        $trip->dispatcher_name = strtoupper($trip->dispatcher->first_name) . ' ' . strtoupper($trip->dispatcher->last_name);
+        $trip->driver_name = strtoupper($trip->driver->first_name) . ' ' . strtoupper($trip->driver->last_name);
+        $trip->ticket_received = Carbon::parse($trip->tripLog->received_at)->format('F d, Y');
+        $trip->actual_departure = Carbon::parse($trip->tripLog->departure_time_actual)->format('h:i A');
+        
+        $trip->vehicle_returned = Carbon::parse($trip->tripLog->date_returned)->format('F d, Y');
+        $trip->arrival = Carbon::parse($trip->tripLog->arrival_time)->format('h:i A');
 
-        $pdf = Pdf::loadView('pdf.trip-ticket', compact('trip'))
+        // Split passengers into groups of 10
+        $passengerChunks = $trip->passengers->chunk(10);
+
+        $pdf = Pdf::loadView('pdf.trip-ticket', compact([
+            'trip',
+            "passengerChunks"
+            ]))
             ->setPaper('a4', "portrait");
         return $pdf->stream('trip-ticket-' . $trip->trip_number . '.pdf');
     }

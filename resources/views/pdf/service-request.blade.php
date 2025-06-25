@@ -621,7 +621,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div style="display: table-row;text-align: center; font-weight: bold;">
+                                        <div style="display: table-row; text-align: center; font-weight: bold;">
                                             <div style="display: table-cell; border-top: 1px solid #000000;">
                                                 Comments & Suggestions
                                             </div>
@@ -662,63 +662,63 @@
             </div>
         </div>
         <!-- Fixed Footer using Table -->
-<div style="
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 40px;
-  background-color: #f9f9f9;
-  font-size: 12px;
-  border-top: 2px solid #146939;
-  padding: 8px 0px;
-  box-sizing: border-box;
-">
-  <table style="width: 100%; border-collapse: collapse;">
-    <tr>
-      <!-- Left Side: Logo + PPO Info -->
-      <td style="width: 50%; text-align: left; vertical-align: top;">
-        <table style="border-collapse: collapse;">
-          <tr>
-            <td style="vertical-align: top;">
-              <img src="ppo-info.png" style="height: 70px;" alt="PPO Logo">
-            </td>
-            <td style="vertical-align: top; padding-left: 8px;">
-                <div style="vertical-align: middle;">
-                    <div style="font-weight: bold;">PHYSICAL PLANT OFFICE</div>
-                    <div>Visayas State University, PQVR+8JR Baybay City, Leyte</div>
-                    <div>Email: ppo@vsu.edu.ph</div>
-                    <div>Website: www.vsu.edu.ph</div>
-                    <div>Phone: +63 53 565 0600 Local 1041</div>
-                </div>
-            </td>
-          </tr>
-        </table>
-      </td>
-
-      <!-- Right Side: Document Metadata -->
-      <td style="width: 30%; text-align: right; font-size: 10px; vertical-align: top;">
-        <div style="font-style: italic;">Page 1 of 1</div>
-        <div style="font-weight: bold;">FM-PPO-09</div>
-        <div style="font-style: italic;">V2.xx-xx-xx</div>
         <div style="
-          background-color: #9ca3af;
-          width: 84px;
-          height: 24px;
-          margin-top: 4px;
-          text-align: left;
-          vertical-align: middle;
-          padding-left: 4px;
-          font-style: italic;
-          line-height: 24px;
-          display: inline-block;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 40px;
+        background-color: #f9f9f9;
+        font-size: 12px;
+        border-top: 2px solid #146939;
+        padding: 8px 0px;
+        box-sizing: border-box;
         ">
-          No.
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                <!-- Left Side: Logo + PPO Info -->
+                <td style="width: 50%; text-align: left; vertical-align: top;">
+                    <table style="border-collapse: collapse;">
+                    <tr>
+                        <td style="vertical-align: top;">
+                        <img src="ppo-info.png" style="height: 70px;" alt="PPO Logo">
+                        </td>
+                        <td style="vertical-align: top; padding-left: 8px;">
+                            <div style="vertical-align: middle;">
+                                <div style="font-weight: bold;">PHYSICAL PLANT OFFICE</div>
+                                <div>Visayas State University, PQVR+8JR Baybay City, Leyte</div>
+                                <div>Email: ppo@vsu.edu.ph</div>
+                                <div>Website: www.vsu.edu.ph</div>
+                                <div>Phone: +63 53 565 0600 Local 1041</div>
+                            </div>
+                        </td>
+                    </tr>
+                    </table>
+                </td>
+
+                <!-- Right Side: Document Metadata -->
+                <td style="width: 30%; text-align: right; font-size: 10px; vertical-align: top;">
+                    <div style="font-style: italic;">Page 1 of 1</div>
+                    <div style="font-weight: bold;">FM-PPO-09</div>
+                    <div style="font-style: italic;">V2.xx-xx-xxxx</div>
+                    <div style="
+                    background-color: #9ca3af;
+                    width: 84px;
+                    height: 24px;
+                    margin-top: 4px;
+                    text-align: left;
+                    vertical-align: middle;
+                    padding-left: 4px;
+                    font-style: italic;
+                    line-height: 24px;
+                    display: inline-block;
+                    ">
+                    No.
+                    </div>
+                </td>
+                </tr>
+            </table>
         </div>
-      </td>
-    </tr>
-  </table>
-</div>
     </div>
 </body>
 </html>

@@ -29,11 +29,12 @@ RUN composer install
 # Install Node dependencies and build frontend
 RUN npm install && npm run build
 
-# Laravel setup
-RUN php artisan config:cache && php artisan route:cache
+# Fix permissions
+RUN chmod -R 775 storage bootstrap/cache
 
-# Expose port Render will use
+# Expose port for Render
 EXPOSE 8080
 
-# Start Laravel development server
-CMD php artisan serve --host=0.0.0.0 --port=8080
+# Start Laravel only after .env is available
+CMD php artisan config:cache && php artisan serve --host=0.0.0.0 --port=8080
+

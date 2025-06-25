@@ -16,6 +16,7 @@ use App\Http\Requests\Maintenance\StoreMaintenanceRequest;
 use App\Http\Requests\Maintenance\UpdateMaintenanceRequest;
 use Inertia\Inertia;
 use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class MaintenanceController extends Controller
 {
@@ -163,18 +164,19 @@ class MaintenanceController extends Controller
     public function printMaintenanceRecord(Maintenance $maintenance)
     {
         $data = Maintenance::with([
+            'serviceRequest.vehicle.latestOdometerLog',
+            'serviceRequest.requestedBy',
             'partsUsed',
             'confirmedBy.role',
             'performedBy.role'
-        ])->find($request->request_id);
+        ])->find($maintenance->maintenance_id);
 
-        // $data->formatted_date_filed = Carbon::parse($data->date_filed)->format('F d, Y');
-        // $data->formatted_date_received = Carbon::parse($data->date_received)->format('F d, Y');
-        // $data->requested_by_name = $data->requestedBy->first_name . ' ' . $data->requestedBy->last_name;
-        // $data->received_by_name = $data->receivedBy->first_name . ' ' . $data->receivedBy->last_name;
-        // $data->date_of_inspection = Carbon::parse($data->serviceInspection->started_at)->format('F d, Y');
-        // $data->time_started = Carbon::parse($data->serviceInspection->started_at)->format('h:i');
-        // $data->time_ended = Carbon::parse($data->serviceInspection->completed_at)->format('h:i');
+        $data->formatted_date_in = Carbon::parse($data->date_in)->format('F d, Y');
+        $data->formatted_date_completed = Carbon::parse($data->date_completed)->format('F d, Y');
+        $data->requested_by_name = $data->serviceRequest->requestedBy->first_name . ' ' . $data->serviceRequest->requestedBy->last_name;
+        $data->performed_by_name = $data->performedBy->first_name . ' ' . $data->performedBy->last_name;
+        $data->formatted_date_confirmed = Carbon::parse($data->date_confirmed)->format('F d, Y');
+        $data->confirmed_by_name = $data->confirmedBy->first_name . ' ' . $data->confirmedBy->last_name;
 
         // if ($data->serviceInspection) {
         //     $data->conducted_by_name = $data->serviceInspection->conductedBy->first_name . ' ' . $data->serviceInspection->conductedBy->last_name;

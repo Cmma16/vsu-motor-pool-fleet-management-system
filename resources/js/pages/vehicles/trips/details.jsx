@@ -64,6 +64,15 @@ export default function TripDetails({ trip }) {
                             End Trip
                         </Button>
                     )}
+                    {trip.status === 'completed' && (
+                        <Button
+                            className="border-2 border-[#006600] bg-white text-black hover:bg-[#005500] hover:text-white"
+                            onClick={() => window.open(`/trips/${trip.trip_id}/pdf`, '_blank')}
+                        >
+                            <FileText className="mr-2 h-4 w-4" />
+                            Print
+                        </Button>
+                    )}
                 </div>
                 {console.log(trip)}
                 <Card className="flex-1">
