@@ -16,7 +16,7 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg && \
 
 # Install and enable Imagick
 # Install Imagick from PECL (✅ this is a tested block)
-RUN pecl install imagick \
+RUN pecl install imagick-3.7.0 \
     && echo "extension=imagick.so" > /usr/local/etc/php/conf.d/imagick.ini
 
 
