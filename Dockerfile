@@ -14,7 +14,9 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg && \
     docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl bcmath gd
 
 # Install and enable Imagick
-RUN pecl install imagick && docker-php-ext-enable imagick
+# Install Imagick from PECL (✅ this is a tested block)
+RUN pecl install imagick && \
+    echo "extension=imagick.so" > /usr/local/etc/php/conf.d/imagick.ini
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
