@@ -10,6 +10,9 @@ RUN apt-get update && apt-get install -y \
     libonig-dev libxml2-dev libzip-dev libssl-dev \
     npm nodejs default-mysql-client
 
+RUN curl -I https://pecl.php.net
+
+
 # Install PHP extensions
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg && \
     docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl bcmath gd
