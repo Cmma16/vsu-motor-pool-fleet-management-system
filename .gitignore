@@ -6,6 +6,12 @@
 /public/storage
 /storage/*.key
 /storage/pail
+/storage
+
+# Allow tracking of QR codes and vehicle images
+!storage/app/public/
+!storage/app/public/qr-codes/**
+!storage/app/public/vehicles/**
 /vendor
 .env
 .env.backup
