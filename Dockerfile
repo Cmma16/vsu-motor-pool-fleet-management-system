@@ -15,7 +15,7 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg && \
     docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl bcmath gd
 
 # Install and enable Imagick
-RUN pecl install imagick-3.7.0
+RUN for i in 1 2 3; do pecl install imagick-3.7.0 && break || sleep 5; done 
 
 RUN echo "extension=imagick.so" > /usr/local/etc/php/conf.d/imagick.ini
 
