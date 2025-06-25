@@ -37,4 +37,4 @@ EXPOSE 8080
 
 # Start Laravel only after .env is available
 CMD php artisan config:cache && php artisan serve --host=0.0.0.0 --port=8080
-
+RUN php artisan storage:link
