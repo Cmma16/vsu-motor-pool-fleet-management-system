@@ -23,6 +23,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Force HTTPS in production
+        if (env('APP_ENV') === 'production') {
+            URL::forceScheme('https');
+        }
+
+        Schema::defaultStringLength(191);
+        
         RepairParts::observe(PartUsageObserver::class);
         MaintenanceParts::observe(PartUsageObserver::class);
 
