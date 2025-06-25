@@ -1,17 +1,17 @@
 # Base PHP image with necessary extensions
 FROM php:8.3-fpm
 
-## Install system packages and dependencies
+# Install system dependencies and Imagick dev libs
 RUN apt-get update && apt-get install -y \
-git curl zip unzip \
-libpng-dev libjpeg-dev libfreetype6-dev \
-libonig-dev libxml2-dev libzip-dev libssl-dev \
-libmagickwand-dev --no-install-recommends \
-npm nodejs default-mysql-client
+    git curl zip unzip \
+    libpng-dev libjpeg-dev libfreetype6-dev \
+    libonig-dev libxml2-dev libzip-dev libssl-dev \
+    libmagickwand-dev imagemagick --no-install-recommends \
+    npm nodejs default-mysql-client
 
 # Install PHP extensions
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg && \
-docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl bcmath gd
+    docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl bcmath gd
 
 # Install and enable Imagick
 RUN pecl install imagick && docker-php-ext-enable imagick
