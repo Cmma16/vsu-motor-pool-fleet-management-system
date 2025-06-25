@@ -21,6 +21,19 @@ export default defineConfig({
         react(),
         tailwindcss(),
     ],
+    build: {
+        manifest: true,
+        outDir: 'public/build', // 👈 This is the fix
+        emptyOutDir: true,
+        rollupOptions: {
+            output: {
+                // Avoid nested ".vite" folder
+                entryFileNames: 'assets/[name]-[hash].js',
+                chunkFileNames: 'assets/[name]-[hash].js',
+                assetFileNames: 'assets/[name]-[hash][extname]',
+            },
+        },
+    },
     // For hosting on local network
     // server: {
     //     host: '10.22.253.4',
