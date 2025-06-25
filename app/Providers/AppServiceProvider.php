@@ -7,6 +7,7 @@ use App\Models\MaintenanceParts;
 use App\Observers\PartUsageObserver;
 use Illuminate\Support\ServiceProvider;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
