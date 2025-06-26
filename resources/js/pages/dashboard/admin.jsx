@@ -60,11 +60,11 @@ export default function Dashboard({ vehicleStats, maintenanceStats, tripStats, s
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             <Head title="Dashboard" />
-            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl px-6">
+            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4 md:px-6">
                 <div className="flex items-center justify-between space-y-2">
                     <h2 className="text-2xl">About Fleet</h2>
                 </div>
-                <div className="flex flex-col gap-4 p-4 md:gap-8">
+                <div className="flex flex-col gap-4 md:gap-8 md:p-4">
                     <GeneralDashboard
                         totalVehicles={totalVehicles}
                         todayTrips={todayTrips}

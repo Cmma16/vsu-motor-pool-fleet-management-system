@@ -14,8 +14,8 @@ export function DashboardChartCard({ title, data, config, totalLabel, dataKey = 
             <CardHeader className="items-center pb-0">
                 <CardTitle>{title}</CardTitle>
             </CardHeader>
-            <CardContent className="mt-0 flex flex-col items-center justify-center md:flex-row">
-                <ChartContainer config={config} className="aspect-square md:min-h-[220px]">
+            <CardContent className="mt-0 flex flex-col items-center justify-center sm:flex-row">
+                <ChartContainer config={config} className="aspect-square min-h-[220px]">
                     <PieChart>
                         <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
                         <Pie data={data} dataKey={dataKey} nameKey={nameKey} innerRadius={60} strokeWidth={5}>
