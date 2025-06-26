@@ -15,15 +15,15 @@ import {
 export function SelectedDayTripsSection({ selectedDateTrips, date, getStatusBadge, editTrip, viewTripDetails }) {
     return (
         <Card className="col-span-1 md:col-span-2">
-            <CardHeader>
+            <CardHeader className="px-3 sm:px-6">
                 <CardTitle>{date ? format(date, 'MMMM d, yyyy') : 'Select a date'}</CardTitle>
                 <CardDescription>{selectedDateTrips.length} trips scheduled</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="px-3 sm:px-6">
                 {selectedDateTrips.length > 0 ? (
                     <div className="grid gap-4">
                         {selectedDateTrips.map((trip) => (
-                            <div key={trip.trip_number} className="flex flex-col justify-between rounded-lg border p-4 md:flex-row">
+                            <div key={trip.trip_number} className="flex flex-col justify-between rounded-lg border p-3 sm:p-4 md:flex-row">
                                 <div className="mb-4 flex flex-col gap-2 md:mb-0">
                                     <div className="flex items-center gap-2">
                                         <h3 className="font-semibold">{trip.purpose}</h3>

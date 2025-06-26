@@ -27,15 +27,15 @@ export function CurrentDayTripsSection({
 
     return (
         <Card>
-            <CardHeader>
+            <CardHeader className="px-3 sm:px-6">
                 <CardTitle>Today's Trips</CardTitle>
                 <CardDescription>All trips scheduled for today, {format(new Date(), 'MMMM d, yyyy')}</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="px-3 sm:px-6">
                 {todayTrips.length > 0 ? (
                     <div className="grid gap-4">
                         {todayTrips.map((trip) => (
-                            <div key={trip.trip_number} className="flex flex-col justify-between rounded-lg border p-4 md:flex-row">
+                            <div key={trip.trip_number} className="flex flex-col justify-between rounded-lg border p-2 sm:p-4 md:flex-row">
                                 <div className="mb-4 flex flex-col gap-2 md:mb-0">
                                     <div className="flex items-center gap-2">
                                         <h3 className="font-semibold">{trip.purpose}</h3>

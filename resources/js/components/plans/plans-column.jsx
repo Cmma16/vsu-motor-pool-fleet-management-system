@@ -61,7 +61,7 @@ export const PlansColumn = (handleView, handleEdit, handleDelete) => [
                 <ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>
         ),
-        cell: (info) => <div className="text-left">{format(info.getValue(), 'yyyy-MM-dd')}</div>,
+        cell: (info) => <div className="text-left">{format(info.getValue(), 'LLL dd, yyyy')}</div>,
     }),
     columnHelper.accessor('created_by', {
         header: () => <div className="text-left">Created by</div>,

@@ -1,12 +1,13 @@
 import { DataTable } from '@/components/data-table';
 import { RequestsColumn } from '@/components/request/request-column';
-import { ServiceCard } from '@/components/request/service-card';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { usePage } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
+import { Plus } from 'lucide-react';
 import { toast } from 'sonner';
 
 import AppLayout from '@/layouts/app-layout';
 
+import { RequestsList } from '@/components/request/requests-list';
 import { Head, router } from '@inertiajs/react';
 import { InfoIcon, Wrench } from 'lucide-react';
 const breadcrumbs = [
@@ -24,7 +25,12 @@ const pageDetails = {
 export default function RequestsIndex({ serviceRequests }) {
     const user = usePage().props.auth.user;
     const isMobile = useIsMobile();
-
+    const breadcrumbs = [
+        {
+            title: 'Service Requests',
+            href: user.role.name === 'Driver' ? '/services/requests?status=my-requests' : '/services/requests',
+        },
+    ];
     const deleteRequest = (id) => {
         router.delete(route('requests.destroy', { id }), {
             onSuccess: () => {
@@ -71,7 +77,7 @@ export default function RequestsIndex({ serviceRequests }) {
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             <Head title="Repairs" />
             {/* Important Information Section */}
-            <div className="mx-4">
+            <div className="mx-3 sm:mx-4">
                 <h2 className="mb-2 text-lg font-semibold">Important Information</h2>
                 <div className="mb-2 flex items-start gap-2 rounded-md bg-blue-50 p-4 text-blue-800">
                     <Wrench className="mt-0.5 h-5 w-5 text-blue-400" />
@@ -88,10 +94,21 @@ export default function RequestsIndex({ serviceRequests }) {
             <div className="flex h-full w-full max-w-full flex-1 flex-col gap-2 rounded-xl p-2 sm:gap-4 sm:p-4">
                 <div className="w-full max-w-full overflow-x-auto rounded-lg">
                     {isMobile ? (
-                        <div className="flex flex-col gap-2">
-                            {serviceRequests.map((request) => (
-                                <ServiceCard request={request} onEdit={editRequest} onDelete={deleteRequest} onStatusUpdate={handleStatusUpdate} />
-                            ))}
+                        <div className="flex flex-col gap-2 px-1">
+                            <Link
+                                href={route('requests.create')}
+                                as="button"
+                                className="flex justify-center rounded-md border bg-[#006600] py-2 text-sm text-white hover:bg-[#00964F] hover:text-white"
+                                variant="outline"
+                            >
+                                <Plus className="h-5" /> New
+                            </Link>
+                            <RequestsList
+                                serviceRequests={serviceRequests}
+                                onEdit={editRequest}
+                                onDelete={deleteRequest}
+                                onStatusUpdate={handleStatusUpdate}
+                            />
                         </div>
                     ) : (
                         <DataTable

@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export function TripSummaryCard({ todayTrips, upcomingTrips, trips }) {
     return (
-        <div className="md:max-w-auto grid max-w-[90vw] grid-cols-1 gap-4 md:grid-cols-3">
+        <div className="md:max-w-auto grid max-w-[100vw] grid-cols-1 gap-4 md:grid-cols-3">
             <Card>
                 <CardHeader className="pb-2">
                     <CardTitle className="text-sm font-medium">Today's Trips</CardTitle>

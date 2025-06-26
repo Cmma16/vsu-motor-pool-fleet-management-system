@@ -150,7 +150,7 @@ export const RequestsColumn = (handleView, handleEdit, handleDelete, handleStatu
             };
             const { auth } = usePage().props;
             return (
-                <>
+                <div className="flex justify-center">
                     {request.status === 'completed' && (
                         <Button
                             onClick={() => window.open(`/services/requests/${request.request_id}/pdf`, '_blank')}
@@ -331,7 +331,7 @@ export const RequestsColumn = (handleView, handleEdit, handleDelete, handleStatu
                             )}
                         </>
                     )}
-                </>
+                </div>
             );
         },
     },

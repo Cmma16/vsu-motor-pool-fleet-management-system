@@ -9,17 +9,6 @@ import { toast } from 'sonner';
 import AppLayout from '@/layouts/app-layout';
 // import { Button } from 'react-day-picker';
 
-const breadcrumbs = [
-    {
-        title: 'Service Requests',
-        href: '/services/requests',
-    },
-    {
-        title: 'Details',
-        href: 'services/requests/details',
-    },
-];
-
 const pageDetails = {
     title: 'Request Details',
     description: 'Comprehensive information about the service being requested.',
@@ -51,6 +40,16 @@ const handleStatusUpdate = (id, status) => {
 
 export default function RequestDetails({ serviceRequest }) {
     const user = usePage().props.auth.user;
+    const breadcrumbs = [
+        {
+            title: 'Service Requests',
+            href: user.role.name === 'Driver' ? '/services/requests?status=my-requests' : '/services/requests',
+        },
+        {
+            title: 'Details',
+            href: 'services/requests/details',
+        },
+    ];
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             <Head title="Repair Details" />

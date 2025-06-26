@@ -13,17 +13,6 @@ import { Calendar, Car, Clock, Image, Loader2, PenTool, QrCode, Settings } from 
 import { UpdateVehiclePhoto } from '@/components/vehicle/update-vehicle-photo';
 import AppLayout from '@/layouts/app-layout';
 
-const breadcrumbs = [
-    {
-        title: 'Vehicles',
-        href: '/vehicles',
-    },
-    {
-        title: 'Details',
-        href: 'vehicles/details',
-    },
-];
-
 const pageDetails = {
     title: 'Vehicle Details',
     description: 'Comprehensive information about the vehicle, including specifications and status.',
@@ -31,6 +20,16 @@ const pageDetails = {
 
 export default function details({ vehicle, odometer_reading, nextMaintenance, latestMaintenance, latestRepair }) {
     const user = usePage().props.auth.user;
+    const breadcrumbs = [
+        {
+            title: 'Vehicles',
+            href: user.role.name !== 'Driver' ? '/vehicles' : '',
+        },
+        {
+            title: 'Details',
+            href: 'vehicles/details',
+        },
+    ];
     const [isLoading, setIsLoading] = React.useState(false);
 
     const generateQRCode = () => {

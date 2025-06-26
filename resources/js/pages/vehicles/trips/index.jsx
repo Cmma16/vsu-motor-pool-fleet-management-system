@@ -1,6 +1,5 @@
 import { Checkbox } from '@/components/ui/checkbox';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import AppLayout from '@/layouts/app-layout';
 import { Head, router } from '@inertiajs/react';
@@ -15,6 +14,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -23,6 +23,7 @@ import { CurrentDayTripsSection } from '@/components/trip/current-day-trips-sect
 import { SelectedDayTripsSection } from '@/components/trip/selected-day-trips-section';
 import { TripColumn } from '@/components/trip/trip-column';
 import { TripSummaryCard } from '@/components/trip/trip-summary-card';
+import { TripsList } from '@/components/trip/trips-list';
 import { UpcomingTripsSection } from '@/components/trip/upcoming-trips-section';
 import { usePage } from '@inertiajs/react';
 
@@ -146,6 +147,7 @@ export default function TripsIndex({ trips = [] }) {
     const [selectedVehicles, setSelectedVehicles] = useState([]);
     const [filteredTrips, setFilteredTrips] = useState(trips);
     const [uniqueVehicles, setUniqueVehicles] = useState([]);
+    const isMobile = useIsMobile();
 
     useEffect(() => {
         const savedSearch = localStorage.getItem('searchText');
@@ -354,15 +356,15 @@ export default function TripsIndex({ trips = [] }) {
                                 <TabsList className="w-full bg-white sm:w-auto">
                                     <TabsTrigger value="list" className="flex flex-1 items-center sm:flex-none">
                                         <List className="mr-2 h-4 w-4" />
-                                        List View
+                                        <span className="hidden sm:flex">List View</span>
                                     </TabsTrigger>
                                     <TabsTrigger value="calendar" className="flex flex-1 items-center sm:flex-none">
                                         <Calendar className="mr-2 h-4 w-4" />
-                                        Calendar View
+                                        <span className="hidden sm:flex">Calendar View</span>
                                     </TabsTrigger>
                                     <TabsTrigger value="table" className="flex flex-1 items-center sm:flex-none">
                                         <Table className="mr-2 h-4 w-4" />
-                                        Table View
+                                        <span className="hidden sm:flex">Table View</span>
                                     </TabsTrigger>
                                 </TabsList>
                                 <div className="flex w-full flex-col items-stretch gap-2 sm:w-auto sm:flex-row sm:items-center">
@@ -468,19 +470,22 @@ export default function TripsIndex({ trips = [] }) {
                             </TabsContent>
 
                             <TabsContent value="table" className="space-y-4">
-                                <DataTable
-                                    columns={TripColumn}
-                                    data={filteredTrips}
-                                    handleView={viewTripDetails}
-                                    handleEdit={editTrip}
-                                    handleDelete={deleteTrip}
-                                />
+                                {isMobile ? (
+                                    <div className="flex flex-col gap-2">
+                                        <TripsList getStatusBadge={getStatusBadge} trips={filteredTrips} />
+                                    </div>
+                                ) : (
+                                    <DataTable
+                                        columns={TripColumn}
+                                        data={filteredTrips}
+                                        handleView={viewTripDetails}
+                                        handleEdit={editTrip}
+                                        handleDelete={deleteTrip}
+                                    />
+                                )}
                             </TabsContent>
                         </Tabs>
                     </div>
-                </div>
-                <div className="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border md:min-h-min">
-                    <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
                 </div>
             </div>
         </AppLayout>

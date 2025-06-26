@@ -20,8 +20,8 @@ export const RequestActions = ({ request, handleEdit, handleDelete, handleStatus
         <div className="mt-2 flex flex-wrap justify-start gap-2">
             {role === 'Driver' && request.status === 'pending' && (
                 <>
-                    <Button className="bg-yellow-300 text-black hover:bg-yellow-400" onClick={() => handleEdit(request.request_id)}>
-                        <Pencil />
+                    <Button className="bg-yellow-300 text-black hover:bg-yellow-400" size={'sm'} onClick={() => handleEdit(request.request_id)}>
+                        <Pencil className="h-4 w-4" />
                     </Button>
                     <DestructiveDialog
                         icon={Trash}
