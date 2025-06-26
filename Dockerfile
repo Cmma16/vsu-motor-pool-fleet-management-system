@@ -37,9 +37,15 @@ RUN npm install && npm run build
 # Fix permissions
 RUN chmod -R 775 storage bootstrap/cache
 
+# Link storage 
+RUN php artisan storage:link
+CMD php artisan config:clear && \
+    php artisan config:cache && \ 
+    php artisan route:clear && \
+    php artisan route:cache
+
 # Expose port for Render
 EXPOSE 8080
 
 # Start Laravel only after .env is available
-CMD php artisan config:clear && php artisan config:cache && php artisan serve --host=0.0.0.0 --port=8080
-RUN php artisan storage:link
+CMD php artisan serve --host=0.0.0.0 --port=8080
