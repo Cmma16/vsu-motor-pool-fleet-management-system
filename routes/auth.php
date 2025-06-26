@@ -42,7 +42,7 @@ Route::middleware('auth')->group(function () {
     Route::get('pending-registration', PendingRegistrationController::class)
         ->name('registration.pending');
 
-    Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)
+    Route::get('/email/verify/{id}/{hash}', VerifyEmailController::class)
         ->middleware(['signed', 'throttle:6,1'])
         ->name('verification.verify');
 
