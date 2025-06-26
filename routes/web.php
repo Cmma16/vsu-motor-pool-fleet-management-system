@@ -23,14 +23,13 @@ use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\PreventiveController;
 use Illuminate\Support\Facades\File;
 
-Route::get('/debug-log', function () {
-    $logPath = storage_path('logs/laravel.log');
-    
-    if (!File::exists($logPath)) {
-        return 'No log file found.';
-    }
-
-    return response()->file($logPath);
+Route::get('/debug-scheme', function (\Illuminate\Http\Request $request) {
+    return [
+        'url' => $request->fullUrl(),
+        'isSecure' => $request->isSecure(),
+        'scheme' => $request->getScheme(),
+        'server' => $_SERVER,
+    ];
 });
 
 
