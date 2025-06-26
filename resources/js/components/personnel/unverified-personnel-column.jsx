@@ -4,6 +4,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 import { ArrowUpDown } from 'lucide-react';
 import { toast } from 'sonner';
 
+import VerifyPersonnelModal from '@/components/personnel/verify-personnel-modal';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
 const columnHelper = createColumnHelper();
@@ -44,20 +45,38 @@ export const UnverifiedPersonnelColumn = (handleView, handleEdit, handleDelete, 
         header: () => <div className="text-left">Actions</div>,
         cell: ({ row }) => {
             const personnel = row.original;
-            const handleVerify = () => {
-                router.put(`/personnel/${personnel.id}/verify`, {
-                    preserveScroll: true,
-                    onSuccess: () => {
-                        toast.success('Personnel has been verified', {
-                            description: 'The personnel has been successfully verified and can now access the system.',
-                        });
+            const handleVerify = (roleId) => {
+                router.put(
+                    `/personnel/${personnel.id}/role`,
+                    {
+                        role: roleId,
                     },
-                    onError: () => {
-                        toast('Error', {
-                            description: 'Failed to verify personnel',
-                        });
+                    {
+                        preserveScroll: true,
+                        onSuccess: () => {
+                            router.put(
+                                `/personnel/${personnel.id}/verify`,
+                                {},
+                                {
+                                    preserveScroll: true,
+                                    onSuccess: () => {
+                                        toast.success('Personnel verified successfully', {
+                                            description: 'The personnel can now access the system.',
+                                        });
+                                    },
+                                    onError: () => {
+                                        toast('Error', {
+                                            description: 'Failed to verify personnel',
+                                        });
+                                    },
+                                },
+                            );
+                        },
+                        onError: () => {
+                            toast.error('Failed to set personnel role');
+                        },
                     },
-                });
+                );
             };
             const handleDelete = () => {
                 router.delete(`/personnel/${personnel.id}`, {
@@ -82,26 +101,7 @@ export const UnverifiedPersonnelColumn = (handleView, handleEdit, handleDelete, 
                     >
                         View
                     </Button>
-                    <Dialog>
-                        <DialogTrigger className="rounded bg-green-700 px-3 text-white hover:bg-green-600">Verify</DialogTrigger>
-                        <DialogContent>
-                            <DialogHeader>
-                                <DialogTitle>Confirmation</DialogTitle>
-                                <DialogDescription>Are you absolutely sure you want to verify this personnel?</DialogDescription>
-                                <div className="mt-4 flex justify-end gap-2">
-                                    <Button className="border-2 border-red-600 bg-red-600 transition-all hover:bg-transparent hover:text-black">
-                                        No
-                                    </Button>
-                                    <Button
-                                        className="border-2 border-green-600 bg-green-600 transition-all hover:bg-transparent hover:text-black"
-                                        onClick={handleVerify}
-                                    >
-                                        Yes
-                                    </Button>
-                                </div>
-                            </DialogHeader>
-                        </DialogContent>
-                    </Dialog>
+                    <VerifyPersonnelModal onConfirm={handleVerify} personnel={personnel} roles={roles} />
                     <Dialog>
                         <DialogTrigger className="rounded bg-red-700 px-3 text-white hover:bg-red-800">Delete</DialogTrigger>
                         <DialogContent>

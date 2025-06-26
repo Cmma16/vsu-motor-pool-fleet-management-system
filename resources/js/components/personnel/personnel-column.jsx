@@ -47,10 +47,10 @@ export const PersonnelColumn = (handleView, handleEdit, handleDelete, roles) => 
                     {
                         preserveScroll: true,
                         onSuccess: () => {
-                            console.log('Role updated successfully');
+                            toast.success('Role updated successfully');
                         },
                         onError: () => {
-                            console.error('Failed to update role');
+                            toast.error('Failed to update role');
                         },
                         onFinish: () => {
                             setIsUpdating(false);

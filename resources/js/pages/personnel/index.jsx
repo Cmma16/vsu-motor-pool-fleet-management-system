@@ -26,7 +26,7 @@ export default function PersonnelIndex({ personnel, roles, unverifiedPersonnel }
 
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
-            <Head title="Parts" />
+            <Head title="Personnel" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <Tabs defaultValue="list" className="w-full">
                     <TabsList className="grid w-[400px] grid-cols-2 bg-white">
