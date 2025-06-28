@@ -1,15 +1,9 @@
 import AppLoader from '@/components/display/app-loader';
+import { useInertiaPageLoading } from '@/hooks/use-inertia-page-loading';
 import AppLayoutTemplate from '@/layouts/app/app-sidebar-layout';
-import { Inertia } from '@inertiajs/inertia';
-import { useEffect, useState } from 'react';
 
 export default function AppLayout({ children, breadcrumbs, pageDetails, showQuickActions = true, ...props }) {
-    const [isLoading, setIsLoading] = useState(false);
-
-    useEffect(() => {
-        Inertia.on('start', () => setIsLoading(true));
-        Inertia.on('finish', () => setIsLoading(false));
-    }, []);
+    const isLoading = useInertiaPageLoading();
 
     return (
         <>
