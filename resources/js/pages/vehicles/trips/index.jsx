@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { ScrollArea } from '@/components/ui/scroll-area';
 import AppLayout from '@/layouts/app-layout';
 import { Head, router } from '@inertiajs/react';
+import axios from 'axios';
 import { endOfDay, format, isToday, isTomorrow, isWithinInterval, parseISO, startOfDay } from 'date-fns';
 import { Calendar, Car, Check, Filter, List, Table, X } from 'lucide-react';
 import React from 'react';
@@ -150,6 +151,7 @@ export default function TripsIndex({ trips = [] }) {
     const [uniqueVehicles, setUniqueVehicles] = useState([]);
     const isMobile = useIsMobile();
     const [isAvailabilityOpen, setIsAvailabilityOpen] = useState(false);
+    const [availableVehicles, setAvailableVehicles] = useState(null);
 
     useEffect(() => {
         const savedSearch = localStorage.getItem('searchText');
@@ -205,6 +207,24 @@ export default function TripsIndex({ trips = [] }) {
 
         setFilteredTrips(result);
     }, [selectedVehicles, statusFilter, searchQuery]);
+
+    useEffect(() => {
+        const getAvailableVehicles = async () => {
+            try {
+                const res = await axios.get('/trips/check-availability', {
+                    params: {
+                        start_date: format(new Date(), 'yyyy-MM-dd'),
+                        end_date: format(new Date(), 'yyyy-MM-dd'),
+                    },
+                });
+                setAvailableVehicles(res.data.vehicles);
+            } catch (error) {
+                console.error('Error fetching availability:', error);
+            }
+        };
+
+        getAvailableVehicles();
+    }, []);
 
     // Toggle vehicle selection
     const toggleVehicleSelection = (vehicleId) => {
@@ -351,7 +371,7 @@ export default function TripsIndex({ trips = [] }) {
 
                     <div className="grid gap-4 sm:gap-6">
                         {/* Summary Cards */}
-                        <TripSummaryCard todayTrips={todayTrips} upcomingTrips={upcomingTrips} trips={trips} />
+                        <TripSummaryCard todayTrips={todayTrips} upcomingTrips={upcomingTrips} availableVehicles={availableVehicles || []} />
 
                         {/* Main Content */}
                         <Tabs defaultValue="list" className="w-full">

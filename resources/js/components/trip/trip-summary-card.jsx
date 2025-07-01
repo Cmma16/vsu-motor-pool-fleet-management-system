@@ -1,9 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-export function TripSummaryCard({ todayTrips, upcomingTrips, trips }) {
+export function TripSummaryCard({ todayTrips, upcomingTrips, availableVehicles }) {
     return (
         <div className="md:max-w-auto grid max-w-[100vw] grid-cols-1 gap-4 md:grid-cols-3">
             <Card>
+                {console.log(availableVehicles)}
                 <CardHeader className="pb-2">
                     <CardTitle className="text-sm font-medium">Today's Trips</CardTitle>
                 </CardHeader>
@@ -23,11 +24,11 @@ export function TripSummaryCard({ todayTrips, upcomingTrips, trips }) {
             </Card>
             <Card>
                 <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium">Active Vehicles</CardTitle>
+                    <CardTitle className="text-sm font-medium">Available Vehicles</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <div className="text-2xl font-bold">
-                        {trips.filter((t) => t.status === 'ongoing').length}/{trips.length}
+                        {availableVehicles.filter((v) => !v.isAvailable).length}/{availableVehicles.length}
                     </div>
                     <p className="text-muted-foreground text-xs">Currently in use</p>
                 </CardContent>
