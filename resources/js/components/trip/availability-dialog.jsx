@@ -1,5 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -52,7 +53,7 @@ const AvailabilityDialog = ({ isAvailabilityOpen, setIsAvailabilityOpen }) => {
                 </Button>
             </DialogTrigger>
 
-            <DialogContent className="max-h-[80vh] overflow-y-auto sm:max-w-[600px]">
+            <DialogContent className="max-h-[95vh] overflow-y-auto sm:max-w-[600px]">
                 <DialogHeader>
                     <DialogTitle>Check Driver & Vehicle Availability</DialogTitle>
                 </DialogHeader>
@@ -108,7 +109,7 @@ const AvailabilityDialog = ({ isAvailabilityOpen, setIsAvailabilityOpen }) => {
                                 </TabsList>
 
                                 <TabsContent value="drivers">
-                                    <ScrollArea className="h-[400px] pr-4">
+                                    <ScrollArea className="h-[300px] pr-4">
                                         <div className="space-y-4">
                                             {driverAvailability.map((driver) => (
                                                 <div key={driver.id} className="flex items-start justify-between rounded-lg border bg-white p-4">
@@ -142,16 +143,20 @@ const AvailabilityDialog = ({ isAvailabilityOpen, setIsAvailabilityOpen }) => {
                                                             )}
                                                         </div>
                                                         {!driver.isAvailable && (
-                                                            <div className="text-muted-foreground text-xs">
-                                                                <p className="mb-1 font-medium">Conflicting trips:</p>
-                                                                {driver.conflictingTrips.map((trip, index) => (
-                                                                    <p key={index}>
-                                                                        {trip.trip_number}: {format(parseISO(trip.start_date), 'MMM d')}
-                                                                        {trip.start_date !== trip.end_date &&
-                                                                            ` - ${format(parseISO(trip.end_date), 'MMM d')}`}
-                                                                    </p>
-                                                                ))}
-                                                            </div>
+                                                            <Collapsible>
+                                                                <CollapsibleTrigger className="text-muted-foreground mb-1 cursor-pointer text-xs font-medium underline">
+                                                                    Conflicting trips ({driver.conflictingTrips.length})
+                                                                </CollapsibleTrigger>
+                                                                <CollapsibleContent className="text-muted-foreground mt-1 text-xs">
+                                                                    {driver.conflictingTrips.map((trip, index) => (
+                                                                        <p key={index}>
+                                                                            {trip.trip_number}: {format(parseISO(trip.start_date), 'MMM d')}
+                                                                            {trip.start_date !== trip.end_date &&
+                                                                                ` - ${format(parseISO(trip.end_date), 'MMM d')}`}
+                                                                        </p>
+                                                                    ))}
+                                                                </CollapsibleContent>
+                                                            </Collapsible>
                                                         )}
                                                     </div>
                                                 </div>
@@ -161,7 +166,7 @@ const AvailabilityDialog = ({ isAvailabilityOpen, setIsAvailabilityOpen }) => {
                                 </TabsContent>
 
                                 <TabsContent value="vehicles">
-                                    <ScrollArea className="h-[400px] pr-4">
+                                    <ScrollArea className="h-[300px] pr-4">
                                         <div className="space-y-4">
                                             {vehicleAvailability.map((vehicle) => (
                                                 <div key={vehicle.id} className="flex items-start justify-between rounded-lg border bg-white p-4">
@@ -191,16 +196,20 @@ const AvailabilityDialog = ({ isAvailabilityOpen, setIsAvailabilityOpen }) => {
                                                             )}
                                                         </div>
                                                         {!vehicle.isAvailable && (
-                                                            <div className="text-muted-foreground text-xs">
-                                                                <p className="mb-1 font-medium">Conflicting trips:</p>
-                                                                {vehicle.conflictingTrips.map((trip, index) => (
-                                                                    <p key={index}>
-                                                                        {trip.trip_number}: {format(parseISO(trip.start_date), 'MMM d')}
-                                                                        {trip.start_date !== trip.end_date &&
-                                                                            ` - ${format(parseISO(trip.end_date), 'MMM d')}`}
-                                                                    </p>
-                                                                ))}
-                                                            </div>
+                                                            <Collapsible>
+                                                                <CollapsibleTrigger className="text-muted-foreground mb-1 cursor-pointer text-xs font-medium underline">
+                                                                    Conflicting trips ({vehicle.conflictingTrips.length})
+                                                                </CollapsibleTrigger>
+                                                                <CollapsibleContent className="text-muted-foreground mt-1 text-xs">
+                                                                    {vehicle.conflictingTrips.map((trip, index) => (
+                                                                        <p key={index}>
+                                                                            {trip.trip_number}: {format(parseISO(trip.start_date), 'MMM d')}
+                                                                            {trip.start_date !== trip.end_date &&
+                                                                                ` - ${format(parseISO(trip.end_date), 'MMM d')}`}
+                                                                        </p>
+                                                                    ))}
+                                                                </CollapsibleContent>
+                                                            </Collapsible>
                                                         )}
                                                     </div>
                                                 </div>
