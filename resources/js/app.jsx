@@ -15,9 +15,6 @@ createInertiaApp({
 
         root.render(
             <>
-                {/* <div className="fixed top-0 left-0 z-50 flex h-screen w-screen items-center justify-center bg-white">
-                    <AppLoader />
-                </div> */}
                 <App {...props} />
                 <Toaster position="bottom-center" richColors />
             </>,

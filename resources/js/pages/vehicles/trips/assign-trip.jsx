@@ -41,7 +41,7 @@ export default function AssignTrip({ trip, availableVehicles, availableDrivers }
         end_date: trip.end_date,
         purpose: trip.purpose,
         destination: trip.destination,
-        departure_time: format(parse(trip.departure_time, 'HH:mm:ss', new Date()), 'h:mm'),
+        departure_time: format(parse(trip.departure_time, 'HH:mm:ss', new Date()), 'hh:mm'),
         requesting_party: trip.requesting_party,
         status: trip.status,
 
@@ -142,8 +142,8 @@ export default function AssignTrip({ trip, availableVehicles, availableDrivers }
                             </Select>
                         </div>
                     </CardContent>
-                    <CardFooter className="flex flex-row gap-2">
-                        <Button className="w-full" onClick={handleAssign} disabled={!data.driver_id || !data.vehicle_id || isSubmitting}>
+                    <CardFooter className="flex flex-col gap-2 sm:flex-row">
+                        <Button className="w-full sm:w-1/2" onClick={handleAssign} disabled={!data.driver_id || !data.vehicle_id || isSubmitting}>
                             {isSubmitting ? (
                                 <>
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -154,7 +154,7 @@ export default function AssignTrip({ trip, availableVehicles, availableDrivers }
                             )}
                         </Button>
                         <Button
-                            className="w-full"
+                            className="w-full sm:w-1/2"
                             variant="destructive"
                             onClick={() => handleStatusUpdate(trip.trip_id, 'rejected')}
                             disabled={isSubmitting}

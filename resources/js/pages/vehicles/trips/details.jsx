@@ -148,7 +148,10 @@ export default function TripDetails({ trip }) {
                     <CardFooter className="">
                         <div className="flex w-full flex-col justify-end gap-3 sm:flex-row">
                             {trip.status === 'pending' && (
-                                <Link href={`${trip.trip_id}/edit`} className="rounded-md border-2 border-[#006600] px-6 py-1 hover:bg-gray-100">
+                                <Link
+                                    href={`${trip.trip_id}/edit`}
+                                    className="rounded-md border-2 border-[#006600] px-6 py-1 text-center hover:bg-gray-100"
+                                >
                                     Edit Trip
                                 </Link>
                             )}

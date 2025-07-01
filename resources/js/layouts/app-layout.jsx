@@ -1,9 +1,11 @@
 import AppLoader from '@/components/display/app-loader';
 import { useInertiaPageLoading } from '@/hooks/use-inertia-page-loading';
+import { useIsMobile } from '@/hooks/use-mobile';
 import AppLayoutTemplate from '@/layouts/app/app-sidebar-layout';
 
 export default function AppLayout({ children, breadcrumbs, pageDetails, showQuickActions = true, ...props }) {
-    const isLoading = useInertiaPageLoading();
+    const { isLoading } = useInertiaPageLoading();
+    const isMobile = useIsMobile();
 
     return (
         <>

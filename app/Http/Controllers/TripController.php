@@ -206,7 +206,6 @@ class TripController extends Controller
         ]);
     }
 
-    //currently not working
     public function printTripRecord(Trip $trip) 
     {
         $trip = Trip::with(['vehicle', 'driver', 'passengers', 'tripLog.odometerOut', 'tripLog.odometerIn', 'dispatcher'])->find($trip->trip_id);
@@ -327,6 +326,86 @@ class TripController extends Controller
         $trip->delete();
 
         return redirect()->route('trips.index');
+    }
+
+    public function checkAvailability(Request $request)
+    {
+        $start = $request->query('start_date');
+        $end = $request->query('end_date');
+
+        if (!$start || !$end) {
+            return response()->json(['error' => 'Start and end dates are required.'], 400);
+        }
+
+        // Step 1: Get conflicting trips
+        $conflictingTrips = Trip::where(function ($query) use ($start, $end) {
+            $query->whereBetween('start_date', [$start, $end])
+                ->orWhereBetween('end_date', [$start, $end])
+                ->orWhere(function ($q) use ($start, $end) {
+                    $q->where('start_date', '<=', $start)
+                        ->where('end_date', '>=', $end);
+                });
+        })
+        ->whereIn('status', ['assigned', 'dispatched', 'approved', 'ongoing'])
+        ->select('trip_id', 'trip_number', 'start_date', 'end_date', 'driver_id', 'vehicle_id')
+        ->get();
+
+        // Step 2: Group conflicting trips by driver and vehicle
+        $driverTripMap = $conflictingTrips->groupBy('driver_id');
+        $vehicleTripMap = $conflictingTrips->groupBy('vehicle_id');
+
+        // Step 3: Fetch all vehicles and attach status + conflictingTrips
+        $vehicles = Vehicle::select('vehicle_id as id', 'vehicle_name as name', 'vehicle_type as type', 'plate_number', 'capacity')
+            ->get()
+            ->map(function ($vehicle) use ($vehicleTripMap) {
+                $conflictingTrips = $vehicleTripMap->get($vehicle->id, collect())->map(function ($trip) {
+                    return [
+                        'trip_id' => $trip->trip_id,
+                        'trip_number' => $trip->trip_number,
+                        'start_date' => $trip->start_date,
+                        'end_date' => $trip->end_date,
+                    ];
+                })->values();
+
+                return [
+                    'id' => $vehicle->id,
+                    'name' => $vehicle->name,
+                    'type' => $vehicle->type,
+                    'plate_number' => $vehicle->plate_number,
+                    'capacity' => $vehicle->capacity,
+                    'isAvailable' => $conflictingTrips->isEmpty(),
+                    'conflictingTrips' => $conflictingTrips,
+                ];
+            });
+
+        // Step 4: Fetch all drivers and attach status + conflictingTrips
+        $drivers = User::where('role_id', 3) // Assuming role_id 3 is for drivers
+            ->select('id', 'first_name', 'last_name', 'contact_number')
+            ->get()
+            ->map(function ($driver) use ($driverTripMap) {
+                $conflictingTrips = $driverTripMap->get($driver->id, collect())->map(function ($trip) {
+                    return [
+                        'trip_id' => $trip->trip_id,
+                        'trip_number' => $trip->trip_number,
+                        'start_date' => $trip->start_date,
+                        'end_date' => $trip->end_date,
+                    ];
+                })->values();
+
+                return [
+                    'id' => $driver->id,
+                    'name' => $driver->first_name . ' ' . $driver->last_name,
+                    'contact' => $driver->contact_number,
+                    'avatar' => null,
+                    'isAvailable' => $conflictingTrips->isEmpty(),
+                    'conflictingTrips' => $conflictingTrips,
+                ];
+            });
+
+        return response()->json([
+            'drivers' => $drivers,
+            'vehicles' => $vehicles,
+        ]);
     }
 
 }

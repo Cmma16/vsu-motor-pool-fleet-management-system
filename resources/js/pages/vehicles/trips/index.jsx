@@ -19,6 +19,7 @@ import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 import { DataTable } from '@/components/data-table';
+import AvailabilityDialog from '@/components/trip/availability-dialog';
 import { CurrentDayTripsSection } from '@/components/trip/current-day-trips-section';
 import { SelectedDayTripsSection } from '@/components/trip/selected-day-trips-section';
 import { TripColumn } from '@/components/trip/trip-column';
@@ -148,6 +149,7 @@ export default function TripsIndex({ trips = [] }) {
     const [filteredTrips, setFilteredTrips] = useState(trips);
     const [uniqueVehicles, setUniqueVehicles] = useState([]);
     const isMobile = useIsMobile();
+    const [isAvailabilityOpen, setIsAvailabilityOpen] = useState(false);
 
     useEffect(() => {
         const savedSearch = localStorage.getItem('searchText');
@@ -281,7 +283,7 @@ export default function TripsIndex({ trips = [] }) {
                         <div className="flex w-full flex-wrap items-center gap-2">
                             <Dialog open={isFilterOpen} onOpenChange={setIsFilterOpen}>
                                 <DialogTrigger asChild>
-                                    <Button variant={selectedVehicles.length > 0 ? 'default' : 'outline'} className="w-full sm:w-auto">
+                                    <Button variant={selectedVehicles.length > 0 ? 'default' : 'outline'} className="w-full bg-white sm:w-auto">
                                         <Filter className="mr-2 h-4 w-4" />
                                         Filter
                                         {selectedVehicles.length > 0 && (
@@ -332,6 +334,7 @@ export default function TripsIndex({ trips = [] }) {
                                     </div>
                                 </DialogContent>
                             </Dialog>
+                            <AvailabilityDialog isAvailabilityOpen={isAvailabilityOpen} setIsAvailabilityOpen={setIsAvailabilityOpen} />
                             {user.role.name !== 'Driver' && (
                                 <Button
                                     variant="default"

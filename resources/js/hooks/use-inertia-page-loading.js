@@ -1,4 +1,5 @@
 // resources/js/hooks/use-inertia-page-loading.js
+
 import { Inertia } from '@inertiajs/inertia';
 import { useEffect, useState } from 'react';
 
@@ -8,18 +9,18 @@ let globalSetLoading = () => {};
 export function useInertiaPageLoading() {
     const [isLoading, setIsLoading] = useState(false);
 
-    // Keep reference to local state updater
+    // Expose current setState globally so events update the right instance
     useEffect(() => {
         globalSetLoading = setIsLoading;
     }, []);
 
-    // Add listeners only once
+    // Bind global Inertia listeners once
     useEffect(() => {
         if (hasBoundListeners) return;
-
         hasBoundListeners = true;
 
         Inertia.on('start', () => {
+            if (event.detail.visit.prefetch) return;
             globalSetLoading(true);
         });
 
@@ -28,5 +29,8 @@ export function useInertiaPageLoading() {
         });
     }, []);
 
-    return isLoading;
+    return {
+        isLoading,
+        triggerLoading: () => setIsLoading(true), // for use in manual Link clicks
+    };
 }
