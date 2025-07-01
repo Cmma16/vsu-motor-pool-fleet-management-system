@@ -1,6 +1,5 @@
 import { DataTable } from '@/components/data-table';
 import { PreventiveColumn } from '@/components/preventive/preventive-column';
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
 import { Head, router } from '@inertiajs/react';
 import { InfoIcon, Wrench } from 'lucide-react';
@@ -41,7 +40,6 @@ export default function PreventiveIndex({ preventive }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             <Head title="Prevenitive Maintenance" />
-            {console.log(preventive)}
             <div className="mx-4">
                 <h2 className="mb-2 text-lg font-semibold">Important Information</h2>
                 <div className="mb-2 flex items-start gap-2 rounded-md bg-blue-50 p-4 text-blue-800">
@@ -55,7 +53,7 @@ export default function PreventiveIndex({ preventive }) {
                     <span>Only the Managers and Admin can confirm/verify repair records.</span>
                 </div>
             </div>
-            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
+            <div className="flex h-auto flex-1 flex-col gap-4 rounded-xl p-4">
                 <DataTable
                     columns={PreventiveColumn}
                     data={preventive}
@@ -65,9 +63,6 @@ export default function PreventiveIndex({ preventive }) {
                     filterColumn={'vehicle_name'}
                     placeholder={'Search vehicle name'}
                 />
-                <div className="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border md:min-h-min">
-                    <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
-                </div>
             </div>
         </AppLayout>
     );

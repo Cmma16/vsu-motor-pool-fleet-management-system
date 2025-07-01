@@ -33,7 +33,7 @@ export function CollapsibleNavItems({ item }) {
                             return (
                                 <SidebarMenuSubItem key={child.title}>
                                     <SidebarMenuSubButton asChild isActive={isActiveSubItem}>
-                                        <Link href={child.href} prefetch>
+                                        <Link href={child.href}>
                                             <span>{child.title}</span>
                                         </Link>
                                     </SidebarMenuSubButton>

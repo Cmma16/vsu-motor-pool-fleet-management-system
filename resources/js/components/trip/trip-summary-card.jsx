@@ -28,9 +28,9 @@ export function TripSummaryCard({ todayTrips, upcomingTrips, availableVehicles }
                 </CardHeader>
                 <CardContent>
                     <div className="text-2xl font-bold">
-                        {availableVehicles.filter((v) => !v.isAvailable).length}/{availableVehicles.length}
+                        {availableVehicles.filter((v) => v.isAvailable).length}/{availableVehicles.length}
                     </div>
-                    <p className="text-muted-foreground text-xs">Currently in use</p>
+                    <p className="text-muted-foreground text-xs">Currently not in use</p>
                 </CardContent>
             </Card>
         </div>

@@ -3,7 +3,6 @@ import { PassengerColumn } from '@/components/passenger/passenger-column';
 import { PassengerModal } from '@/components/passenger/passenger-modal';
 import TripForm from '@/components/trip/trip-form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
 import { Head, router, useForm } from '@inertiajs/react';
 import { toast } from 'sonner';
@@ -111,9 +110,6 @@ export default function EditTrip({ vehicles, users, trip }) {
                         />
                     </CardContent>
                 </Card>
-            </div>
-            <div className="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border md:min-h-min">
-                <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
             </div>
         </AppLayout>
     );
