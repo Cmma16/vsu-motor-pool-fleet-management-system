@@ -34,7 +34,6 @@ export default function AddPlan({ vehicles, users }) {
 
     const createPlan = (e) => {
         e.preventDefault();
-        console.log(data);
         post(route('plans.store'), {
             data,
             onSuccess: () => reset(),

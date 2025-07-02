@@ -50,7 +50,6 @@ export default function EditAccomplishment({ users, serviceRequests, serviceAcco
 
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
-            {console.log(serviceAccomplishment)}
             <Head title="Inspections" />
             <div className="mx-6 mb-3 space-y-6 rounded-lg bg-white">
                 <Card className="w-full">

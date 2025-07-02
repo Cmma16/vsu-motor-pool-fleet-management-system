@@ -73,7 +73,7 @@ export default function CreateTripLog({ trip, tripLog }) {
                 <ArrowLeft className="mr-2 h-4 w-4" /> Trip Details
             </Button>
 
-            <div className="grid gap-6 px-4 lg:grid-cols-2">
+            <div className="grid gap-6 px-4 pb-4 lg:grid-cols-2">
                 <TripInfoCard trip={trip} />
 
                 <Card className="shadow-sm">

@@ -40,7 +40,6 @@ export default function Register() {
         e.preventDefault();
         post(route('register'), {
             onSuccess: () => {
-                console.log('Registration successful');
                 toast.success('Registration Successful', {
                     description: 'You can only log in once you verify your email and the admin verifies your registration.',
                 });

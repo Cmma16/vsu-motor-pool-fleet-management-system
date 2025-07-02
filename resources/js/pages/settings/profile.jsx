@@ -47,7 +47,6 @@ export default function Profile({ mustVerifyEmail, status }) {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails} showQuickActions={false}>
-            {console.log(auth)}
             <Head title="Profile settings" />
 
             <SettingsLayout>

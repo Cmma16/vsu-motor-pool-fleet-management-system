@@ -31,7 +31,6 @@ export default function InspectionDetails({ serviceInspection }) {
     };
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
-            {console.log(serviceInspection)}
             <Head title="Inspection Details" />
             <div className="mx-6 mb-3 space-y-6 rounded-lg">
                 <Card className="w-full">

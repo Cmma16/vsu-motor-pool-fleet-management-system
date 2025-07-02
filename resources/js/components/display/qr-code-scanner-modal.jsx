@@ -14,8 +14,8 @@ export function QRCodeScannerModal() {
             console.log({
                 title: 'Scanning QR Code',
                 description: 'Scanning QR Code',
-                decodedText: decodedText,
-                decodedResult: decodedResult,
+                // decodedText: decodedText,
+                // decodedResult: decodedResult,
             });
         }
         setIsLoading(true);

@@ -52,14 +52,12 @@ export default function CreateInspection({ serviceRequest, users, requestId }) {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
-            {console.log(requestId)}
             <Head title="Repairs" />
             <div className="mx-6 mb-3 space-y-6 rounded-lg">
                 <Card className="w-full">
                     <CardHeader>
                         <CardTitle>Service Request Information</CardTitle>
                         <CardDescription>General overview of the request.</CardDescription>
-                        {console.log(serviceRequest)}
                     </CardHeader>
                     <CardContent>
                         <div className="space-y-6">

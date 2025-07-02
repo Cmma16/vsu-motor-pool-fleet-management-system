@@ -285,7 +285,6 @@ export default function TripsIndex({ trips = [] }) {
     });
 
     const startTrip = (id) => {
-        console.log(id);
         router.get(route('trip-logs.create', { id }));
     };
 
@@ -296,7 +295,6 @@ export default function TripsIndex({ trips = [] }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             <Head title="Vehicles" />
-            {console.log(trips)}
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-2 sm:p-4">
                 <div className="container mx-auto py-4 sm:py-6">
                     <div className="mb-4 flex flex-col items-start justify-between gap-4 sm:mb-6">

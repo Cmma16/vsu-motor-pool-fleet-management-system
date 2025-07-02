@@ -91,7 +91,7 @@ export default function RequestsIndex({ serviceRequests }) {
                     <span>Requestors can only edit their own pending requests. Only the Managers and Admin can approve requests.</span>
                 </div>
             </div>
-            <div className="flex h-full w-full max-w-full flex-1 flex-col gap-2 rounded-xl p-2 sm:gap-4 sm:p-4">
+            <div className="flex h-auto w-full max-w-full flex-1 flex-col gap-2 rounded-xl p-2 sm:gap-4 sm:p-4">
                 <div className="w-full max-w-full overflow-x-auto rounded-lg">
                     {isMobile ? (
                         <div className="flex flex-col gap-2 px-1">

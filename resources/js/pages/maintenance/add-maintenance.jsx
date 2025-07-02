@@ -30,7 +30,6 @@ export default function AddMaintenance({ maintenancePlans, vehicles, users, serv
     });
 
     const createMaintenance = (e) => {
-        console.log(data); //delete this
         e.preventDefault();
 
         // Create a shallow copy of data

@@ -39,7 +39,6 @@ export default function PlansIndex({ maintenancePlans }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             <Head title="Plans" />
-            {console.log(maintenancePlans)}
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 {isMobile ? (
                     <div className="flex flex-col gap-2">

@@ -4,7 +4,6 @@ export function TripSummaryCard({ todayTrips, upcomingTrips, availableVehicles }
     return (
         <div className="md:max-w-auto grid max-w-[100vw] grid-cols-1 gap-4 md:grid-cols-3">
             <Card>
-                {console.log(availableVehicles)}
                 <CardHeader className="pb-2">
                     <CardTitle className="text-sm font-medium">Today's Trips</CardTitle>
                 </CardHeader>

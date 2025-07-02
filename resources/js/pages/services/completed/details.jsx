@@ -24,7 +24,6 @@ const pageDetails = {
 export default function InspectionDetails({ serviceAccomplishment }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
-            {console.log(serviceAccomplishment)}
             <Head title="Inspection Details" />
             <div className="mx-6 mb-3 space-y-6 rounded-lg bg-white">
                 <Card className="w-full">

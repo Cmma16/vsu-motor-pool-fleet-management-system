@@ -49,7 +49,6 @@ export default function EditPlan({ maintenancePlan, vehicles, users }) {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
-            {console.log(maintenancePlan)}
             <Head title="Repairs" />
             <div className="mx-6 mb-3 space-y-6 rounded-lg">
                 <Card className="mx-auto w-full md:max-w-xl">

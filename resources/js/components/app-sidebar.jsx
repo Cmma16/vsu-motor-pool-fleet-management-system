@@ -1,8 +1,18 @@
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
+import {
+    Sidebar,
+    SidebarContent,
+    SidebarFooter,
+    SidebarHeader,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
+    useSidebar,
+} from '@/components/ui/sidebar';
 import { Link } from '@inertiajs/react';
 import {
+    Building2,
     ChartColumnBig,
     HandHelpingIcon,
     LayoutGrid,
@@ -116,15 +126,23 @@ const footerNavItems = [
 ];
 
 export function AppSidebar() {
+    const { state } = useSidebar();
+    const isCollapsed = state === 'collapsed';
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <SidebarMenuButton size={null} asChild>
-                            <Link href="/dashboard" prefetch className="flex flex-col items-center">
-                                <AppLogo />
-                            </Link>
+                        <SidebarMenuButton size={null} asChild tooltip="Dashboard">
+                            {isCollapsed ? (
+                                <div className="bg-[#146939]">
+                                    <Building2 />
+                                </div>
+                            ) : (
+                                <Link href="/dashboard" className="flex flex-col items-center">
+                                    <AppLogo />
+                                </Link>
+                            )}
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>

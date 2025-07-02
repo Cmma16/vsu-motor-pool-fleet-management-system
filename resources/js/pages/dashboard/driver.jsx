@@ -75,7 +75,6 @@ export default function Dashboard({
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             <Head title="Dashboard" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4 md:px-6">
-                {console.log(activeVehicle, latestOdometerReading, nextMaintenance)}
                 <div className="flex items-center justify-between space-y-2">
                     <h2 className="text-2xl">Information Relevant to You</h2>
                 </div>
@@ -144,7 +143,6 @@ export default function Dashboard({
                                 </CardHeader>
                                 <CardContent>
                                     <div className="grid gap-3">
-                                        {console.log(myRequests)}
                                         {myRequests ? (
                                             myRequests.map((request) => (
                                                 <div key={request.request_id} className="rounded-lg border p-3">

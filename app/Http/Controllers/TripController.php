@@ -249,7 +249,12 @@ class TripController extends Controller
         ]);
 
         $trip->update(['status' => $request->status]);
-
+        if ($request->status == 'ongoing') {
+            $trip->vehicle->update(['status' => 'in use']);
+        }
+        if ($request->status == 'completed') {
+            $trip->vehicle->update(['status' => 'available']);
+        }
         return redirect()->route('trips.show', $trip->trip_id);
     }
 
@@ -346,7 +351,7 @@ class TripController extends Controller
                         ->where('end_date', '>=', $end);
                 });
         })
-        ->whereIn('status', ['assigned', 'dispatched', 'approved', 'ongoing'])
+        ->whereIn('status', ['assigned', 'approved', 'ongoing'])
         ->select('trip_id', 'trip_number', 'start_date', 'end_date', 'driver_id', 'vehicle_id')
         ->get();
 

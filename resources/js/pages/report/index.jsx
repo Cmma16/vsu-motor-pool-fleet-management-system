@@ -71,7 +71,6 @@ export default function ReportsIndex({ tripData, metrics }) {
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             <Head title="Reports" />
             <div className="flex h-full flex-1 flex-col gap-6 p-6">
-                {console.log(tripData, metrics)}
                 {/* Metrics Cards */}
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                     <MetricsCard title="Total Trips" value={metrics.total_trips} description="Total number of trips completed" icon={MapPin} />

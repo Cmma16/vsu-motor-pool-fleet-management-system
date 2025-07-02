@@ -208,7 +208,7 @@
                         "
                     >
                         <div>
-                            <input type="checkbox" id="vehicle" style="margin-right: 4px; vertical-align: middle; transform: scale(0.75)" />
+                            <input type="checkbox" checked id="vehicle" style="margin-right: 4px; vertical-align: middle; transform: scale(0.75)" />
                             <label for="vehicle" style="font-size: 12px; vertical-align: middle;">
                                 Vehicle Repair
                             </label>

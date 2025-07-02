@@ -20,7 +20,6 @@ export function OperationalDetailsCard({ vehicle, odometer_reading }) {
     return (
         <div className="space-y-6 md:col-span-1">
             <Card className="h-full">
-                {console.log(vehicle, odometer_reading)}
                 <CardHeader className="pb-3">
                     <CardTitle className="text-base">Operational Details</CardTitle>
                 </CardHeader>

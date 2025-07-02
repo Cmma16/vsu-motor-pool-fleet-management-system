@@ -22,7 +22,6 @@ export function RepairPartModal({ repair_id, parts, formType = 'add', repairPart
     }, [repairPart]);
 
     const handleSubmit = () => {
-        console.log(data);
         if (formType === 'edit') {
             put(route('repair-parts.update', repairPart.id), {
                 onSuccess: () => setOpen(false),

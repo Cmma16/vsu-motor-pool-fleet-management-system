@@ -56,7 +56,6 @@ export default function EditTrip({ vehicles, users, trip }) {
 
     const editTrip = (e) => {
         e.preventDefault();
-        console.log(data);
         put(route('trips.update', trip.trip_id), {
             preserveScroll: true,
             onSuccess: () => {

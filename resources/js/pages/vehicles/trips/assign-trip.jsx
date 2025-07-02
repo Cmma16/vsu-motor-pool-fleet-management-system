@@ -52,7 +52,6 @@ export default function AssignTrip({ trip, availableVehicles, availableDrivers }
     const handleAssign = (e) => {
         setIsSubmitting(true);
         e.preventDefault();
-        console.log(data);
         put(route('trips.update', trip.trip_id), {
             // data, // Sends all form data
             // forceFormData: true, // Ensures file uploads and proper formatting

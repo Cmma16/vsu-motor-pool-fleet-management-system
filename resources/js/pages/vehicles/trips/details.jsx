@@ -55,7 +55,7 @@ export default function TripDetails({ trip }) {
                             Start Trip
                         </Button>
                     )}
-                    {trip.status === 'ongoing' && (
+                    {trip.status === 'ongoing' && user.role.name === 'Driver' && (
                         <Button
                             className="border-2 border-[#006600] bg-white text-black hover:bg-[#005500] hover:text-white"
                             onClick={() => router.get(route('trip-logs.end', trip.trip_id))}
@@ -74,7 +74,6 @@ export default function TripDetails({ trip }) {
                         </Button>
                     )}
                 </div>
-                {console.log(trip)}
                 <Card className="flex-1">
                     <CardHeader>
                         <CardTitle>Trip Information</CardTitle>

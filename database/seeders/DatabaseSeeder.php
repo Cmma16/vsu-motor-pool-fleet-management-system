@@ -37,6 +37,7 @@ class DatabaseSeeder extends Seeder
 
         //User::factory(12)->create();
         User::factory()->create([
+            'employee_id' => '20-1-00703',
             'first_name' => 'Carlos Miguel',
             'middle_name' => 'Maniego',
             'last_name' => 'Advincula',
@@ -48,50 +49,50 @@ class DatabaseSeeder extends Seeder
             'role_id' => 1,
             'is_verified' => true,
             'email' => '1cmadvincula@gmail.com',
-            'password' => Hash::make('2fcc3627'),
+            'password' => Hash::make('admin123'),
         ]);
-        User::factory()->create([
-            'first_name' => 'Carlos Gabriel',
-            'middle_name' => 'Maniego',
-            'last_name' => 'Advincula',
-            'contact_number' => '09999788109',
-            'province' => 'Leyte',
-            'city' => 'Tolosa',
-            'barangay' => 'Opong',
-            'address_details' => '',
-            'role_id' => 4,
-            'is_verified' => true,
-            'email' => 'test@gmail.com',
-            'password' => Hash::make('password'),
-        ]);
-        User::factory()->create([
-            'first_name' => 'Juan',
-            'middle_name' => '',
-            'last_name' => 'Dela Cruz',
-            'contact_number' => '09123456789',
-            'province' => 'Leyte',
-            'city' => 'Tolosa',
-            'barangay' => 'Poblacion',
-            'address_details' => '',
-            'role_id' => 3,
-            'is_verified' => true,
-            'email' => 'juandelacruz@test.com',
-            'password' => Hash::make('password'),
-        ]);
-        User::factory()->create([
-            'first_name' => 'Mike',
-            'middle_name' => '',
-            'last_name' => 'Manager',
-            'contact_number' => '09123456789',
-            'province' => 'Kahit Saan',
-            'city' => 'Dimakita',
-            'barangay' => 'Bulalacao',
-            'address_details' => '',
-            'role_id' => 2,
-            'is_verified' => true,
-            'email' => 'mikemanager@test.com',
-            'password' => Hash::make('password'),
-        ]);
+        // User::factory()->create([
+        //     'first_name' => 'Carlos Gabriel',
+        //     'middle_name' => 'Maniego',
+        //     'last_name' => 'Advincula',
+        //     'contact_number' => '09999788109',
+        //     'province' => 'Leyte',
+        //     'city' => 'Tolosa',
+        //     'barangay' => 'Opong',
+        //     'address_details' => '',
+        //     'role_id' => 4,
+        //     'is_verified' => true,
+        //     'email' => 'test@gmail.com',
+        //     'password' => Hash::make('password'),
+        // ]);
+        // User::factory()->create([
+        //     'first_name' => 'Juan',
+        //     'middle_name' => '',
+        //     'last_name' => 'Dela Cruz',
+        //     'contact_number' => '09123456789',
+        //     'province' => 'Leyte',
+        //     'city' => 'Tolosa',
+        //     'barangay' => 'Poblacion',
+        //     'address_details' => '',
+        //     'role_id' => 3,
+        //     'is_verified' => true,
+        //     'email' => 'juandelacruz@test.com',
+        //     'password' => Hash::make('password'),
+        // ]);
+        // User::factory()->create([
+        //     'first_name' => 'Mike',
+        //     'middle_name' => '',
+        //     'last_name' => 'Manager',
+        //     'contact_number' => '09123456789',
+        //     'province' => 'Kahit Saan',
+        //     'city' => 'Dimakita',
+        //     'barangay' => 'Bulalacao',
+        //     'address_details' => '',
+        //     'role_id' => 2,
+        //     'is_verified' => true,
+        //     'email' => 'mikemanager@test.com',
+        //     'password' => Hash::make('password'),
+        // ]);
 
         // Vehicle::factory(5)->create();
         // MaintenancePlan::factory(3)->create();

@@ -34,7 +34,6 @@ export default function InspectionsIndex({ serviceInspections }) {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
-            {console.log(serviceInspections)}
             <Head title="Service Request Inspections" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <DataTable

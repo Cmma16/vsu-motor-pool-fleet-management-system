@@ -36,7 +36,6 @@ export default function EditInspection({ users, serviceRequests, serviceInspecti
 
     const updateInspection = (e) => {
         e.preventDefault();
-        console.log(data);
         put(route('request-inspections.update', serviceInspection.inspection_id), {
             // data, // Sends all form data
             // forceFormData: true, // Ensures file uploads and proper formatting
@@ -52,7 +51,6 @@ export default function EditInspection({ users, serviceRequests, serviceInspecti
 
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
-            {console.log(serviceInspection)}
             <Head title="Inspections" />
             <div className="mx-6 mb-3 space-y-6 rounded-lg bg-white">
                 <Card className="w-full">

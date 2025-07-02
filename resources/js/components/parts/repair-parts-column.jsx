@@ -17,7 +17,6 @@ export const RepairPartsColumn = (showActions, handleEdit, handleDelete) => [
     columnHelper.accessor('part_name', {
         header: ({ column }) => (
             <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-                {console.log(showActions)}
                 Part Name
                 <ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>

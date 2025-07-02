@@ -53,8 +53,6 @@ export default function EditMaintenance({ maintenance, odometerLogs, vehicles })
 
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
-            {/* delete this */}
-            {/* {console.log(maintenance)} */}
             <Head title="Maintenance" />
             <div className="mx-6 mb-3 space-y-6 rounded-lg bg-white">
                 <Card className="w-full">

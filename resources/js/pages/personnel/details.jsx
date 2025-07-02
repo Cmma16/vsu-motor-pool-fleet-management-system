@@ -26,7 +26,6 @@ export default function details({ personnel }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             <Head title="Personnel Details" />
-            {console.log(personnel)}
             <div className="mx-6 mb-3 space-y-6 rounded-lg bg-white">
                 <Card className="w-full">
                     <CardHeader>
