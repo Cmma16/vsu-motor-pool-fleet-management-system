@@ -81,6 +81,7 @@ export default function TripForm({ formData, setData, onSubmit, processing, erro
                         name="end_date"
                         type="date"
                         className="mb-2 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500"
+                        min={formData.start_date}
                         value={formData.end_date}
                         onChange={(e) => setData('end_date', e.target.value)}
                         disabled={processing}

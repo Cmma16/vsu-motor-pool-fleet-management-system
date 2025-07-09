@@ -23,10 +23,12 @@ class Trip extends Model
         'purpose',
         'departure_time',
         'requesting_party',
+        'requestor_id',
         'vehicle_id',
         'driver_id',
         'dispatcher_id',
         'status',
+        'remarks'
     ];
 
     public function vehicle()
@@ -42,6 +44,11 @@ class Trip extends Model
     public function dispatcher()
     {
         return $this->belongsTo(User::class, 'dispatcher_id');
+    }
+
+    public function requestor()
+    {
+        return $this->belongsTo(User::class, 'requestor_id');
     }
 
     public function passengers()

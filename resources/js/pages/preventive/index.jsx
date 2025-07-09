@@ -17,6 +17,15 @@ const pageDetails = {
     description: 'Manage your records efficiently here.',
 };
 
+const categoryFilters = {
+    categoryTitle: 'confirmation status',
+    filteredColumn: 'confirmed_by',
+    filterOptions: [
+        { key: 0, value: 'confirmed', label: 'Confirmed' },
+        { key: 1, value: 'unconfirmed', label: 'Unconfirmed' },
+    ],
+};
+
 export default function PreventiveIndex({ preventive }) {
     const deletePreventive = (id) => {
         router.delete(route('preventive.destroy', { id }), {
@@ -62,6 +71,7 @@ export default function PreventiveIndex({ preventive }) {
                     handleDelete={deletePreventive}
                     filterColumn={'vehicle_name'}
                     placeholder={'Search vehicle name'}
+                    categoryFilters={categoryFilters}
                 />
             </div>
         </AppLayout>

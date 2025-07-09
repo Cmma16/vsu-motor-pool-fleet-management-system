@@ -33,6 +33,8 @@ class DashboardController extends Controller
                 return $this->getMechanicDashboard();
             case 'Manager':
                 return $this->getManagerDashboard();
+            case 'Requestor':
+                 return redirect()->route('trips.index');
             }
         }
     }

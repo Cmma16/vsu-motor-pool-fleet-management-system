@@ -57,6 +57,16 @@ export const MaintenanceColumn = (handleView, handleEdit, handleDelete) => [
     }),
     columnHelper.accessor('confirmed_by', {
         header: () => <div className="text-left">Confirmation</div>,
+        filterFn: (row, columnId, filterValue) => {
+            const value = row.getValue(columnId);
+            if (filterValue === 'confirmed') {
+                return value !== '';
+            }
+            if (filterValue === 'unconfirmed') {
+                return value === '';
+            }
+            return true; // default fallback
+        },
         cell: (info) => (
             <div className="text-left">
                 {info.getValue() ? <Badge variant="primary">Confirmed</Badge> : <Badge variant="secondary">Unconfirmed</Badge>}

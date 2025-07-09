@@ -19,6 +19,17 @@ const pageDetails = {
     description: 'Manage maintenance plans here.',
 };
 
+const categoryFilters = {
+    categoryTitle: 'Status',
+    filteredColumn: 'status',
+    filterOptions: [
+        { key: 0, value: 'pending', label: 'Pending' },
+        { key: 1, value: 'scheduled', label: 'Scheduled' },
+        { key: 2, value: 'completed', label: 'Completed' },
+        { key: 3, value: 'cancelled', label: 'Cancelled' },
+    ],
+};
+
 export default function PlansIndex({ maintenancePlans }) {
     const user = usePage().props.auth.user;
     const isMobile = useIsMobile();
@@ -63,6 +74,7 @@ export default function PlansIndex({ maintenancePlans }) {
                         handleDelete={user.role.name === 'Admin' ? deletePlan : null}
                         filterColumn={'vehicle_name'}
                         placeholder={'Search plan by vehicle name'}
+                        categoryFilters={categoryFilters}
                     />
                 )}
             </div>

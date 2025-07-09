@@ -19,8 +19,7 @@ export function DataTable({
     handleDelete,
     filterColumn,
     placeholder,
-    filterOptions,
-    filterColumnName,
+    categoryFilters,
     handleStatusUpdate,
 }) {
     const [sorting, setSorting] = React.useState([]);
@@ -62,8 +61,7 @@ export function DataTable({
                 handleCreate={handleCreate}
                 filterColumn={filterColumn}
                 placeholder={placeholder}
-                filterOptions={filterOptions}
-                filterColumnName={filterColumnName}
+                categoryFilters={categoryFilters}
             />
             <div className="rounded-md border bg-white">
                 <Table>

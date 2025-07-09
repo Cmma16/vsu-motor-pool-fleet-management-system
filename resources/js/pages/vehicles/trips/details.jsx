@@ -1,13 +1,15 @@
 import { DisplayTable } from '@/components/display-table';
 import { PassengerViewOnlyColumn } from '@/components/passenger/passenger-view-only-column';
+import RemarksModal from '@/components/trip/remarks-modal';
 import TripLogDetails from '@/components/trip/trip-log-details';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/app-layout';
-import { Head, Link, router, usePage } from '@inertiajs/react';
+import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
 import { format, parse } from 'date-fns';
 import { ArrowLeft, FileText } from 'lucide-react';
+import { toast } from 'sonner';
 
 // import { Button } from 'react-day-picker';
 
@@ -40,9 +42,32 @@ export default function TripDetails({ trip }) {
     // Format the departure time to 12-hour format
     const formattedTime = trip.departure_time ? format(parse(trip.departure_time, 'HH:mm:ss', new Date()), 'h:mm a') : '';
     const user = usePage().props.auth.user;
+    const { data, setData, put, processing, errors, reset } = useForm({
+        remarks: trip.remarks,
+    });
+
+    const updateRemarks = (id) => {
+        console.log(data);
+        router.patch(
+            route('trips.updateRemarks', id),
+            {
+                remarks: data.remarks,
+            },
+            {
+                preserveScroll: true,
+                onSuccess: () => {
+                    toast.info('Remarks updated successfully');
+                },
+                onError: () => {
+                    toast.error('Failed to update remarks');
+                },
+            },
+        );
+    };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
+            {console.log(data)}
             <Head title="Trip Details" />
             <div className="mx-6 mb-3 space-y-6 rounded-lg">
                 <div className="flex justify-between">
@@ -64,7 +89,7 @@ export default function TripDetails({ trip }) {
                             End Trip
                         </Button>
                     )}
-                    {trip.status === 'completed' && (
+                    {trip.status === 'completed' && user.role.name !== 'Requestor' && (
                         <Button
                             className="border-2 border-[#006600] bg-white text-black hover:bg-[#005500] hover:text-white"
                             onClick={() => window.open(`/trips/${trip.trip_id}/pdf`, '_blank')}
@@ -140,13 +165,19 @@ export default function TripDetails({ trip }) {
                                     <p className="font-medium">Status</p>
                                     <p className="text-muted-foreground">{trip.status}</p>
                                 </div>
+                                {trip.remarks && (
+                                    <div className="flex flex-col space-y-2">
+                                        <strong>Remarks:</strong>
+                                        <p>{trip.remarks}</p>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </CardContent>
                     <Separator className="my-2" />
                     <CardFooter className="">
                         <div className="flex w-full flex-col justify-end gap-3 sm:flex-row">
-                            {trip.status === 'pending' && (
+                            {trip.status === 'pending' && trip.requestor_id === user.id && (
                                 <Link
                                     href={`${trip.trip_id}/edit`}
                                     className="rounded-md border-2 border-[#006600] px-6 py-1 text-center hover:bg-gray-100"
@@ -154,7 +185,7 @@ export default function TripDetails({ trip }) {
                                     Edit Trip
                                 </Link>
                             )}
-                            {trip.status === 'pending' && (
+                            {trip.status === 'pending' && (user.role.name === 'Manager' || user.role.name === 'Admin') && (
                                 <Button
                                     className="rounded-md bg-[#006600] px-6 py-2 text-center text-white hover:bg-[#005500]"
                                     onClick={() => {
@@ -164,6 +195,17 @@ export default function TripDetails({ trip }) {
                                     Assign
                                 </Button>
                             )}
+                            {(trip.status === 'assigned' || trip.status === 'rejected') &&
+                                (user.role.name === 'Manager' || user.role.name === 'Admin') && (
+                                    <RemarksModal
+                                        title={'Update Trip Remarks'}
+                                        buttonLabel={'Update Remarks'}
+                                        action={() => updateRemarks(trip.trip_id)}
+                                        data={data}
+                                        setData={setData}
+                                        actionType={'Update'}
+                                    />
+                                )}
                         </div>
                     </CardFooter>
                 </Card>

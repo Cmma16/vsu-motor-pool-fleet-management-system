@@ -55,7 +55,7 @@ export const PlansColumn = (handleView, handleEdit, handleDelete) => [
         cell: (info) => <div className="text-left">{info.getValue()}</div>,
     }),
     columnHelper.accessor('scheduled_date', {
-        header: () => (
+        header: ({ column }) => (
             <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
                 Scheduled date
                 <ArrowUpDown className="ml-2 h-4 w-4" />

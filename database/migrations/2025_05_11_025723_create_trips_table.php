@@ -21,10 +21,12 @@ return new class extends Migration
            $table->string('purpose');
            $table->time('departure_time');
            $table->string('requesting_party');
+           $table->foreignId('requestor_id')->nullable()->constrained('vehicles', 'vehicle_id')->onDelete('set null');
            $table->foreignId('vehicle_id')->nullable()->constrained('vehicles', 'vehicle_id')->onDelete('set null');
            $table->foreignId('driver_id')->nullable()->constrained('users', 'id')->onDelete('set null');
            $table->foreignId('dispatcher_id')->nullable()->constrained('users', 'id')->onDelete('set null');
            $table->enum('status', ['pending', 'rejected', 'assigned', 'ongoing', 'completed', 'cancelled']);
+           $table->text('remarks')->nullable();
            $table->timestamps();
         });
     }

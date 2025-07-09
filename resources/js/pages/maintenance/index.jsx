@@ -19,6 +19,15 @@ const pageDetails = {
     description: 'View and manage maintenance records here.',
 };
 
+const categoryFilters = {
+    categoryTitle: 'confirmation status',
+    filteredColumn: 'confirmed_by',
+    filterOptions: [
+        { key: 0, value: 'confirmed', label: 'Confirmed' },
+        { key: 1, value: 'unconfirmed', label: 'Unconfirmed' },
+    ],
+};
+
 export default function MaintenanceIndex({ maintenanceRecords }) {
     const deleteMaintenance = (id) => {
         router.delete(route('maintenance.destroy', { id }), {
@@ -64,6 +73,7 @@ export default function MaintenanceIndex({ maintenanceRecords }) {
                     handleDelete={deleteMaintenance}
                     filterColumn={'vehicle_name'}
                     placeholder={'Search vehicle name'}
+                    categoryFilters={categoryFilters}
                 />
             </div>
         </AppLayout>

@@ -27,13 +27,14 @@ export default function Profile({ mustVerifyEmail, status }) {
 
     const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
         first_name: auth.user.first_name,
-        middle_name: auth.user.middle_name,
+        middle_name: auth.user.middle_name || '',
         last_name: auth.user.last_name,
-        contact_number: auth.user.contact_number,
-        address_details: auth.user.address_details,
-        province: auth.user.province,
-        city: auth.user.city,
-        barangay: auth.user.barangay,
+        name_extension: auth.user.name_extension || '',
+        contact_number: auth.user.contact_number || '',
+        address_details: auth.user.address_details || '',
+        province: auth.user.province || '',
+        city: auth.user.city || '',
+        barangay: auth.user.barangay || '',
         email: auth.user.email,
     });
 
@@ -103,7 +104,25 @@ export default function Profile({ mustVerifyEmail, status }) {
                         </div>
 
                         <div className="grid gap-2">
-                            <Label htmlFor="contact_number">Contact Number</Label>
+                            <Label htmlFor="name_extension">Name extension(Optional)</Label>
+
+                            <Input
+                                id="name_extension"
+                                className="mt-1 block w-full"
+                                value={data.name_extension}
+                                onChange={(e) => setData('name_extension', e.target.value)}
+                                required
+                                autoComplete="name extension"
+                                placeholder="Name extension"
+                            />
+
+                            <InputError className="mt-2" message={errors.name_extension} />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="contact_number">
+                                Contact Number {!data.contact_number && <span className="text-red-500">* Please fill this field</span>}
+                            </Label>
                             <Input
                                 id="contact_number"
                                 className="mt-1 block w-full"
@@ -117,7 +136,9 @@ export default function Profile({ mustVerifyEmail, status }) {
                         </div>
 
                         <div className="grid gap-2">
-                            <Label htmlFor="province">Province</Label>
+                            <Label htmlFor="province">
+                                Province {!data.province && <span className="text-red-500">* Please fill this field</span>}
+                            </Label>
                             <Input
                                 id="province"
                                 className="mt-1 block w-full"
@@ -131,7 +152,9 @@ export default function Profile({ mustVerifyEmail, status }) {
                         </div>
 
                         <div className="grid gap-2">
-                            <Label htmlFor="city">City/Municipality/Town</Label>
+                            <Label htmlFor="city">
+                                City/Municipality/Town {!data.city && <span className="text-red-500">* Please fill this field</span>}
+                            </Label>
                             <Input
                                 id="city"
                                 className="mt-1 block w-full"
@@ -145,7 +168,9 @@ export default function Profile({ mustVerifyEmail, status }) {
                         </div>
 
                         <div className="grid gap-2">
-                            <Label htmlFor="barangay">Barangay</Label>
+                            <Label htmlFor="barangay">
+                                Barangay {!data.barangay && <span className="text-red-500">* Please fill this field</span>}
+                            </Label>
                             <Input
                                 id="barangay"
                                 className="mt-1 block w-full"

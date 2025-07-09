@@ -14,8 +14,9 @@ class PersonnelController extends Controller
      */
     public function index()
     {
-        $roles = UserRole::select('role_id', 'name')->get();
+        $roles = UserRole::whereNot('name', 'Admin')->select('role_id', 'name')->get();
         $personnel = User::where('is_verified', 1)
+            ->whereNot('role_id', 1)
             ->orderBy('created_at', 'desc')
             ->get()
             ->map(function ($personnel) {
@@ -30,6 +31,7 @@ class PersonnelController extends Controller
             });
 
         $unverifiedPersonnel = User::where('is_verified', 0)
+            ->whereNotNull('password')
             ->get()
             ->map(function ($personnel) {
                 return [

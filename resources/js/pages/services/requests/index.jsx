@@ -22,6 +22,16 @@ const pageDetails = {
     description: 'Manage your service requests',
 };
 
+const categoryFilters = {
+    categoryTitle: 'service type',
+    filteredColumn: 'service_type',
+    filterOptions: [
+        { key: 0, value: 'preventive', label: 'Preventive' },
+        { key: 1, value: 'maintenance', label: 'Maintenance' },
+        { key: 2, value: 'repair', label: 'Repair' },
+    ],
+};
+
 export default function RequestsIndex({ serviceRequests }) {
     const user = usePage().props.auth.user;
     const isMobile = useIsMobile();
@@ -121,6 +131,7 @@ export default function RequestsIndex({ serviceRequests }) {
                             handleStatusUpdate={handleStatusUpdate}
                             filterColumn={'vehicle_name'}
                             placeholder={'Search vehicle name'}
+                            categoryFilters={categoryFilters}
                         />
                     )}
                 </div>

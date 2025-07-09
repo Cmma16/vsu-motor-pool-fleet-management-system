@@ -1,9 +1,56 @@
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { createColumnHelper } from '@tanstack/react-table';
 import { ArrowUpDown, MoreHorizontal, NotepadText, Pencil, TrashIcon } from 'lucide-react';
 
 const columnHelper = createColumnHelper();
+function getStatusBadge(status) {
+    switch (status) {
+        case 'pending':
+            return (
+                <Badge variant="outline" className="bg-gray-100">
+                    Pending
+                </Badge>
+            );
+        case 'assigned':
+            return (
+                <Badge variant="default" className="bg-green-500">
+                    Assigned
+                </Badge>
+            );
+        case 'rejected':
+            return (
+                <Badge variant="default" className="bg-red-500">
+                    Rejected
+                </Badge>
+            );
+        case 'ongoing':
+            return (
+                <Badge variant="default" className="bg-yellow-500">
+                    Ongoing
+                </Badge>
+            );
+        case 'completed':
+            return (
+                <Badge variant="secondary" className="bg-gray-500">
+                    Completed
+                </Badge>
+            );
+        case 'cancelled':
+            return (
+                <Badge variant="destructive" className="bg-rose-800">
+                    Cancelled
+                </Badge>
+            );
+        default:
+            return (
+                <Badge variant="outline" className="bg-gray-200">
+                    {status}
+                </Badge>
+            );
+    }
+}
 
 export const TripColumn = (handleView, handleEdit, handleDelete) => [
     {
@@ -29,12 +76,22 @@ export const TripColumn = (handleView, handleEdit, handleDelete) => [
         },
         {
             id: 'trip_dates',
-            header: () => <div className="text-left">Trip Dates</div>,
+            header: ({ column }) => (
+                <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+                    Trip dates
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            ),
             cell: (info) => <div className="text-left">{info.getValue()}</div>,
         },
     ),
     columnHelper.accessor('date_filed', {
-        header: () => <div className="text-left">Date filed</div>,
+        header: ({ column }) => (
+            <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+                Trip filed
+                <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+        ),
         cell: (info) => <div className="text-left">{info.getValue()}</div>,
     }),
     columnHelper.accessor('vehicle.vehicle_name', {
@@ -54,12 +111,17 @@ export const TripColumn = (handleView, handleEdit, handleDelete) => [
         },
     }),
     columnHelper.accessor('driver_name', {
-        header: () => <div className="text-left">Driver name</div>,
+        header: ({ column }) => (
+            <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+                Driver
+                <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+        ),
         cell: (info) => <div className="text-left">{info.getValue()}</div>,
     }),
     columnHelper.accessor('status', {
         header: () => <div className="text-left">Status</div>,
-        cell: (info) => <div className="text-left">{info.getValue()}</div>,
+        cell: (info) => <div className="text-left">{getStatusBadge(info.getValue())}</div>,
     }),
     {
         id: 'actions',

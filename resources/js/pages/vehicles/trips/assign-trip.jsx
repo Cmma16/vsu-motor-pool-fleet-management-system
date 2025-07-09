@@ -1,3 +1,4 @@
+import RemarksModal from '@/components/trip/remarks-modal';
 import TripInfoCard from '@/components/trip/trip-info-card';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -47,6 +48,7 @@ export default function AssignTrip({ trip, availableVehicles, availableDrivers }
 
         driver_id: '',
         vehicle_id: '',
+        remarks: '',
     });
 
     const handleAssign = (e) => {
@@ -70,10 +72,12 @@ export default function AssignTrip({ trip, availableVehicles, availableDrivers }
     };
 
     const handleStatusUpdate = (id, status) => {
+        console.log(data);
         router.patch(
             route('trips.updateStatus', id),
             {
                 status: status,
+                remarks: data.remarks,
             },
             {
                 preserveScroll: true,
@@ -152,21 +156,14 @@ export default function AssignTrip({ trip, availableVehicles, availableDrivers }
                                 'Confirm Assignment'
                             )}
                         </Button>
-                        <Button
-                            className="w-full sm:w-1/2"
-                            variant="destructive"
-                            onClick={() => handleStatusUpdate(trip.trip_id, 'rejected')}
-                            disabled={isSubmitting}
-                        >
-                            {isSubmitting ? (
-                                <>
-                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    Rejecting...
-                                </>
-                            ) : (
-                                'Reject Trip'
-                            )}
-                        </Button>
+                        <RemarksModal
+                            title={'Trip Request'}
+                            buttonLabel={'Reject'}
+                            action={() => handleStatusUpdate(trip.trip_id, 'rejected')}
+                            data={data}
+                            setData={setData}
+                            actionType={'rejected'}
+                        />
                     </CardFooter>
                 </Card>
                 {error && <p className="text-red-500">{error}</p>}

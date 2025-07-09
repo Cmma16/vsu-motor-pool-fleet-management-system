@@ -10,8 +10,7 @@ export function DataTableActions({
     handleCreate = null,
     filterColumn,
     placeholder,
-    filterOptions = null, // Array of { value: string, label: string }
-    filterColumnName = 'status', // Column name for the filter
+    categoryFilters = null, // Array of { value: string, label: string }
 }) {
     const isFiltered = table.getState().columnFilters.length > 0;
 
@@ -35,18 +34,17 @@ export function DataTableActions({
                     className="max-w-xs bg-white"
                 />
             )}
-            {filterOptions && (
+            {categoryFilters && (
                 <Select
-                    value={table.getColumn(filterColumnName)?.getFilterValue() ?? ''}
-                    onValueChange={(value) => table.getColumn(filterColumnName)?.setFilterValue(value)}
+                    value={table.getColumn(categoryFilters.filteredColumn)?.getFilterValue() ?? ''}
+                    onValueChange={(value) => table.getColumn(categoryFilters.filteredColumn)?.setFilterValue(String(value))}
                 >
-                    <SelectTrigger className="w-[180px]">
-                        <SelectValue placeholder="Filter by status" />
+                    <SelectTrigger className="w-md bg-white">
+                        <SelectValue placeholder={`Filter by ${categoryFilters.categoryTitle}`} />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="">All</SelectItem>
-                        {filterOptions.map((option) => (
-                            <SelectItem key={option.value} value={option.value}>
+                        {categoryFilters.filterOptions.map((option) => (
+                            <SelectItem key={option.key} value={String(option.value)}>
                                 {option.label}
                             </SelectItem>
                         ))}

@@ -20,8 +20,7 @@ export function PersonnelTable({
     roles,
     filterColumn,
     placeholder,
-    filterOptions,
-    filterColumnName,
+    categoryFilters,
 }) {
     const [sorting, setSorting] = React.useState([]);
     const [columnFilters, setColumnFilters] = React.useState([]);
@@ -59,8 +58,7 @@ export function PersonnelTable({
                 handleCreate={handleCreate}
                 filterColumn={filterColumn}
                 placeholder={placeholder}
-                filterOptions={filterOptions}
-                filterColumnName={filterColumnName}
+                categoryFilters={categoryFilters}
             />
             <div className="rounded-md border bg-white">
                 <Table>

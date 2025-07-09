@@ -24,10 +24,15 @@ class TripController extends Controller
         $user = auth()->user();
         
         $query = Trip::with(['vehicle', 'driver']);
+        $myRequests = [];
         
         // If user is a driver (role_id 3), only show their assigned trips
         if ($user->role->name === 'Driver') {
             $query->where('driver_id', $user->id);
+        }
+
+        if ($user->role->name === 'Requestor') {
+            $query->whereIn('status', ['pending', 'assigned', 'ongoing']);
         }
         
         $trips = $query->orderBy('created_at', 'desc')->get()
@@ -42,6 +47,7 @@ class TripController extends Controller
                     'purpose' => $trip->purpose,
                     'departure_time' => $trip->departure_time,
                     'requesting_party' => $trip->requesting_party,
+                    'requestor_id' => $trip->requestor_id,
                     'plate_number' => $trip->vehicle->plate_number ?? 'N/A',
                     'driver_name' => $trip->driver ? $trip->driver->first_name . ' ' . $trip->driver->last_name : '',
                     'status' => $trip->status,
@@ -52,6 +58,41 @@ class TripController extends Controller
 
         return Inertia::render('vehicles/trips/index', [
             'trips' => $trips,
+        ]);
+    }
+    /**
+     * Display a listing of the requested trips by the current users.
+     */
+    public function myRequests()
+    {
+        $user = auth()->user();
+        // Fetch trips where the user is the requesting party
+        $myRequests = Trip::with(['vehicle', 'driver'])
+            ->where('requestor_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($trip) {
+                return [
+                    'trip_id' => $trip->trip_id,
+                    'trip_number' => $trip->trip_number,
+                    'date_filed' => $trip->date_filed,
+                    'start_date' => $trip->start_date,
+                    'end_date' => $trip->end_date,
+                    'destination' => $trip->destination,
+                    'purpose' => $trip->purpose,
+                    'departure_time' => $trip->departure_time,
+                    'requesting_party' => $trip->requesting_party,
+                    'requestor_id' => $trip->requestor_id,
+                    'plate_number' => $trip->vehicle->plate_number ?? 'N/A',
+                    'driver_name' => $trip->driver ? $trip->driver->first_name . ' ' . $trip->driver->last_name : '',
+                    'status' => $trip->status,
+                    'vehicle' => $trip->vehicle ?? '',
+                    'updated_at' => $trip->updated_at,
+                ];
+            });
+
+        return Inertia::render('vehicles/trips/my-requests', [
+            'myRequests' => $myRequests,
         ]);
     }
 
@@ -83,7 +124,7 @@ class TripController extends Controller
         $passengers = $request->input('passengers', []);
 
         $validatedData['status'] = 'pending';
-        $validatedData['dispatcher_id'] = $user->id;
+        $validatedData['requestor_id'] = $user->id;
         
         // Use DB transaction to ensure data consistency
         DB::transaction(function () use ($validatedData, $passengers) {
@@ -115,11 +156,13 @@ class TripController extends Controller
                 'destination' => $trip->destination,
                 'departure_time' => $trip->departure_time,
                 'requesting_party' => $trip->requesting_party,
+                'requestor_id' => $trip->requestor_id,
                 'vehicle' => $trip->vehicle ? [
                     'name' => $trip->vehicle->vehicle_name,
                 ] : null,
                 'driver_name' => $trip->driver ? $trip->driver->first_name . ' ' . $trip->driver->last_name : '',
                 'status' => $trip->status,
+                'remarks' => $trip->remarks,
                 'passengers' => $trip->passengers->map(function ($passenger) use ($trip) {
                     return [
                         'id' => $passenger->id,
@@ -248,12 +291,18 @@ class TripController extends Controller
             'status' => 'required|string|in:pending,rejected,assigned,received,ongoing,completed,cancelled',
         ]);
 
-        $trip->update(['status' => $request->status]);
-        if ($request->status == 'ongoing') {
+        $trip->update([
+            'status' => $request->status,
+            'remarks' => $request->remarks,
+        ]);
+
+        if ($request->status === 'ongoing' && $trip->vehicle) {
             $trip->vehicle->update(['status' => 'in use']);
         }
-        if ($request->status == 'completed') {
-            $trip->vehicle->update(['status' => 'available']);
+        if (in_array($request->status, ['completed', 'cancelled'])) {
+            if ($trip->vehicle) {
+                $trip->vehicle->update(['status' => 'available']);
+            }
         }
         return redirect()->route('trips.show', $trip->trip_id);
     }
@@ -302,11 +351,13 @@ class TripController extends Controller
      */
     public function update(UpdateTripRequest $request, Trip $trip)
     {
+        $user = auth()->user();
         $validatedData = $request->validated();
         
         // If vehicle and driver are being assigned, update status to 'assigned'
         if (isset($validatedData['vehicle_id']) && isset($validatedData['driver_id'])) {
             $validatedData['status'] = 'assigned';
+            $validatedData['dispatcher_id'] = $user->id;
             Notification::create([
                 'user_id' => $validatedData['driver_id'],
                 'title' => 'Trip Assigned',
@@ -411,6 +462,16 @@ class TripController extends Controller
             'drivers' => $drivers,
             'vehicles' => $vehicles,
         ]);
+    }
+
+    public function updateRemarks(Request $request, Trip $trip)
+    {
+        $request->validate([
+            'remarks' => 'required|string|max:1000',
+        ]);
+        
+        $trip->update(['remarks' => $request->remarks]);
+
     }
 
 }

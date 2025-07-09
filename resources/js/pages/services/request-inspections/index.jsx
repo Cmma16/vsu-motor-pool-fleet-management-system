@@ -17,6 +17,15 @@ const pageDetails = {
     description: 'Inspections done to confirm issue validity and determine the service requirements.',
 };
 
+const categoryFilters = {
+    categoryTitle: 'confirmation status',
+    filteredColumn: 'confirmed_by',
+    filterOptions: [
+        { key: 0, value: 'confirmed', label: 'Confirmed' },
+        { key: 1, value: 'unconfirmed', label: 'Unconfirmed' },
+    ],
+};
+
 export default function InspectionsIndex({ serviceInspections }) {
     const deleteInspection = (id) => {
         if (confirm('Are you sure?')) {
@@ -45,6 +54,7 @@ export default function InspectionsIndex({ serviceInspections }) {
                     handleDelete={deleteInspection}
                     filterColumn={'request_description'}
                     placeholder={'Search service request description'}
+                    categoryFilters={categoryFilters}
                 />
             </div>
         </AppLayout>

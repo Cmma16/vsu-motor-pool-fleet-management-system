@@ -80,7 +80,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('vehicles/trips', TripController::class);
     Route::get('/trips/{trip}/assign', [TripController::class, 'assign'])->name('trips.assign');
     Route::patch('trips/{trip}/status', [TripController::class, 'updateStatus'])->name('trips.updateStatus');
-    //Route::post('/trips/check-availability', [TripController::class, 'checkAvailability'])->name('trips.check-availability');
+    Route::patch('trips/{trip}/remarks', [TripController::class, 'updateRemarks'])->name('trips.updateRemarks');
+    Route::get('/trips/my-requests', [TripController::class, 'myRequests'])->name('trips.myRequests');
+    Route::get('/trips/check-availability', [TripController::class, 'checkAvailability'])->name('trips.check-availability');
     
     //not working
     Route::get('/trips/{trip}/pdf', [TripController::class, 'printTripRecord'])->name('trips.print');
@@ -115,8 +117,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/personnel/{person}/unverify', [PersonnelController::class, 'unverifyPersonnel'])->name('personnel.unverify');
         // Route::delete('/personnel/{person}', [PersonnelController::class, 'destroy'])->name('personnel.destroy');
     });
-
-    Route::get('/trips/check-availability', [TripController::class, 'checkAvailability'])->name('trips.check-availability');
 
 });
 

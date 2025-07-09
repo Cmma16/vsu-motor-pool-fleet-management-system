@@ -17,6 +17,17 @@ const pageDetails = {
     description: 'Manage your vehicles efficiently here.',
 };
 
+const categoryFilters = {
+    categoryTitle: 'status',
+    filteredColumn: 'status',
+    filterOptions: [
+        { key: 0, value: 'available', label: 'Available' },
+        { key: 1, value: 'in use', label: 'In use' },
+        { key: 2, value: 'out of service', label: 'Out of service' },
+        { key: 3, value: 'under maintenance', label: 'Under maintenance' },
+    ],
+};
+
 export default function List({ vehicles }) {
     const deleteVehicle = (id) => {
         if (confirm('Are you sure?')) {
@@ -44,6 +55,7 @@ export default function List({ vehicles }) {
                     handleDelete={deleteVehicle}
                     filterColumn={'vehicle_name'}
                     placeholder={'Search vehicle name'}
+                    categoryFilters={categoryFilters}
                 />
             </div>
         </AppLayout>

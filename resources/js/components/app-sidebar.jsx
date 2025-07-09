@@ -20,6 +20,7 @@ import {
     MapPinIcon,
     NotebookPen,
     Stethoscope,
+    Ticket,
     TruckIcon,
     Users,
     WrenchIcon,
@@ -31,6 +32,7 @@ const mainNavItems = [
         title: 'Dashboard',
         href: '/dashboard',
         icon: LayoutGrid,
+        allowedRoles: ['Admin', 'Manager', 'Mechanic', 'Driver'],
     },
     { title: 'My Requests', href: '/services/requests?status=my-requests', icon: HandHelpingIcon, allowedRoles: ['Driver'] },
     {
@@ -66,7 +68,13 @@ const mainNavItems = [
         title: 'Trips',
         href: '/vehicles/trips',
         icon: MapPinIcon,
-        allowedRoles: ['Admin', 'Driver', 'Manager'],
+        allowedRoles: ['Admin', 'Driver', 'Manager', 'Requestor'],
+    },
+    {
+        title: 'My Trip Requests',
+        href: '/trips/my-requests',
+        icon: Ticket,
+        allowedRoles: ['Requestor'],
     },
     { title: 'Maintenance Plans', href: '/plans', icon: NotebookPen, allowedRoles: ['Admin', 'Manager', 'Mechanic'] },
     {

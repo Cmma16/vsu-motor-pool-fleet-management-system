@@ -19,6 +19,8 @@ const AvailabilityDialog = ({ isAvailabilityOpen, setIsAvailabilityOpen }) => {
     const [vehicleAvailability, setVehicleAvailability] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
+    const [search, setSearch] = useState('');
+
     const fetchAvailability = async () => {
         if (!availabilityStartDate || !availabilityEndDate) return;
 
@@ -58,9 +60,9 @@ const AvailabilityDialog = ({ isAvailabilityOpen, setIsAvailabilityOpen }) => {
                     <DialogTitle>Check Driver & Vehicle Availability</DialogTitle>
                 </DialogHeader>
 
-                <div className="py-4">
+                <div className="py-2">
                     {/* Date Selection */}
-                    <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <div className="mb-3 grid grid-cols-1 gap-4 md:grid-cols-2">
                         <div>
                             <label className="mb-2 block text-sm font-medium">Start Date</label>
                             <Input
@@ -88,16 +90,24 @@ const AvailabilityDialog = ({ isAvailabilityOpen, setIsAvailabilityOpen }) => {
                     {/* Availability Display */}
                     {availabilityStartDate && availabilityEndDate && (
                         <div>
-                            <div className="mb-4">
+                            <div className="mb-2">
                                 <h3 className="mb-2 text-lg font-semibold">
                                     Availability for {format(availabilityStartDate, 'MMM d, yyyy')}
                                     {availabilityStartDate.getTime() !== availabilityEndDate.getTime() &&
                                         ` - ${format(availabilityEndDate, 'MMM d, yyyy')}`}
                                 </h3>
                             </div>
+                            <div className="mb-2">
+                                <Input
+                                    placeholder="Search driver or vehicle name"
+                                    className="max-w-xs bg-white"
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
+                                />
+                            </div>
 
                             <Tabs value={availabilityTab} onValueChange={setAvailabilityTab}>
-                                <TabsList className="mb-4 bg-white">
+                                <TabsList className="mb-2 bg-white">
                                     <TabsTrigger value="drivers">
                                         <UsersIcon className="mr-2 h-4 w-4" />
                                         Drivers
@@ -111,56 +121,58 @@ const AvailabilityDialog = ({ isAvailabilityOpen, setIsAvailabilityOpen }) => {
                                 <TabsContent value="drivers">
                                     <ScrollArea className="h-[300px] pr-4">
                                         <div className="space-y-4">
-                                            {driverAvailability.map((driver) => (
-                                                <div key={driver.id} className="flex items-start justify-between rounded-lg border bg-white p-4">
-                                                    <div className="flex items-center gap-3">
-                                                        <Avatar className="h-10 w-10">
-                                                            <AvatarImage src={driver.avatar || '/placeholder.svg'} alt={driver.name} />
-                                                            <AvatarFallback>
-                                                                {driver.name
-                                                                    .split(' ')
-                                                                    .map((n) => n[0])
-                                                                    .join('')}
-                                                            </AvatarFallback>
-                                                        </Avatar>
-                                                        <div>
-                                                            <h4 className="font-medium">{driver.name}</h4>
-                                                            <p className="text-muted-foreground text-sm">{driver.contact}</p>
+                                            {driverAvailability
+                                                .filter((driver) => driver.name.toLowerCase().includes(search.toLowerCase()))
+                                                .map((driver) => (
+                                                    <div key={driver.id} className="flex items-start justify-between rounded-lg border bg-white p-4">
+                                                        <div className="flex items-center gap-3">
+                                                            <Avatar className="h-10 w-10">
+                                                                <AvatarImage src={driver.avatar || '/placeholder.svg'} alt={driver.name} />
+                                                                <AvatarFallback>
+                                                                    {driver.name
+                                                                        .split(' ')
+                                                                        .map((n) => n[0])
+                                                                        .join('')}
+                                                                </AvatarFallback>
+                                                            </Avatar>
+                                                            <div>
+                                                                <h4 className="font-medium">{driver.name}</h4>
+                                                                <p className="text-muted-foreground text-sm">{driver.contact}</p>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div className="text-right">
-                                                        <div className="mb-2 flex items-center gap-2">
-                                                            {driver.isAvailable ? (
-                                                                <>
-                                                                    <CheckCircle className="h-5 w-5 text-green-500" />
-                                                                    <span className="text-sm font-medium text-green-700">Available</span>
-                                                                </>
-                                                            ) : (
-                                                                <>
-                                                                    <XCircle className="h-5 w-5 text-red-500" />
-                                                                    <span className="text-sm font-medium text-red-700">Unavailable</span>
-                                                                </>
+                                                        <div className="text-right">
+                                                            <div className="mb-2 flex items-center gap-2">
+                                                                {driver.isAvailable ? (
+                                                                    <>
+                                                                        <CheckCircle className="h-5 w-5 text-green-500" />
+                                                                        <span className="text-sm font-medium text-green-700">Available</span>
+                                                                    </>
+                                                                ) : (
+                                                                    <>
+                                                                        <XCircle className="h-5 w-5 text-red-500" />
+                                                                        <span className="text-sm font-medium text-red-700">Unavailable</span>
+                                                                    </>
+                                                                )}
+                                                            </div>
+                                                            {!driver.isAvailable && (
+                                                                <Collapsible>
+                                                                    <CollapsibleTrigger className="text-muted-foreground mb-1 cursor-pointer text-xs font-medium underline">
+                                                                        Conflicting trips ({driver.conflictingTrips.length})
+                                                                    </CollapsibleTrigger>
+                                                                    <CollapsibleContent className="text-muted-foreground mt-1 text-xs">
+                                                                        {driver.conflictingTrips.map((trip, index) => (
+                                                                            <p key={index}>
+                                                                                {trip.trip_number}: {format(parseISO(trip.start_date), 'MMM d')}
+                                                                                {trip.start_date !== trip.end_date &&
+                                                                                    ` - ${format(parseISO(trip.end_date), 'MMM d')}`}
+                                                                            </p>
+                                                                        ))}
+                                                                    </CollapsibleContent>
+                                                                </Collapsible>
                                                             )}
                                                         </div>
-                                                        {!driver.isAvailable && (
-                                                            <Collapsible>
-                                                                <CollapsibleTrigger className="text-muted-foreground mb-1 cursor-pointer text-xs font-medium underline">
-                                                                    Conflicting trips ({driver.conflictingTrips.length})
-                                                                </CollapsibleTrigger>
-                                                                <CollapsibleContent className="text-muted-foreground mt-1 text-xs">
-                                                                    {driver.conflictingTrips.map((trip, index) => (
-                                                                        <p key={index}>
-                                                                            {trip.trip_number}: {format(parseISO(trip.start_date), 'MMM d')}
-                                                                            {trip.start_date !== trip.end_date &&
-                                                                                ` - ${format(parseISO(trip.end_date), 'MMM d')}`}
-                                                                        </p>
-                                                                    ))}
-                                                                </CollapsibleContent>
-                                                            </Collapsible>
-                                                        )}
                                                     </div>
-                                                </div>
-                                            ))}
+                                                ))}
                                         </div>
                                     </ScrollArea>
                                 </TabsContent>
@@ -168,52 +180,54 @@ const AvailabilityDialog = ({ isAvailabilityOpen, setIsAvailabilityOpen }) => {
                                 <TabsContent value="vehicles">
                                     <ScrollArea className="h-[300px] pr-4">
                                         <div className="space-y-4">
-                                            {vehicleAvailability.map((vehicle) => (
-                                                <div key={vehicle.id} className="flex items-start justify-between rounded-lg border bg-white p-4">
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="bg-muted flex h-10 w-10 items-center justify-center rounded-lg">
-                                                            <Car className="h-5 w-5" />
+                                            {vehicleAvailability
+                                                .filter((vehicle) => vehicle.name.toLowerCase().includes(search.toLowerCase()))
+                                                .map((vehicle) => (
+                                                    <div key={vehicle.id} className="flex items-start justify-between rounded-lg border bg-white p-4">
+                                                        <div className="flex items-center gap-3">
+                                                            <div className="bg-muted flex h-10 w-10 items-center justify-center rounded-lg">
+                                                                <Car className="h-5 w-5" />
+                                                            </div>
+                                                            <div>
+                                                                <h4 className="font-medium">{vehicle.name}</h4>
+                                                                <p className="text-muted-foreground text-sm">
+                                                                    {vehicle.type} • {vehicle.plate_number} • {vehicle.capacity} capacity
+                                                                </p>
+                                                            </div>
                                                         </div>
-                                                        <div>
-                                                            <h4 className="font-medium">{vehicle.name}</h4>
-                                                            <p className="text-muted-foreground text-sm">
-                                                                {vehicle.type} • {vehicle.plate_number} • {vehicle.capacity} capacity
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                    <div className="text-right">
-                                                        <div className="mb-2 flex items-center gap-2">
-                                                            {vehicle.isAvailable ? (
-                                                                <>
-                                                                    <CheckCircle className="h-5 w-5 text-green-500" />
-                                                                    <span className="text-sm font-medium text-green-700">Available</span>
-                                                                </>
-                                                            ) : (
-                                                                <>
-                                                                    <XCircle className="h-5 w-5 text-red-500" />
-                                                                    <span className="text-sm font-medium text-red-700">Unavailable</span>
-                                                                </>
+                                                        <div className="text-right">
+                                                            <div className="mb-2 flex items-center gap-2">
+                                                                {vehicle.isAvailable ? (
+                                                                    <>
+                                                                        <CheckCircle className="h-5 w-5 text-green-500" />
+                                                                        <span className="text-sm font-medium text-green-700">Available</span>
+                                                                    </>
+                                                                ) : (
+                                                                    <>
+                                                                        <XCircle className="h-5 w-5 text-red-500" />
+                                                                        <span className="text-sm font-medium text-red-700">Unavailable</span>
+                                                                    </>
+                                                                )}
+                                                            </div>
+                                                            {!vehicle.isAvailable && (
+                                                                <Collapsible>
+                                                                    <CollapsibleTrigger className="text-muted-foreground mb-1 cursor-pointer text-xs font-medium underline">
+                                                                        Conflicting trips ({vehicle.conflictingTrips.length})
+                                                                    </CollapsibleTrigger>
+                                                                    <CollapsibleContent className="text-muted-foreground mt-1 text-xs">
+                                                                        {vehicle.conflictingTrips.map((trip, index) => (
+                                                                            <p key={index}>
+                                                                                {trip.trip_number}: {format(parseISO(trip.start_date), 'MMM d')}
+                                                                                {trip.start_date !== trip.end_date &&
+                                                                                    ` - ${format(parseISO(trip.end_date), 'MMM d')}`}
+                                                                            </p>
+                                                                        ))}
+                                                                    </CollapsibleContent>
+                                                                </Collapsible>
                                                             )}
                                                         </div>
-                                                        {!vehicle.isAvailable && (
-                                                            <Collapsible>
-                                                                <CollapsibleTrigger className="text-muted-foreground mb-1 cursor-pointer text-xs font-medium underline">
-                                                                    Conflicting trips ({vehicle.conflictingTrips.length})
-                                                                </CollapsibleTrigger>
-                                                                <CollapsibleContent className="text-muted-foreground mt-1 text-xs">
-                                                                    {vehicle.conflictingTrips.map((trip, index) => (
-                                                                        <p key={index}>
-                                                                            {trip.trip_number}: {format(parseISO(trip.start_date), 'MMM d')}
-                                                                            {trip.start_date !== trip.end_date &&
-                                                                                ` - ${format(parseISO(trip.end_date), 'MMM d')}`}
-                                                                        </p>
-                                                                    ))}
-                                                                </CollapsibleContent>
-                                                            </Collapsible>
-                                                        )}
                                                     </div>
-                                                </div>
-                                            ))}
+                                                ))}
                                         </div>
                                     </ScrollArea>
                                 </TabsContent>

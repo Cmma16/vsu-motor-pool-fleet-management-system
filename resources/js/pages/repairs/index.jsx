@@ -17,6 +17,15 @@ const pageDetails = {
     description: 'Manage your repairs efficiently here.',
 };
 
+const categoryFilters = {
+    categoryTitle: 'confirmation status',
+    filteredColumn: 'confirmed_by',
+    filterOptions: [
+        { key: 0, value: 'confirmed', label: 'Confirmed' },
+        { key: 1, value: 'unconfirmed', label: 'Unconfirmed' },
+    ],
+};
+
 export default function RepairsIndex({ repairs }) {
     const deleteRepair = (id) => {
         router.delete(route('repairs.destroy', { id }), {
@@ -62,6 +71,7 @@ export default function RepairsIndex({ repairs }) {
                     handleDelete={deleteRepair}
                     filterColumn={'vehicle_name'}
                     placeholder={'Search vehicle name'}
+                    categoryFilters={categoryFilters}
                 />
             </div>
         </AppLayout>

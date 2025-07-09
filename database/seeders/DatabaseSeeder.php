@@ -41,6 +41,8 @@ class DatabaseSeeder extends Seeder
             'first_name' => 'Carlos Miguel',
             'middle_name' => 'Maniego',
             'last_name' => 'Advincula',
+            'name_extension' => NULL,
+            'position' => 'Student',
             'contact_number' => '09999788109',
             'province' => 'Leyte',
             'city' => 'Tolosa',

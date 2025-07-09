@@ -33,6 +33,9 @@ export const PersonnelColumn = (handleView, handleEdit, handleDelete, roles) => 
     }),
     columnHelper.accessor('role_id', {
         header: () => <div className="text-left">Role</div>,
+        filterFn: (row, columnId, filterValue) => {
+            return String(row.getValue(columnId)) === String(filterValue);
+        },
         cell: (info) => {
             const personnel = info.row.original;
             const [isUpdating, setIsUpdating] = React.useState(false);

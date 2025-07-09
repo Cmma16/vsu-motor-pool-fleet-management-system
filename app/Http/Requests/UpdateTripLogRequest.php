@@ -42,6 +42,7 @@ class UpdateTripLogRequest extends FormRequest
                 'post_trip_condition' => 'required|string',
                 'arrival_time' => 'required|date_format:H:i',
                 'odometer_reading' => 'required|integer|min:0',
+                'odometer_in' => 'required|exists:odometer_logs,odometer_id',
             ];
         }
 

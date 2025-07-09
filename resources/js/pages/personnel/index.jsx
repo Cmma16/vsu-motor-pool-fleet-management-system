@@ -19,6 +19,17 @@ const pageDetails = {
     description: 'View and manage personnel here.',
 };
 
+const categoryFilters = {
+    categoryTitle: 'role',
+    filteredColumn: 'role_id',
+    filterOptions: [
+        { key: 0, value: 2, label: 'Manager' },
+        { key: 1, value: 3, label: 'Driver' },
+        { key: 2, value: 4, label: 'Mechanic' },
+        { key: 3, value: 5, label: 'Requestor' },
+    ],
+};
+
 export default function PersonnelIndex({ personnel, roles, unverifiedPersonnel }) {
     const veiwPersonnelDetails = (id) => {
         router.get(route('personnel.show', { id }));
@@ -41,6 +52,7 @@ export default function PersonnelIndex({ personnel, roles, unverifiedPersonnel }
                             roles={roles}
                             filterColumn={'personnel_name'}
                             placeholder={'Search personnel'}
+                            categoryFilters={categoryFilters}
                         />
                     </TabsContent>
                     <TabsContent value="verification">
