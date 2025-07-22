@@ -30,6 +30,7 @@ class ServiceRequest extends Model
         'date_received',
         'received_by',
         'status',
+        'remarks'
     ];
 
     // Relationship with Vehicle

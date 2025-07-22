@@ -353,7 +353,7 @@ export default function TripsIndex({ trips = [] }) {
                                 </DialogContent>
                             </Dialog>
                             <AvailabilityDialog isAvailabilityOpen={isAvailabilityOpen} setIsAvailabilityOpen={setIsAvailabilityOpen} />
-                            {user.role.name !== 'Driver' && (
+                            {user.role.name === 'Requestor' && (
                                 <Button
                                     variant="default"
                                     size="default"
@@ -412,9 +412,6 @@ export default function TripsIndex({ trips = [] }) {
                                             </SelectItem>
                                             <SelectItem value="assigned" className="bg-white">
                                                 Assigned
-                                            </SelectItem>
-                                            <SelectItem value="received" className="bg-white">
-                                                Received
                                             </SelectItem>
                                             <SelectItem value="ongoing" className="bg-white">
                                                 Ongoing

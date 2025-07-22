@@ -94,7 +94,7 @@ export default function ReportsIndex({ tripData, metrics }) {
                     <CardHeader>
                         <div className="flex items-center gap-2">
                             <FilterIcon className="h-5 w-5" />
-                            <CardTitle>Filter Reports</CardTitle>
+                            <CardTitle>Filter Report</CardTitle>
                         </div>
                     </CardHeader>
                     <CardContent>

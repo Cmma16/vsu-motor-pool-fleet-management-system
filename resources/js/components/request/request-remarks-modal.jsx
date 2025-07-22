@@ -4,13 +4,13 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useState } from 'react';
 
-export default function RemarksModal({ title, buttonLabel, action, actionType, data, setData }) {
+export default function RequestRemarksModal({ title, buttonLabel, action, actionType, data, setData }) {
     const [open, setOpen] = useState(false);
     const [error, setError] = useState('');
 
     const handleAction = () => {
         if (actionType === 'rejected' && !data.remarks.trim()) {
-            setError('Remarks are required when rejecting a trip.');
+            setError('Remarks are required when rejecting a service request.');
             return;
         }
 
@@ -22,7 +22,7 @@ export default function RemarksModal({ title, buttonLabel, action, actionType, d
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button className="w-64" variant={actionType === 'rejected' ? 'destructive' : 'default'}>
+                <Button className="w-44" variant={actionType === 'rejected' ? 'destructive' : 'default'}>
                     {buttonLabel}
                 </Button>
             </DialogTrigger>
@@ -39,7 +39,7 @@ export default function RemarksModal({ title, buttonLabel, action, actionType, d
                     id="remarks"
                     value={data.remarks}
                     onChange={(e) => setData('remarks', e.target.value)}
-                    placeholder={actionType === 'rejected' ? 'Please explain why the trip is being rejected.' : 'Enter details here...'}
+                    placeholder={actionType === 'rejected' ? 'Describe why the service request is being rejected.' : 'Optional notes for approval...'}
                     rows={4}
                 />
                 <DialogFooter>

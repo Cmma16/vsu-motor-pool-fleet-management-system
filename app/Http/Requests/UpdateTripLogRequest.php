@@ -50,7 +50,7 @@ class UpdateTripLogRequest extends FormRequest
         return [
             'received_at' => 'required|date',
             'pre_trip_condition' => 'required|string',
-            'departure_time_actual' => 'required|date_format:H:i',
+            'departure_time_actual' => 'required|date_format:H:i:s',
             'odometer_out' => 'required|exists:odometer_logs,odometer_id',
             'date_returned' => 'required|date',
             'post_trip_condition' => 'required|string',

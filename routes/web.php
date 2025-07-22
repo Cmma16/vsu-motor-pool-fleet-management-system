@@ -105,7 +105,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
     Route::get('/reports/fleet-analytics', [ReportsController::class, 'fleetReports'])->name('reports.fleet');
-    Route::get('/reports/part-analytics', [ReportsController::class, 'partsAnalytics'])->name('reports.part');
+    Route::get('/reports/detailed-report', [ReportsController::class, 'vehicleReports'])->name('reports.detailed');
 
     Route::post('maintenance-parts', [MaintenancePartsController::class, 'store'])->name('maintenance-parts.store');
     Route::put('maintenance-parts/{maintenancePart}', [MaintenancePartsController::class, 'update'])->name('maintenance-parts.update');

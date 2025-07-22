@@ -7,7 +7,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import axios from 'axios';
 import { format, parseISO } from 'date-fns';
-import { CalendarDays, Car, CheckCircle, UsersIcon, XCircle } from 'lucide-react';
+import { CalendarDays, Car, CheckCircle, Loader, UsersIcon, XCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 const AvailabilityDialog = ({ isAvailabilityOpen, setIsAvailabilityOpen }) => {
@@ -35,7 +35,6 @@ const AvailabilityDialog = ({ isAvailabilityOpen, setIsAvailabilityOpen }) => {
 
             setDriverAvailability(res.data.drivers);
             setVehicleAvailability(res.data.vehicles);
-            console.log(res);
         } catch (error) {
             console.error('Error fetching availability:', error);
         } finally {
@@ -88,6 +87,7 @@ const AvailabilityDialog = ({ isAvailabilityOpen, setIsAvailabilityOpen }) => {
                     </div>
 
                     {/* Availability Display */}
+
                     {availabilityStartDate && availabilityEndDate && (
                         <div>
                             <div className="mb-2">
@@ -119,117 +119,135 @@ const AvailabilityDialog = ({ isAvailabilityOpen, setIsAvailabilityOpen }) => {
                                 </TabsList>
 
                                 <TabsContent value="drivers">
-                                    <ScrollArea className="h-[300px] pr-4">
-                                        <div className="space-y-4">
-                                            {driverAvailability
-                                                .filter((driver) => driver.name.toLowerCase().includes(search.toLowerCase()))
-                                                .map((driver) => (
-                                                    <div key={driver.id} className="flex items-start justify-between rounded-lg border bg-white p-4">
-                                                        <div className="flex items-center gap-3">
-                                                            <Avatar className="h-10 w-10">
-                                                                <AvatarImage src={driver.avatar || '/placeholder.svg'} alt={driver.name} />
-                                                                <AvatarFallback>
-                                                                    {driver.name
-                                                                        .split(' ')
-                                                                        .map((n) => n[0])
-                                                                        .join('')}
-                                                                </AvatarFallback>
-                                                            </Avatar>
-                                                            <div>
-                                                                <h4 className="font-medium">{driver.name}</h4>
-                                                                <p className="text-muted-foreground text-sm">{driver.contact}</p>
+                                    {isLoading ? (
+                                        <div className="flex justify-center">
+                                            <Loader className="size-10 animate-spin" />
+                                        </div>
+                                    ) : (
+                                        <ScrollArea className="h-[300px] pr-4">
+                                            <div className="space-y-4">
+                                                {driverAvailability
+                                                    .filter((driver) => driver.name.toLowerCase().includes(search.toLowerCase()))
+                                                    .map((driver) => (
+                                                        <div
+                                                            key={driver.id}
+                                                            className="flex items-start justify-between rounded-lg border bg-white p-4"
+                                                        >
+                                                            <div className="flex items-center gap-3">
+                                                                <Avatar className="h-10 w-10">
+                                                                    <AvatarImage src={driver.avatar || '/placeholder.svg'} alt={driver.name} />
+                                                                    <AvatarFallback>
+                                                                        {driver.name
+                                                                            .split(' ')
+                                                                            .map((n) => n[0])
+                                                                            .join('')}
+                                                                    </AvatarFallback>
+                                                                </Avatar>
+                                                                <div>
+                                                                    <h4 className="font-medium">{driver.name}</h4>
+                                                                    <p className="text-muted-foreground text-sm">{driver.contact}</p>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div className="text-right">
-                                                            <div className="mb-2 flex items-center gap-2">
-                                                                {driver.isAvailable ? (
-                                                                    <>
-                                                                        <CheckCircle className="h-5 w-5 text-green-500" />
-                                                                        <span className="text-sm font-medium text-green-700">Available</span>
-                                                                    </>
-                                                                ) : (
-                                                                    <>
-                                                                        <XCircle className="h-5 w-5 text-red-500" />
-                                                                        <span className="text-sm font-medium text-red-700">Unavailable</span>
-                                                                    </>
+                                                            <div className="text-right">
+                                                                <div className="mb-2 flex items-center gap-2">
+                                                                    {driver.isAvailable ? (
+                                                                        <>
+                                                                            <CheckCircle className="h-5 w-5 text-green-500" />
+                                                                            <span className="text-sm font-medium text-green-700">Available</span>
+                                                                        </>
+                                                                    ) : (
+                                                                        <>
+                                                                            <XCircle className="h-5 w-5 text-red-500" />
+                                                                            <span className="text-sm font-medium text-red-700">Unavailable</span>
+                                                                        </>
+                                                                    )}
+                                                                </div>
+                                                                {!driver.isAvailable && (
+                                                                    <Collapsible>
+                                                                        <CollapsibleTrigger className="text-muted-foreground mb-1 cursor-pointer text-xs font-medium underline">
+                                                                            Conflicting trips ({driver.conflictingTrips.length})
+                                                                        </CollapsibleTrigger>
+                                                                        <CollapsibleContent className="text-muted-foreground mt-1 text-xs">
+                                                                            {driver.conflictingTrips.map((trip, index) => (
+                                                                                <p key={index}>
+                                                                                    {trip.trip_number}: {format(parseISO(trip.start_date), 'MMM d')}
+                                                                                    {trip.start_date !== trip.end_date &&
+                                                                                        ` - ${format(parseISO(trip.end_date), 'MMM d')}`}
+                                                                                </p>
+                                                                            ))}
+                                                                        </CollapsibleContent>
+                                                                    </Collapsible>
                                                                 )}
                                                             </div>
-                                                            {!driver.isAvailable && (
-                                                                <Collapsible>
-                                                                    <CollapsibleTrigger className="text-muted-foreground mb-1 cursor-pointer text-xs font-medium underline">
-                                                                        Conflicting trips ({driver.conflictingTrips.length})
-                                                                    </CollapsibleTrigger>
-                                                                    <CollapsibleContent className="text-muted-foreground mt-1 text-xs">
-                                                                        {driver.conflictingTrips.map((trip, index) => (
-                                                                            <p key={index}>
-                                                                                {trip.trip_number}: {format(parseISO(trip.start_date), 'MMM d')}
-                                                                                {trip.start_date !== trip.end_date &&
-                                                                                    ` - ${format(parseISO(trip.end_date), 'MMM d')}`}
-                                                                            </p>
-                                                                        ))}
-                                                                    </CollapsibleContent>
-                                                                </Collapsible>
-                                                            )}
                                                         </div>
-                                                    </div>
-                                                ))}
-                                        </div>
-                                    </ScrollArea>
+                                                    ))}
+                                            </div>
+                                        </ScrollArea>
+                                    )}
                                 </TabsContent>
 
                                 <TabsContent value="vehicles">
-                                    <ScrollArea className="h-[300px] pr-4">
-                                        <div className="space-y-4">
-                                            {vehicleAvailability
-                                                .filter((vehicle) => vehicle.name.toLowerCase().includes(search.toLowerCase()))
-                                                .map((vehicle) => (
-                                                    <div key={vehicle.id} className="flex items-start justify-between rounded-lg border bg-white p-4">
-                                                        <div className="flex items-center gap-3">
-                                                            <div className="bg-muted flex h-10 w-10 items-center justify-center rounded-lg">
-                                                                <Car className="h-5 w-5" />
+                                    {isLoading ? (
+                                        <div className="flex justify-center">
+                                            <Loader className="size-10 animate-spin" />
+                                        </div>
+                                    ) : (
+                                        <ScrollArea className="h-[300px] pr-4">
+                                            <div className="space-y-4">
+                                                {vehicleAvailability
+                                                    .filter((vehicle) => vehicle.name.toLowerCase().includes(search.toLowerCase()))
+                                                    .map((vehicle) => (
+                                                        <div
+                                                            key={vehicle.id}
+                                                            className="flex items-start justify-between rounded-lg border bg-white p-4"
+                                                        >
+                                                            <div className="flex items-center gap-3">
+                                                                <div className="bg-muted flex h-10 w-10 items-center justify-center rounded-lg">
+                                                                    <Car className="h-5 w-5" />
+                                                                </div>
+                                                                <div>
+                                                                    <h4 className="font-medium">{vehicle.name}</h4>
+                                                                    <p className="text-muted-foreground text-sm">
+                                                                        {vehicle.type} • {vehicle.plate_number} • {vehicle.capacity} capacity
+                                                                    </p>
+                                                                </div>
                                                             </div>
-                                                            <div>
-                                                                <h4 className="font-medium">{vehicle.name}</h4>
-                                                                <p className="text-muted-foreground text-sm">
-                                                                    {vehicle.type} • {vehicle.plate_number} • {vehicle.capacity} capacity
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                        <div className="text-right">
-                                                            <div className="mb-2 flex items-center gap-2">
-                                                                {vehicle.isAvailable ? (
-                                                                    <>
-                                                                        <CheckCircle className="h-5 w-5 text-green-500" />
-                                                                        <span className="text-sm font-medium text-green-700">Available</span>
-                                                                    </>
-                                                                ) : (
-                                                                    <>
-                                                                        <XCircle className="h-5 w-5 text-red-500" />
-                                                                        <span className="text-sm font-medium text-red-700">Unavailable</span>
-                                                                    </>
+                                                            <div className="text-right">
+                                                                <div className="mb-2 flex items-center gap-2">
+                                                                    {vehicle.isAvailable ? (
+                                                                        <>
+                                                                            <CheckCircle className="h-5 w-5 text-green-500" />
+                                                                            <span className="text-sm font-medium text-green-700">Available</span>
+                                                                        </>
+                                                                    ) : (
+                                                                        <>
+                                                                            <XCircle className="h-5 w-5 text-red-500" />
+                                                                            <span className="text-sm font-medium text-red-700">Unavailable</span>
+                                                                        </>
+                                                                    )}
+                                                                </div>
+                                                                {!vehicle.isAvailable && (
+                                                                    <Collapsible>
+                                                                        <CollapsibleTrigger className="text-muted-foreground mb-1 cursor-pointer text-xs font-medium underline">
+                                                                            Conflicting trips ({vehicle.conflictingTrips.length})
+                                                                        </CollapsibleTrigger>
+                                                                        <CollapsibleContent className="text-muted-foreground mt-1 text-xs">
+                                                                            {vehicle.conflictingTrips.map((trip, index) => (
+                                                                                <p key={index}>
+                                                                                    {trip.trip_number}: {format(parseISO(trip.start_date), 'MMM d')}
+                                                                                    {trip.start_date !== trip.end_date &&
+                                                                                        ` - ${format(parseISO(trip.end_date), 'MMM d')}`}
+                                                                                </p>
+                                                                            ))}
+                                                                        </CollapsibleContent>
+                                                                    </Collapsible>
                                                                 )}
                                                             </div>
-                                                            {!vehicle.isAvailable && (
-                                                                <Collapsible>
-                                                                    <CollapsibleTrigger className="text-muted-foreground mb-1 cursor-pointer text-xs font-medium underline">
-                                                                        Conflicting trips ({vehicle.conflictingTrips.length})
-                                                                    </CollapsibleTrigger>
-                                                                    <CollapsibleContent className="text-muted-foreground mt-1 text-xs">
-                                                                        {vehicle.conflictingTrips.map((trip, index) => (
-                                                                            <p key={index}>
-                                                                                {trip.trip_number}: {format(parseISO(trip.start_date), 'MMM d')}
-                                                                                {trip.start_date !== trip.end_date &&
-                                                                                    ` - ${format(parseISO(trip.end_date), 'MMM d')}`}
-                                                                            </p>
-                                                                        ))}
-                                                                    </CollapsibleContent>
-                                                                </Collapsible>
-                                                            )}
                                                         </div>
-                                                    </div>
-                                                ))}
-                                        </div>
-                                    </ScrollArea>
+                                                    ))}
+                                            </div>
+                                        </ScrollArea>
+                                    )}
                                 </TabsContent>
                             </Tabs>
                         </div>

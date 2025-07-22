@@ -33,7 +33,7 @@ class ServiceRequestController extends Controller
 
         // Filter by valid status values
         } elseif (in_array($statusFilter, [
-            'pending', 'received', 'inspected', 'approved', 'conducted', 'cancelled', 'completed'
+            'pending', 'received', 'inspected', 'approved', 'conducted', 'rejected', 'completed'
         ])) {
             $query->where('status', $statusFilter);
         }else {
@@ -132,7 +132,20 @@ class ServiceRequestController extends Controller
                 'received_by' => trim(($serviceRequest->receivedBy->first_name ?? '') . ' ' . ($serviceRequest->receivedBy->middle_name ?? '') . ' ' . ($serviceRequest->receivedBy->last_name ?? '')) ?: 'N/A',
                 'date_received' => $serviceRequest->date_received ? $serviceRequest->date_received : null,
                 'status' => $serviceRequest->status,
+                'remarks' => $serviceRequest->remarks,
                 'inspection_id' => $serviceRequest->serviceInspection->inspection_id ?? 'N/A',
+                'serviceInspection' => $serviceRequest->serviceInspection ? [
+                    'inspection_id' => $serviceRequest->serviceInspection->inspection_id,
+                    'request_description' => $serviceRequest->serviceInspection->serviceRequest->work_description ?? 'N/A',
+                    'started_at' => $serviceRequest->serviceInspection->started_at,
+                    'completed_at' => $serviceRequest->serviceInspection->completed_at,
+                    'parts_available' => $serviceRequest->serviceInspection->parts_available,
+                    'personnel_available' => $serviceRequest->serviceInspection->personnel_available,
+                    'estimated_duration' => $serviceRequest->serviceInspection->estimated_duration,
+                    'conducted_by' => trim(($serviceRequest->serviceInspection->conductedBy->first_name ?? '') . ' ' . ($serviceRequest->serviceInspection->conductedBy->middle_name ?? '') . ' ' . ($serviceRequest->serviceInspection->conductedBy->last_name ?? '')) ?: 'N/A',
+                    'confirmed_by' => trim(($serviceRequest->serviceInspection->confirmedBy->first_name ?? '') . ' ' . ($serviceRequest->serviceInspection->confirmedBy->middle_name ?? '') . ' ' . ($serviceRequest->serviceInspection->confirmedBy->last_name ?? '')) ?: '',
+                    'request_id' => $serviceRequest->serviceInspection->request_id,
+                ] : null,
             ],
         ]);
     }
@@ -219,7 +232,7 @@ class ServiceRequestController extends Controller
         $serviceRequest = $request;
 
         $updateRequest->validate([
-            'status' => 'required|string|in:pending,received,inspected,approved,cancelled,conducted,completed',
+            'status' => 'required|string|in:pending,received,inspected,approved,rejected,cancelled,conducted,completed',
         ]);
 
         $updateData = ['status' => $updateRequest->status];
@@ -237,7 +250,12 @@ class ServiceRequestController extends Controller
 
         if ($updateRequest->status === 'approved') {
             $serviceRequest->vehicle->update(['status' => 'under maintenance']);
-        } 
+        }
+
+        if($updateRequest->status === 'rejected')
+        {
+            $updateData['remarks'] = $updateRequest->remarks;
+        }
 
         $serviceRequest->update($updateData);
 

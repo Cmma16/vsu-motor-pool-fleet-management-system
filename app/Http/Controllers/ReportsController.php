@@ -8,6 +8,7 @@ use App\Models\ServiceRequest;
 use App\Models\Part;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\DB;
 
 class ReportsController extends Controller
 {
@@ -212,4 +213,116 @@ class ReportsController extends Controller
             ]
         ]);
     }
+
+    public function vehicleReports(Request $request)
+    {
+        $vehicles = Vehicle::orderBy('created_at', 'desc')->get()
+            ->map(function ($vehicle) {
+                return [
+                    'vehicle_id' => $vehicle->vehicle_id,
+                    'vehicle_name' => $vehicle->vehicle_name,
+                    'asset_tag' => $vehicle->asset_tag,
+                    'plate_number' => $vehicle->plate_number,
+                ];
+            });
+
+        
+            $vehicleIds = $request->vehicle_ids;
+            $startDate = $request->start_date;
+            $endDate = $request->end_date;
+            $reportType = $request->report_type;
+        
+            $data = collect();
+        
+            if(!empty($vehicleIds))
+            {
+                foreach ($vehicleIds as $vehicleId) {
+                    switch ($reportType) {
+                        case 'trips':
+                            $records = Trip::select([
+                                'trips.trip_id',
+                                'trips.trip_number',
+                                'trips.start_date',
+                                'trips.end_date',
+                                'trips.destination',
+                                'trips.purpose',
+                                'vehicles.vehicle_name',
+                                DB::raw("CONCAT(drivers.first_name, ' ', drivers.last_name) as driver_name"),
+                            ])
+                            ->join('vehicles', 'trips.vehicle_id', '=', 'vehicles.vehicle_id')
+                            ->join('users as drivers', 'trips.driver_id', '=', 'drivers.id')
+                            ->where('trips.vehicle_id', $vehicleId)
+                            ->where('trips.status', 'completed')
+                            ->whereBetween('trips.start_date', [$startDate, $endDate])
+                            ->get();
+                            break;
+            
+                        case 'repair':
+                            $records = ServiceRequest::select([
+                                'maintenance.maintenance_id',
+                                'maintenance.date_in',
+                                'maintenance.date_completed',
+                                'vehicles.vehicle_name',
+                                'service_requests.service_type',
+                                'maintenance.maintenance_summary',
+                            ])
+                                ->join('maintenance', 'service_requests.request_id', '=', 'maintenance.request_id')
+                                ->join('vehicles', 'service_requests.vehicle_id', '=', 'vehicles.vehicle_id')
+                                ->where('service_requests.vehicle_id', $vehicleId)
+                                ->where('service_requests.service_type', $reportType)
+                                ->whereBetween('maintenance.date_completed', [$startDate, $endDate])
+                                ->get();
+                            break;
+                        case 'maintenance':
+                            $records = ServiceRequest::select([
+                                'maintenance.maintenance_id',
+                                'maintenance.date_in',
+                                'maintenance.date_completed',
+                                'vehicles.vehicle_name',
+                                'service_requests.service_type',
+                                'maintenance.maintenance_summary',
+                            ])
+                                ->join('maintenance', 'service_requests.request_id', '=', 'maintenance.request_id')
+                                ->join('vehicles', 'service_requests.vehicle_id', '=', 'vehicles.vehicle_id')
+                                ->where('service_requests.vehicle_id', $vehicleId)
+                                ->whereIn('service_requests.service_type', ['maintenance', 'preventive'])
+                                ->whereBetween('maintenance.date_completed', [$startDate, $endDate])
+                                ->get();
+                            break;
+                        case 'all':
+                            $records = ServiceRequest::select([
+                                'maintenance.maintenance_id',
+                                'maintenance.date_in',
+                                'maintenance.date_completed',
+                                'vehicles.vehicle_name',
+                                'service_requests.service_type',
+                                'maintenance.maintenance_summary',
+                            ])
+                                ->join('maintenance', 'service_requests.request_id', '=', 'maintenance.request_id')
+                                ->join('vehicles', 'service_requests.vehicle_id', '=', 'vehicles.vehicle_id')
+                                ->where('service_requests.vehicle_id', $vehicleId)
+                                ->whereBetween('maintenance.date_completed', [$startDate, $endDate])
+                                ->get();
+                            break;
+            
+                        default:
+                            $records = collect(); // Fallback
+                    }
+            
+                    $data = $data->merge($records);
+                }
+            }
+
+        return Inertia::render('report/detailed-report', [
+            'vehicles' => $vehicles,
+            'resultData' => $data,
+            'filters' => [
+                'vehicle_ids' => $vehicleIds,
+                'start_date' => $startDate,
+                'end_date' => $endDate,
+                'report_type' => $reportType,
+            ],
+        ]);
+    }
+
 } 

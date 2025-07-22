@@ -1,12 +1,13 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, router, useForm } from '@inertiajs/react';
 
+import RequestRemarksModal from '@/components/request/request-remarks-modal';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import { usePage } from '@inertiajs/react';
 import { format } from 'date-fns';
-import { ArrowRight } from 'lucide-react';
+import { toast } from 'sonner';
 
 const breadcrumbs = [
     {
@@ -26,13 +27,139 @@ const pageDetails = {
 
 export default function InspectionDetails({ serviceInspection }) {
     const user = usePage().props.auth.user;
+
+    const { data, setData, put, processing, errors, reset } = useForm({
+        remarks: '',
+    });
+
     const handleConfirmInspection = () => {
-        router.patch(`/services/request-inspections/${serviceInspection.inspection_id}/confirm`);
+        router.patch(
+            `/services/request-inspections/${serviceInspection.inspection_id}/confirm`,
+            {},
+            {
+                onSuccess: () => {
+                    // ✅ Do something on success here
+                    toast.success('Inspection confirmed successfully!');
+                    // or redirect, reload, etc.
+                },
+                onError: (errors) => {
+                    // Optional: handle validation or server errors
+                    toast.error('Failed to confirm inspection.');
+                },
+            },
+        );
+    };
+
+    const handleStatusUpdate = (id, status) => {
+        router.patch(
+            route('requests.updateStatus', id),
+            {
+                status: status,
+                remarks: data.remarks,
+            },
+            {
+                onSuccess: () => {
+                    if (status === 'rejected') {
+                        toast.info(`Service request ${status}`, {
+                            description: 'Service request status updated successfully',
+                        });
+                    } else {
+                        toast.success(`Service request ${status}`, {
+                            description: 'Service request status updated successfully',
+                        });
+                    }
+                },
+                onError: (error) => {
+                    toast.error('Service request status update failed', {
+                        description: 'Please try again',
+                    });
+                    console.log(error);
+                },
+                onFinish: () => {
+                    router.reload();
+                },
+            },
+        );
     };
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             <Head title="Inspection Details" />
             <div className="mx-6 mb-3 space-y-6 rounded-lg">
+                <Card className="w-full">
+                    <CardHeader>
+                        <CardTitle>Service Request Information</CardTitle>
+                        <CardDescription>General overview of the request.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="space-y-6">
+                            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                                {/* Vehicle Name */}
+                                <div className="flex flex-col space-y-2">
+                                    <Label htmlFor="vehicle_name">Vehicle Name</Label>
+                                    <span>{serviceInspection.serviceRequest.vehicle_name}</span>
+                                </div>
+                                {/* Request By */}
+                                <div className="flex flex-col space-y-2">
+                                    <Label htmlFor="requested_by">Requested by</Label>
+                                    <span>{serviceInspection.serviceRequest.requested_by}</span>
+                                </div>
+                                {/* Date Filed */}
+                                <div className="flex flex-col space-y-2">
+                                    <Label htmlFor="date_filed">Date Filed</Label>
+                                    <span>{format(serviceInspection.serviceRequest.date_filed, 'LLL dd, y HH:mm')}</span>
+                                </div>
+                                {/* Service Type */}
+                                <div className="flex flex-col space-y-2">
+                                    <Label htmlFor="service_type">Service Type</Label>
+                                    <span>{serviceInspection.serviceRequest.service_type}</span>
+                                </div>
+                                {/* Work Description */}
+                                <div className="flex flex-col space-y-2">
+                                    <Label htmlFor="work_description">Work Description</Label>
+                                    <span>{serviceInspection.serviceRequest.work_description}</span>
+                                </div>
+                                {/* Received By */}
+                                <div className="flex flex-col space-y-2">
+                                    <Label htmlFor="received_by">Received By</Label>
+                                    <span>{serviceInspection.serviceRequest.received_by}</span>
+                                </div>
+                                {/* Date Received */}
+                                <div className="flex flex-col space-y-2">
+                                    <Label htmlFor="date_received">Date Received</Label>
+                                    <span>
+                                        {serviceInspection.serviceRequest.date_received
+                                            ? format(serviceInspection.serviceRequest.date_received, 'LLL dd, y HH:mm')
+                                            : 'N/A'}
+                                    </span>
+                                </div>
+                                {/* Status */}
+                                <div className="flex flex-col space-y-2">
+                                    <Label htmlFor="status">Status</Label>
+                                    <span>{serviceInspection.serviceRequest.status}</span>
+                                </div>
+
+                                {serviceInspection.serviceRequest.status === 'inspected' &&
+                                    serviceInspection.confirmed_by &&
+                                    (user.role.name === 'Manager' || user.role.name === 'Admin') && (
+                                        <div className="col-span-2 flex gap-2">
+                                            <Button onClick={() => handleStatusUpdate(serviceInspection.serviceRequest.request_id, 'approved')}>
+                                                Approve Request
+                                            </Button>
+
+                                            <RequestRemarksModal
+                                                title={'Service Request'}
+                                                buttonLabel={'Reject Request'}
+                                                action={() => handleStatusUpdate(serviceInspection.serviceRequest.request_id, 'rejected')}
+                                                data={data}
+                                                setData={setData}
+                                                actionType={'rejected'}
+                                            />
+                                        </div>
+                                    )}
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
                 <Card className="w-full">
                     <CardHeader>
                         <CardTitle>Request Inspection Information</CardTitle>
@@ -97,7 +224,7 @@ export default function InspectionDetails({ serviceInspection }) {
                                         Edit Inspection
                                     </Link>
                                 )}
-                                {user.role.name == 'Manager' && !serviceInspection.confirmed_by && (
+                                {(user.role.name === 'Manager' || user.role.name === 'Admin') && !serviceInspection.confirmed_by && (
                                     <Button
                                         className="col-span-2 w-1/3 rounded-md bg-[#006600] px-3 py-2 text-center text-white hover:bg-[#005500]"
                                         onClick={handleConfirmInspection}
@@ -109,13 +236,6 @@ export default function InspectionDetails({ serviceInspection }) {
                         </div>
                     </CardContent>
                 </Card>
-                <Button
-                    variant="outline"
-                    className="self-end bg-white"
-                    onClick={() => router.get(route('requests.show', serviceInspection.request_id))}
-                >
-                    <ArrowRight /> Go to Service Request
-                </Button>
             </div>
         </AppLayout>
     );

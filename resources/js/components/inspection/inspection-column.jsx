@@ -101,7 +101,6 @@ export const InspectionsColumn = (handleView, handleEdit, handleDelete) => [
         },
         cell: (info) => (
             <div className="text-left">
-                {console.log(info.getValue(), typeof info.getValue())}
                 {info.getValue() ? <Badge variant="primary">Confirmed</Badge> : <Badge variant="secondary">Unconfirmed</Badge>}
             </div>
         ),

@@ -3,16 +3,11 @@ import { Car, Clock, FileText, MapPin, MoreHorizontal, User, Users } from 'lucid
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { usePage } from '@inertiajs/react';
 
 export function SelectedDayTripsSection({ selectedDateTrips, date, getStatusBadge, editTrip, viewTripDetails }) {
+    const user = usePage().props.auth.user;
     return (
         <Card className="col-span-1 md:col-span-2">
             <CardHeader className="px-3 sm:px-6">
@@ -52,14 +47,18 @@ export function SelectedDayTripsSection({ selectedDateTrips, date, getStatusBadg
                                     </div>
                                 </div>
                                 <div className="flex flex-row items-start gap-4 md:flex-col">
-                                    <div className="flex items-center gap-2">
-                                        <User className="mr-2 h-4 w-4" />
-                                        <p className="font-medium">{trip.driver_name}</p>
-                                    </div>
-                                    <div className="flex items-center text-sm">
-                                        <Car className="mr-2 h-4 w-4" />
-                                        {trip.vehicle.vehicle_name} ({trip.vehicle.plate_number})
-                                    </div>
+                                    {trip.driver_name && (
+                                        <div className="flex items-center gap-2">
+                                            <User className="mr-2 h-4 w-4" />
+                                            <p className="font-medium">{trip.driver_name}</p>
+                                        </div>
+                                    )}
+                                    {trip.vehicle.vehicle_name && (
+                                        <div className="flex items-center text-sm">
+                                            <Car className="mr-2 h-4 w-4" />
+                                            {trip.vehicle.vehicle_name} ({trip.vehicle.plate_number})
+                                        </div>
+                                    )}
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
                                             <Button variant="ghost" size="icon" className="h-8 w-8">
@@ -70,9 +69,11 @@ export function SelectedDayTripsSection({ selectedDateTrips, date, getStatusBadg
                                         <DropdownMenuContent align="end">
                                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                                             <DropdownMenuItem onClick={() => viewTripDetails(trip.trip_id)}>View Details</DropdownMenuItem>
-                                            <DropdownMenuItem onClick={() => editTrip(trip.trip_id)}>Edit Trip</DropdownMenuItem>
-                                            <DropdownMenuSeparator />
-                                            <DropdownMenuItem>Cancel Trip</DropdownMenuItem>
+                                            {(trip.status === 'pending' || trip.status === 'rejected') && trip.requestor_id === user.id && (
+                                                <DropdownMenuItem onClick={() => editTrip(trip.trip_id)}>Edit Trip</DropdownMenuItem>
+                                            )}
+                                            {/* <DropdownMenuSeparator />
+                                            <DropdownMenuItem>Cancel Trip</DropdownMenuItem> */}
                                         </DropdownMenuContent>
                                     </DropdownMenu>
                                 </div>

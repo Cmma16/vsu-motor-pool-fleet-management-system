@@ -1,6 +1,7 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { usePage } from '@inertiajs/react';
 import { createColumnHelper } from '@tanstack/react-table';
 import { ArrowUpDown, MoreHorizontal, NotepadText, Pencil, TrashIcon } from 'lucide-react';
 
@@ -127,6 +128,8 @@ export const TripColumn = (handleView, handleEdit, handleDelete) => [
         id: 'actions',
         cell: ({ row }) => {
             const trip = row.original;
+            const user = usePage().props.auth.user;
+
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -141,20 +144,18 @@ export const TripColumn = (handleView, handleEdit, handleDelete) => [
                             <NotepadText />
                             View details
                         </DropdownMenuItem>
-                        {trip.status === 'pending' ||
-                            (trip.status === 'rejected' && (
-                                <DropdownMenuItem onClick={() => handleEdit(trip.trip_id)}>
-                                    <Pencil /> Edit
-                                </DropdownMenuItem>
-                            ))}
-                        {trip.status === 'pending' ||
-                            trip.status === 'rejected' ||
-                            (trip.status === 'cancelled' && (
+                        {(trip.status === 'pending' || trip.status === 'rejected') && trip.requestor_id === user.id && (
+                            <DropdownMenuItem onClick={() => handleEdit(trip.trip_id)}>
+                                <Pencil /> Edit
+                            </DropdownMenuItem>
+                        )}
+                        {(trip.status === 'pending' || trip.status === 'rejected' || trip.status === 'cancelled') &&
+                            trip.requestor_id === user.id && (
                                 <DropdownMenuItem onClick={() => handleDelete(trip.trip_id)}>
                                     <TrashIcon />
                                     Delete
                                 </DropdownMenuItem>
-                            ))}
+                            )}
                     </DropdownMenuContent>
                 </DropdownMenu>
             );

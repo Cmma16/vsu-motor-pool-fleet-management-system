@@ -46,8 +46,25 @@ export default function TripDetails({ trip }) {
         remarks: trip.remarks,
     });
 
+    const handleStatusUpdate = (id, status) => {
+        router.patch(
+            route('trips.updateStatus', id),
+            {
+                status: status,
+            },
+            {
+                preserveScroll: true,
+                onSuccess: () => {
+                    toast('Trip status updated successfully');
+                },
+                onError: () => {
+                    toast('Failed to update trip status');
+                },
+            },
+        );
+    };
+
     const updateRemarks = (id) => {
-        console.log(data);
         router.patch(
             route('trips.updateRemarks', id),
             {
@@ -108,10 +125,10 @@ export default function TripDetails({ trip }) {
                         <div className="space-y-2">
                             <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
                                 {/* Trip Number */}
-                                <div className="flex flex-col space-y-2">
+                                {/* <div className="flex flex-col space-y-2">
                                     <p className="font-medium">Trip Number</p>
                                     <p className="text-muted-foreground">{trip.trip_number}</p>
-                                </div>
+                                </div> */}
                                 {/* Date Filed */}
                                 <div className="flex flex-col space-y-2">
                                     <p className="font-medium">Date Filed</p>
@@ -185,7 +202,7 @@ export default function TripDetails({ trip }) {
                                     Edit Trip
                                 </Link>
                             )}
-                            {trip.status === 'pending' && (user.role.name === 'Manager' || user.role.name === 'Admin') && (
+                            {trip.status === 'pending' && user.role.name === 'Manager' && (
                                 <Button
                                     className="rounded-md bg-[#006600] px-6 py-2 text-center text-white hover:bg-[#005500]"
                                     onClick={() => {
@@ -195,17 +212,28 @@ export default function TripDetails({ trip }) {
                                     Assign
                                 </Button>
                             )}
-                            {(trip.status === 'assigned' || trip.status === 'rejected') &&
-                                (user.role.name === 'Manager' || user.role.name === 'Admin') && (
-                                    <RemarksModal
-                                        title={'Update Trip Remarks'}
-                                        buttonLabel={'Update Remarks'}
-                                        action={() => updateRemarks(trip.trip_id)}
-                                        data={data}
-                                        setData={setData}
-                                        actionType={'Update'}
-                                    />
-                                )}
+
+                            {trip.status === 'assigned' && user.role.name === 'Manager' && (
+                                <Button
+                                    onClick={() => {
+                                        handleStatusUpdate(trip.trip_id, 'cancelled');
+                                    }}
+                                    variant="outline"
+                                    className="rounded-md border-2 border-[#006600] px-6 py-1 text-center hover:bg-gray-100"
+                                >
+                                    Cancel Trip
+                                </Button>
+                            )}
+                            {trip.status === 'rejected' && (user.role.name === 'Manager' || user.role.name === 'Admin') && (
+                                <RemarksModal
+                                    title={'Update Trip Remarks'}
+                                    buttonLabel={'Update Remarks'}
+                                    action={() => updateRemarks(trip.trip_id)}
+                                    data={data}
+                                    setData={setData}
+                                    actionType={'Update'}
+                                />
+                            )}
                         </div>
                     </CardFooter>
                 </Card>

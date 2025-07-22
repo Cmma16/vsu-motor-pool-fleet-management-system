@@ -46,8 +46,8 @@ class TripController extends Controller
                     'destination' => $trip->destination,
                     'purpose' => $trip->purpose,
                     'departure_time' => $trip->departure_time,
-                    'requesting_party' => $trip->requesting_party,
                     'requestor_id' => $trip->requestor_id,
+                    'requesting_party' => $trip->requestor ? $trip->requestor->first_name . ' ' . $trip->requestor->last_name : '',
                     'plate_number' => $trip->vehicle->plate_number ?? 'N/A',
                     'driver_name' => $trip->driver ? $trip->driver->first_name . ' ' . $trip->driver->last_name : '',
                     'status' => $trip->status,
@@ -81,7 +81,6 @@ class TripController extends Controller
                     'destination' => $trip->destination,
                     'purpose' => $trip->purpose,
                     'departure_time' => $trip->departure_time,
-                    'requesting_party' => $trip->requesting_party,
                     'requestor_id' => $trip->requestor_id,
                     'plate_number' => $trip->vehicle->plate_number ?? 'N/A',
                     'driver_name' => $trip->driver ? $trip->driver->first_name . ' ' . $trip->driver->last_name : '',
@@ -155,8 +154,8 @@ class TripController extends Controller
                 'purpose' => $trip->purpose,
                 'destination' => $trip->destination,
                 'departure_time' => $trip->departure_time,
-                'requesting_party' => $trip->requesting_party,
                 'requestor_id' => $trip->requestor_id,
+                'requesting_party' => $trip->requestor ? $trip->requestor->first_name . ' ' . $trip->requestor->last_name : '',
                 'vehicle' => $trip->vehicle ? [
                     'name' => $trip->vehicle->vehicle_name,
                 ] : null,
@@ -237,7 +236,7 @@ class TripController extends Controller
                 'purpose' => $trip->purpose,
                 'destination' => $trip->destination,
                 'departure_time' => $trip->departure_time,
-                'requesting_party' => $trip->requesting_party,
+                'requesting_party' => $trip->requestor ? $trip->requestor->first_name . ' ' . $trip->requestor->last_name : '',
                 'vehicle_name' => $trip->vehicle ? $trip->vehicle->vehicle_name : '',
                 'driver_name' => $trip->driver ? $trip->driver->first_name . ' ' . $trip->driver->last_name : '',
                 'status' => $trip->status,
@@ -251,7 +250,7 @@ class TripController extends Controller
 
     public function printTripRecord(Trip $trip) 
     {
-        $trip = Trip::with(['vehicle', 'driver', 'passengers', 'tripLog.odometerOut', 'tripLog.odometerIn', 'dispatcher'])->find($trip->trip_id);
+        $trip = Trip::with(['vehicle', 'driver', 'passengers', 'tripLog.odometerOut', 'tripLog.odometerIn', 'dispatcher', 'requestor'])->find($trip->trip_id);
         
         $trip->formatted_date_filed = Carbon::parse($trip->date_filed)->format('F d, Y');
         
@@ -267,7 +266,8 @@ class TripController extends Controller
         $trip->formatted_departure_time = Carbon::parse($trip->departure_time)->format('h:i A');
         $trip->party_head = $trip->passengers->firstWhere('is_party_head', true);
         $trip->dispatcher_name = strtoupper($trip->dispatcher->first_name) . ' ' . strtoupper($trip->dispatcher->last_name);
-        $trip->driver_name = strtoupper($trip->driver->first_name) . ' ' . strtoupper($trip->driver->last_name);
+        $trip->driver_name = strtoupper($trip->driver->first_name) . ' ' . strtoupper($trip->driver->last_name);        
+        $trip->requesting_party = strtoupper($trip->requestor->first_name) . ' ' . strtoupper($trip->requestor->last_name);
         $trip->ticket_received = Carbon::parse($trip->tripLog->received_at)->format('F d, Y');
         $trip->actual_departure = Carbon::parse($trip->tripLog->departure_time_actual)->format('h:i A');
         
@@ -327,7 +327,6 @@ class TripController extends Controller
                 'purpose' => $trip->purpose,
                 'destination' => $trip->destination,
                 'departure_time' => $trip->departure_time,
-                'requesting_party' => $trip->requesting_party,
                 'vehicle_name' => $trip->vehicle ? $trip->vehicle->vehicle_name : '',
                 'driver_name' => $trip->driver ? $trip->driver->first_name . ' ' . $trip->driver->last_name : '',
                 'status' => $trip->status,

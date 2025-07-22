@@ -1,6 +1,6 @@
 import { router, usePage } from '@inertiajs/react';
 import { createColumnHelper } from '@tanstack/react-table';
-import { ArrowUpDown, CircleArrowOutUpRight, FileWarning, Pencil, Printer, ScanSearch, Trash, Wrench } from 'lucide-react';
+import { ArrowUpDown, CircleArrowOutUpRight, Eye, Pencil, Printer, ScanSearch, SearchCheck, Trash, Wrench } from 'lucide-react';
 
 import DestructiveDialog from '@/components/display/destructive-dialog';
 import { Badge } from '@/components/ui/badge';
@@ -34,10 +34,10 @@ function getStatusBadge(status) {
                     Approved
                 </Badge>
             );
-        case 'cancelled':
+        case 'rejected':
             return (
                 <Badge variant="default" className="bg-red-500">
-                    Cancelled
+                    Rejected
                 </Badge>
             );
         case 'conducted':
@@ -151,21 +151,35 @@ export const RequestsColumn = (handleView, handleEdit, handleDelete, handleStatu
             const { auth } = usePage().props;
             return (
                 <div className="flex justify-center">
-                    {request.status === 'completed' && (
+                    {(request.status === 'completed' || request.status === 'approved') && (
                         <Button
                             onClick={() => window.open(`/services/requests/${request.request_id}/pdf`, '_blank')}
-                            className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-800"
+                            className="mx-2 rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-800"
                         >
                             <Printer />
                         </Button>
                     )}
+
+                    {request.status === 'rejected' && (
+                        <Button
+                            onClick={() => router.get(route('requests.show', { id: request.request_id }))}
+                            className="mx-2 rounded bg-yellow-600 px-4 py-2 text-white hover:bg-yellow-800"
+                        >
+                            <Eye />
+                        </Button>
+                    )}
                     {auth.user.role.name === 'Driver' && (
                         <>
-                            {request.status === 'pending' && (
+                            {(request.status === 'pending' || request.status === 'rejected') && (
                                 <div className="flex justify-center gap-2">
-                                    <Button className="bg-yellow-300 text-black hover:bg-yellow-400" onClick={() => handleEdit(request.request_id)}>
-                                        <Pencil />
-                                    </Button>
+                                    {request.status !== 'rejected' && (
+                                        <Button
+                                            className="bg-yellow-300 text-black hover:bg-yellow-400"
+                                            onClick={() => handleEdit(request.request_id)}
+                                        >
+                                            <Pencil />
+                                        </Button>
+                                    )}
                                     <DestructiveDialog
                                         icon={Trash}
                                         iconOnly
@@ -274,7 +288,8 @@ export const RequestsColumn = (handleView, handleEdit, handleDelete, handleStatu
                             {request.status === 'inspected' && (
                                 <div className="flex justify-center gap-2">
                                     {/* Approve button */}
-                                    {request.inspection_confirmed ? (
+                                    {
+                                        /* {request.inspection_confirmed ? (
                                         <>
                                             <Button
                                                 className="bg-green-300 text-black hover:bg-green-400"
@@ -282,7 +297,7 @@ export const RequestsColumn = (handleView, handleEdit, handleDelete, handleStatu
                                             >
                                                 Approve
                                             </Button>
-                                            {/* Reject button */}
+                                            {/* Reject button }
                                             <Button
                                                 className="bg-red-300 text-black hover:bg-red-400"
                                                 onClick={() => handleStatusUpdate(request.request_id, 'rejected')}
@@ -290,7 +305,7 @@ export const RequestsColumn = (handleView, handleEdit, handleDelete, handleStatu
                                                 Reject
                                             </Button>
                                         </>
-                                    ) : (
+                                    ) : ( }*/
                                         <TooltipProvider>
                                             <Tooltip>
                                                 <TooltipTrigger asChild>
@@ -301,15 +316,16 @@ export const RequestsColumn = (handleView, handleEdit, handleDelete, handleStatu
                                                         className="bg-amber-300"
                                                         variant="outline"
                                                     >
-                                                        <FileWarning />
+                                                        <SearchCheck />
                                                     </Button>
                                                 </TooltipTrigger>
                                                 <TooltipContent>
-                                                    <p>Inspection is not confirmed, click here to confirm</p>
+                                                    <p>{request.inspection_confirmed ? '' : 'Inspection is not confirmed, click here to confirm'}</p>
                                                 </TooltipContent>
                                             </Tooltip>
                                         </TooltipProvider>
-                                    )}
+                                        /*)*/
+                                    }
                                 </div>
                             )}
                             {request.status === 'conducted' && (

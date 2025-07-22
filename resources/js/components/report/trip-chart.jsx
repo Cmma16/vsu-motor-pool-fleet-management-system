@@ -1,4 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Link } from '@inertiajs/react';
+import { ArrowRight } from 'lucide-react';
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 export function TripChart({ tripData, barKey, xKey, chartTitle, chartDescription, report_type }) {
@@ -63,6 +65,9 @@ export function TripChart({ tripData, barKey, xKey, chartTitle, chartDescription
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
+                <Link className="flex items-center place-self-end text-green-600 hover:underline" href="/reports/detailed-report">
+                    View detailed vehicle reports <ArrowRight size={15} />
+                </Link>
             </CardContent>
         </Card>
     );

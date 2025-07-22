@@ -22,13 +22,12 @@ export default function AddTrip({ vehicles, users }) {
 
     const { data, setData, post, processing, errors, reset } = useForm({
         date_filed: format(new Date(), 'yyyy-MM-dd'),
-        trip_number: '',
+        // trip_number: '',
         start_date: '',
         end_date: '',
         purpose: '',
         destination: '',
         departure_time: '',
-        requesting_party: '',
         passengers: [],
     });
 
@@ -62,8 +61,8 @@ export default function AddTrip({ vehicles, users }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs} pageDetails={pageDetails}>
             <Head title="Add New Trip" />
-            <div className="mx-6 mb-3 space-y-6 rounded-lg bg-white">
-                <Card>
+            <div className="mx-6 mb-3 space-y-6 rounded-lg">
+                <Card className="w-full">
                     <CardHeader>
                         <CardTitle>{stage === 1 ? 'Trip Details' : 'Passenger Information'}</CardTitle>
                         <CardDescription>

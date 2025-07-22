@@ -44,13 +44,12 @@ export default function EditTrip({ vehicles, users, trip }) {
 
     const { data, setData, put, processing, errors, reset } = useForm({
         date_filed: trip.date_filed,
-        trip_number: trip.trip_number,
+        // trip_number: trip.trip_number,
         start_date: trip.start_date,
         end_date: trip.end_date,
         purpose: trip.purpose,
         destination: trip.destination,
         departure_time: formattedDepartureTime,
-        requesting_party: trip.requesting_party,
         status: trip.status,
     });
 

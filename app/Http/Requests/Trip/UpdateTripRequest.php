@@ -22,14 +22,13 @@ class UpdateTripRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'trip_number' => ['required', 'integer'],
+            //'trip_number' => ['required', 'integer'],
             'date_filed' => ['required', 'date'],
             'start_date' => ['required', 'date'],
             'end_date' => ['required', 'date'],
             'purpose' => ['required', 'string', 'max:255'],
             'destination' => ['required', 'string', 'max:255'],
             'departure_time' => ['required', 'date_format:H:i'],
-            'requesting_party' => ['required', 'string', 'max:255'],
             'driver_id' => ['nullable', 'exists:users,id'],
             'vehicle_id' => ['nullable', 'exists:vehicles,vehicle_id'],
         ];

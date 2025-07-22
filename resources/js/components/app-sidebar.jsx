@@ -48,7 +48,7 @@ const mainNavItems = [
             { title: 'Approved', href: '/services/requests?status=approved', allowedRoles: ['Mechanic'] },
             { title: 'Conducted', href: '/services/requests?status=conducted', allowedRoles: ['Manager'] },
             { title: 'Completed', href: '/services/requests?status=completed', allowedRoles: ['Admin', 'Mechanic', 'Manager'] },
-            { title: 'Cancelled', href: '/services/requests?status=cancelled', allowedRoles: ['Admin', 'Mechanic', 'Manager'] },
+            { title: 'Rejected', href: '/services/requests?status=rejected', allowedRoles: ['Admin', 'Mechanic', 'Manager', 'Driver'] },
             // { title: 'Completed', href: '/services/completed', allowedRoles: ['Admin', 'Mechanic', 'Manager'] },
         ],
     },
@@ -58,6 +58,18 @@ const mainNavItems = [
         icon: Stethoscope,
         allowedRoles: ['Admin', 'Mechanic', 'Manager'],
     },
+    {
+        title: 'Service Records',
+        href: '#',
+        icon: WrenchIcon,
+        allowedRoles: ['Admin', 'Mechanic', 'Manager'],
+        children: [
+            { title: 'Preventive Maintenance Records', href: '/preventive', allowedRoles: ['Admin', 'Manager', 'Mechanic'] },
+            { title: 'Planned Maintenance Records', href: '/maintenance', allowedRoles: ['Admin', 'Mechanic', 'Manager'] },
+            { title: 'Repair Records', href: '/repairs', allowedRoles: ['Admin', 'Mechanic', 'Manager'] },
+        ],
+    },
+    { title: 'Maintenance Plans', href: '/plans', icon: NotebookPen, allowedRoles: ['Admin', 'Manager', 'Mechanic'] },
     {
         title: 'Vehicles',
         href: '/vehicles',
@@ -75,18 +87,6 @@ const mainNavItems = [
         href: '/trips/my-requests',
         icon: Ticket,
         allowedRoles: ['Requestor'],
-    },
-    { title: 'Maintenance Plans', href: '/plans', icon: NotebookPen, allowedRoles: ['Admin', 'Manager', 'Mechanic'] },
-    {
-        title: 'Service Records',
-        href: '#',
-        icon: WrenchIcon,
-        allowedRoles: ['Admin', 'Mechanic', 'Manager'],
-        children: [
-            { title: 'Preventive Maintenance Records', href: '/preventive', allowedRoles: ['Admin', 'Manager', 'Mechanic'] },
-            { title: 'Planned Maintenance Records', href: '/maintenance', allowedRoles: ['Admin', 'Mechanic', 'Manager'] },
-            { title: 'Repair Records', href: '/repairs', allowedRoles: ['Admin', 'Mechanic', 'Manager'] },
-        ],
     },
     {
         title: 'Parts',

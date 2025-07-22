@@ -83,7 +83,7 @@ class ServiceInspectionController extends Controller
                 'message' => "Your inspection for {$request_inspection->serviceRequest->work_description} has been confirmed.",
             ]);
 
-        return redirect()->route('requests.show', $request_inspection->serviceRequest->request_id);
+        return redirect()->route('request-inspections.show', $request_inspection->inspection_id);
     }
 
     /**
@@ -119,6 +119,18 @@ class ServiceInspectionController extends Controller
                 'conducted_by' => trim(($serviceInspection->conductedBy->first_name ?? '') . ' ' . ($serviceInspection->conductedBy->middle_name ?? '') . ' ' . ($serviceInspection->conductedBy->last_name ?? '')) ?: 'N/A',
                 'confirmed_by' => trim(($serviceInspection->confirmedBy->first_name ?? '') . ' ' . ($serviceInspection->confirmedBy->middle_name ?? '') . ' ' . ($serviceInspection->confirmedBy->last_name ?? '')) ?: '',
                 'request_id' => $serviceInspection->request_id,
+                'serviceRequest' => $serviceInspection->serviceRequest ? [
+                    'request_id' => $serviceInspection->serviceRequest->request_id,
+                    'vehicle_name' => $serviceInspection->serviceRequest->vehicle->vehicle_name ?? 'N/A',
+                    'requested_by' => trim(($serviceInspection->serviceRequest->requestedBy->first_name ?? '') . ' ' . ($serviceInspection->serviceRequest->requestedBy->middle_name ?? '') . ' ' . ($serviceInspection->serviceRequest->requestedBy->last_name ?? '')) ?: 'N/A',
+                    'date_filed' => $serviceInspection->serviceRequest->date_filed,
+                    'service_type' => $serviceInspection->serviceRequest->service_type,
+                    'work_description' => $serviceInspection->serviceRequest->work_description,
+                    'received_by' => trim(($serviceInspection->serviceRequest->receivedBy->first_name ?? '') . ' ' . ($serviceInspection->serviceRequest->receivedBy->middle_name ?? '') . ' ' . ($serviceInspection->serviceRequest->receivedBy->last_name ?? '')) ?: 'N/A',
+                    'date_received' => $serviceInspection->serviceRequest->date_received ? $serviceInspection->serviceRequest->date_received : null,
+                    'status' => $serviceInspection->serviceRequest->status,
+                    'inspection_id' => $serviceInspection->serviceRequest->serviceInspection->inspection_id ?? 'N/A',
+                ] : null,
             ],
         ]);
     }

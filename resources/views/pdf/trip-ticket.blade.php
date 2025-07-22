@@ -221,7 +221,7 @@
               <td style="width: 40%; padding: 0 32px 0 16px;">
               </td>
               <td style="width: 40%;">
-                <div style="text-align: center; font-size: 10px;">(Designation/Position)</div>
+                <div style="text-align: center; font-size: 10px;">{{$trip->requestor->position ?? '(Designation/Position)'}}</div>
               </td>
             </tr>
           </table>

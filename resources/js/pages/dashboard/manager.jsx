@@ -88,6 +88,7 @@ export default function Dashboard({ vehicleStats, maintenanceStats, tripStats, s
                             sectionDescription="Trips that are pending and have not been assigned."
                             handleViewDetails={handleViewTripDetails}
                         />
+                        {console.log(pendingTrips)}
                     </div>
                     <GeneralDashboard
                         totalVehicles={totalVehicles}

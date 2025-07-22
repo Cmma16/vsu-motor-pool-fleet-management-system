@@ -5,7 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 
 export default function TripForm({ formData, setData, onSubmit, processing, errors, formType }) {
     return (
-        <form onSubmit={onSubmit} className="space-y-6">
+        <form onSubmit={onSubmit} className="w-full space-y-8">
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 {/* Date filed
                 <div className="space-y-2">
@@ -23,7 +23,7 @@ export default function TripForm({ formData, setData, onSubmit, processing, erro
                     <InputError message={errors.date_filed} />
                 </div> */}
                 {/* Trip Number */}
-                <div className="space-y-2">
+                {/* <div className="space-y-2">
                     <Label htmlFor="trip_number">
                         Trip Number <span className="text-red-500">*</span>
                     </Label>
@@ -37,7 +37,7 @@ export default function TripForm({ formData, setData, onSubmit, processing, erro
                         tabIndex={2}
                     />
                     <InputError message={errors.trip_number} />
-                </div>
+                </div> */}
                 {/* Destination */}
                 <div className="space-y-2">
                     <Label htmlFor="destination">
@@ -50,7 +50,7 @@ export default function TripForm({ formData, setData, onSubmit, processing, erro
                         value={formData.destination}
                         onChange={(e) => setData('destination', e.target.value)}
                         disabled={processing}
-                        tabIndex={4}
+                        tabIndex={1}
                     />
                     <InputError message={errors.destination} />
                 </div>
@@ -67,7 +67,7 @@ export default function TripForm({ formData, setData, onSubmit, processing, erro
                         value={formData.start_date}
                         onChange={(e) => setData('start_date', e.target.value)}
                         disabled={processing}
-                        tabIndex={5}
+                        tabIndex={2}
                     />
                     <InputError message={errors.start_date} />
                 </div>
@@ -85,7 +85,7 @@ export default function TripForm({ formData, setData, onSubmit, processing, erro
                         value={formData.end_date}
                         onChange={(e) => setData('end_date', e.target.value)}
                         disabled={processing}
-                        tabIndex={6}
+                        tabIndex={3}
                     />
                     <InputError message={errors.end_date} />
                 </div>
@@ -102,30 +102,13 @@ export default function TripForm({ formData, setData, onSubmit, processing, erro
                         value={formData.departure_time}
                         onChange={(e) => setData('departure_time', e.target.value)}
                         disabled={processing}
-                        tabIndex={7}
+                        tabIndex={4}
                     />
                     <InputError message={errors.departure_time} />
                 </div>
 
-                {/* Requesting Party */}
-                <div className="space-y-2">
-                    <Label htmlFor="requesting_party">
-                        Requesting Party <span className="text-red-500">*</span>
-                    </Label>
-                    <Input
-                        id="requesting_party"
-                        name="requesting_party"
-                        placeholder="Enter name of the requesting party"
-                        value={formData.requesting_party}
-                        onChange={(e) => setData('requesting_party', e.target.value)}
-                        disabled={processing}
-                        tabIndex={8}
-                    />
-                    <InputError message={errors.requesting_party} />
-                </div>
-
                 {/* Purpose */}
-                <div className="space-y-2">
+                <div className="col-span-2 space-y-2">
                     <Label htmlFor="purpose">
                         Purpose <span className="text-red-500">*</span>
                     </Label>
@@ -136,7 +119,7 @@ export default function TripForm({ formData, setData, onSubmit, processing, erro
                         value={formData.purpose}
                         onChange={(e) => setData('purpose', e.target.value)}
                         disabled={processing}
-                        tabIndex={3}
+                        tabIndex={5}
                     />
                     <InputError message={errors.purpose} />
                 </div>
@@ -188,7 +171,7 @@ export default function TripForm({ formData, setData, onSubmit, processing, erro
                     type="submit"
                     disabled={processing}
                     className="bg-primary hover:bg-primary/90 rounded-md px-4 py-2 text-white disabled:opacity-50"
-                    tabIndex={9}
+                    tabIndex={6}
                 >
                     {formType === 'edit' ? 'Save Changes' : 'Add Passengers'}
                 </button>

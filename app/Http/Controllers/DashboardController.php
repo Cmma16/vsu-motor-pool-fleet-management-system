@@ -240,7 +240,16 @@ class DashboardController extends Controller
                     $query->where('name', 'Manager');
                 })->count(),
             ], 
-            'pendingTrips' => Trip::where('status', 'pending')->get(),
+            'pendingTrips' => Trip::where('status', 'pending')
+                ->with(['requestor:id,first_name,last_name']) // only load needed columns from requestor
+                ->get()
+                ->map(function ($trip) {
+                    $trip->requesting_party = $trip->requestor
+                        ? $trip->requestor->first_name . ' ' . $trip->requestor->last_name
+                        : null;
+
+                    return $trip;
+                }),
             'pendingRequests' => ServiceRequest::where('status', 'pending')->get(),
         ]);
     }

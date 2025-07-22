@@ -76,7 +76,9 @@ export default function details({ preventive, parts, preventiveParts }) {
                         <CardTitle>Preventive Maintenance Information</CardTitle>
                         <CardDescription className="flex justify-between">
                             General overview of the preventive maintenance.
-                            {user.role.name === 'Manager' && !preventive.confirmed_by && <Button onClick={confirmPreventive}>Confirm Record</Button>}
+                            {(user.role.name === 'Manager' || user.role.name === 'Admin') && !preventive.confirmed_by && (
+                                <Button onClick={confirmPreventive}>Confirm Record</Button>
+                            )}
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
